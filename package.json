@@ -6,18 +6,26 @@
     "cli": "pnpm --filter cli dev",
     "api": "pnpm --filter api dev",
     "dev": "pnpm --parallel --filter cli --filter api dev",
-    "db:generate": "pnpm --filter api db:generate",
-    "db:migrate": "pnpm --filter api db:migrate",
-    "db:studio": "pnpm --filter api db:studio",
+    "db:generate": "pnpm --filter @ink-starter/db db:generate",
+    "db:migrate": "pnpm --filter @ink-starter/db db:migrate",
+    "db:studio": "pnpm --filter @ink-starter/db db:studio",
     "typecheck": "bun x tsc --build --noEmit",
+    "lint": "eslint packages/",
+    "lint:fix": "eslint packages/ --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "husky"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,json,md}": "prettier --write"
+    "*.{ts,tsx}": ["eslint --fix", "prettier --write"],
+    "*.{js,jsx,json,md}": "prettier --write"
   },
   "devDependencies": {
+    "@testcontainers/postgresql": "^11.11.0",
+    "@typescript-eslint/eslint-plugin": "^8.51.0",
+    "@typescript-eslint/parser": "^8.51.0",
+    "api": "^6.1.3",
+    "eslint": "^9.39.2",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "prettier": "^3.7.4"

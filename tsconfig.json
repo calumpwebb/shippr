@@ -14,5 +14,9 @@
     "noFallthroughCasesInSwitch": true
   },
   "files": [],
-  "references": [{ "path": "./packages/api" }, { "path": "./packages/cli" }]
+  "references": [
+    { "path": "./packages/db" },
+    { "path": "./packages/api" },
+    { "path": "./packages/cli" }
+  ]
 }
