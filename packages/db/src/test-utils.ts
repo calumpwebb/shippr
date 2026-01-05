@@ -3,7 +3,7 @@ import postgres from 'postgres'
 import { createDb, type Database } from './client'
 
 const MIGRATIONS_PATH = new URL('../drizzle', import.meta.url).pathname
-const TEST_CONTAINER_LABEL = 'ink-starter-test'
+const TEST_CONTAINER_LABEL = 'shippr-test'
 
 async function exec(cmd: string[]): Promise<string> {
   const proc = Bun.spawn(cmd, { stdout: 'pipe', stderr: 'pipe' })

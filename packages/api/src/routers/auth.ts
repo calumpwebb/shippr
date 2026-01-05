@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { router, publicProcedure } from '../trpc'
-import { users, passwordResetTokens, eq, type Database } from '@ink-starter/db'
+import { users, passwordResetTokens, eq, type Database } from '@shippr/db'
 import { generateToken } from '../utils/jwt'
 import { TRPCError } from '@trpc/server'
 
@@ -12,6 +12,12 @@ export function createAuthRouter(db: Database) {
         z.object({
           email: z.string().email(),
           password: z.string().min(8),
+        })
+      )
+      .output(
+        z.object({
+          token: z.string(),
+          user: z.object({ id: z.string(), email: z.string() }),
         })
       )
       .mutation(async ({ input }) => {
@@ -49,6 +55,12 @@ export function createAuthRouter(db: Database) {
           password: z.string(),
         })
       )
+      .output(
+        z.object({
+          token: z.string(),
+          user: z.object({ id: z.string(), email: z.string() }),
+        })
+      )
       .mutation(async ({ input }) => {
         const [user] = await db.select().from(users).where(eq(users.email, input.email))
 
@@ -68,6 +80,7 @@ export function createAuthRouter(db: Database) {
 
     requestPasswordReset: publicProcedure
       .input(z.object({ email: z.string().email() }))
+      .output(z.object({ success: z.boolean() }))
       .mutation(async ({ input }) => {
         const [user] = await db.select().from(users).where(eq(users.email, input.email))
 
@@ -97,6 +110,7 @@ export function createAuthRouter(db: Database) {
           newPassword: z.string().min(8),
         })
       )
+      .output(z.object({ success: z.boolean() }))
       .mutation(async ({ input }) => {
         const [user] = await db.select().from(users).where(eq(users.email, input.email))
 

@@ -8,7 +8,7 @@ JWT-based authentication with persistent token storage.
 
 - **API**: tRPC mutations for `loginUser` and `createUser`
 - **CLI**: Ink TUI with forms, Router for navigation
-- **Token Storage**: `~/.ink-starter/credentials.json`
+- **Token Storage**: `~/.shippr/credentials.json`
 
 ## Security
 
@@ -47,7 +47,7 @@ JWT-based authentication with persistent token storage.
 
 ```bash
 # API (.env)
-DATABASE_URL=postgresql://user:password@localhost:5432/ink-starter
+DATABASE_URL=postgresql://user:password@localhost:5432/shippr
 JWT_SECRET=i-am-not-a-secret
 ```
 
@@ -67,10 +67,10 @@ bun run dev
 
 ```bash
 # Delete credentials to test fresh flow
-rm ~/.ink-starter/credentials.json
+rm ~/.shippr/credentials.json
 
 # Check stored token
-cat ~/.ink-starter/credentials.json
+cat ~/.shippr/credentials.json
 ```
 
 ## API Reference

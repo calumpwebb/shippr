@@ -10,7 +10,7 @@ This design implements JWT-based authentication for the CLI and API. Users log i
 
 1. **CLI (packages/cli)**: Ink-based TUI with navigation and forms
 2. **API (packages/api)**: tRPC mutations for auth + JWT generation
-3. **Token Storage**: Local credentials file at `~/.ink-starter/credentials.json`
+3. **Token Storage**: Local credentials file at `~/.shippr/credentials.json`
 
 ### User Flow
 
@@ -29,7 +29,7 @@ Submit → Call tRPC mutation (loginUser or createUser)
     ↓
 Success → Receive JWT token
     ↓
-Store token in ~/.ink-starter/credentials.json
+Store token in ~/.shippr/credentials.json
     ↓
 Show main app (authenticated)
 ```
@@ -152,10 +152,10 @@ Logout → replace('auth') → Stack: ['auth']
 **`utils/credentials.ts`** – Token management
 
 ```typescript
-// Read token from ~/.ink-starter/credentials.json
+// Read token from ~/.shippr/credentials.json
 export function getToken(): string | null
 
-// Write token to ~/.ink-starter/credentials.json
+// Write token to ~/.shippr/credentials.json
 export function saveToken(token: string): void
 
 // Delete credentials file
@@ -192,7 +192,7 @@ export const trpcClient = createTRPCClient({
 ### Environment Variables
 
 ```bash
-DATABASE_URL=postgresql://user:password@localhost:5432/ink-starter
+DATABASE_URL=postgresql://user:password@localhost:5432/shippr
 JWT_SECRET=<openssl rand -base64 32>
 ```
 
@@ -445,7 +445,7 @@ All login failures return "Invalid credentials," preventing email enumeration th
 **Token Security**
 
 - JWT tokens expire after 7 days
-- Tokens store in `~/.ink-starter/credentials.json` with restricted permissions (0600)
+- Tokens store in `~/.shippr/credentials.json` with restricted permissions (0600)
 - Client verifies token expiration; server verifies signature and expiration
 
 **Environment Variables**

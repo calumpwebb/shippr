@@ -1,5 +1,5 @@
 import { router } from '../trpc'
-import { db as defaultDb, type Database } from '@ink-starter/db'
+import { db as defaultDb, type Database } from '@shippr/db'
 import { createAuthRouter } from './auth'
 import { createUserRouter } from './user'
 

@@ -4,7 +4,7 @@
 
 **Goal:** Implement JWT-based authentication for the CLI and API with login/signup flows and persistent token storage.
 
-**Architecture:** API provides tRPC mutations for login/signup that return JWT tokens. CLI uses Ink components for TUI forms, stores tokens in `~/.ink-starter/credentials.json`, and manages navigation with a router that enforces auth guards.
+**Architecture:** API provides tRPC mutations for login/signup that return JWT tokens. CLI uses Ink components for TUI forms, stores tokens in `~/.shippr/credentials.json`, and manages navigation with a router that enforces auth guards.
 
 **Tech Stack:** tRPC, Drizzle ORM, PostgreSQL, jose (JWT), Ink, React, Bun
 
@@ -585,7 +585,7 @@ import { join } from 'path'
 import { existsSync, mkdirSync, readFileSync, writeFileSync, unlinkSync } from 'fs'
 import { jwtVerify } from 'jose'
 
-const CONFIG_DIR = join(homedir(), '.ink-starter')
+const CONFIG_DIR = join(homedir(), '.shippr')
 const CREDENTIALS_PATH = join(CONFIG_DIR, 'credentials.json')
 
 export function getToken(): string | null {
@@ -1254,7 +1254,7 @@ packages/cli/dist/
 packages/cli/cli
 
 # User credentials
-.ink-starter/
+.shippr/
 
 # Dependencies
 node_modules/
@@ -1310,7 +1310,7 @@ Expected: "✓ Logged In Successfully!" dashboard screen
 **Step 4: Verify token was saved**
 
 ```bash
-cat ~/.ink-starter/credentials.json
+cat ~/.shippr/credentials.json
 ```
 
 Expected: JSON file with token field
@@ -1324,7 +1324,7 @@ Expected: Goes straight to dashboard (token persists)
 
 **Step 6: Test login with invalid credentials**
 
-1. Delete credentials: `rm ~/.ink-starter/credentials.json`
+1. Delete credentials: `rm ~/.shippr/credentials.json`
 2. Restart CLI: `bun run dev`
 3. Select "Login"
 4. Enter email: `wrong@example.com`
@@ -1342,7 +1342,7 @@ Expected: Dashboard appears
 
 **Step 8: Test token expiration check**
 
-Manually edit `~/.ink-starter/credentials.json` and set an invalid token:
+Manually edit `~/.shippr/credentials.json` and set an invalid token:
 
 ```json
 {
@@ -1387,7 +1387,7 @@ JWT-based authentication with persistent token storage.
 
 - **API**: tRPC mutations for `loginUser` and `createUser`
 - **CLI**: Ink TUI with forms, Router for navigation
-- **Token Storage**: `~/.ink-starter/credentials.json`
+- **Token Storage**: `~/.shippr/credentials.json`
 
 ## Security
 
@@ -1426,7 +1426,7 @@ JWT-based authentication with persistent token storage.
 
 ```bash
 # API (.env)
-DATABASE_URL=postgresql://user:password@localhost:5432/ink-starter
+DATABASE_URL=postgresql://user:password@localhost:5432/shippr
 JWT_SECRET=i-am-not-a-secret
 ```
 ````
@@ -1447,10 +1447,10 @@ bun run dev
 
 ```bash
 # Delete credentials to test fresh flow
-rm ~/.ink-starter/credentials.json
+rm ~/.shippr/credentials.json
 
 # Check stored token
-cat ~/.ink-starter/credentials.json
+cat ~/.shippr/credentials.json
 ```
 
 ## API Reference

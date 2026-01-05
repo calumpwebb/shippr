@@ -1,10 +1,10 @@
-import { setupTestDb } from '@ink-starter/db/test-utils'
+import { setupTestDb } from '@shippr/db/test-utils'
 import { describe, test, expect, beforeAll, afterAll } from 'bun:test'
 import { router, publicProcedure, protectedProcedure } from './trpc'
 import { createAppRouter } from './routers'
 import { verifyToken } from './utils/jwt'
-import type { Database } from '@ink-starter/db/client'
-import type { TestContainer } from '@ink-starter/db/test-utils'
+import type { Database } from '@shippr/db/client'
+import type { TestContainer } from '@shippr/db/test-utils'
 
 // Minimal test router to verify procedure behavior
 const testRouter = router({

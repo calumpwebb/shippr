@@ -44,7 +44,7 @@ importers:
 
   packages/api:
     dependencies:
-      '@ink-starter/db':
+      '@shippr/db':
         specifier: workspace:*
         version: link:../db
       '@trpc/client':

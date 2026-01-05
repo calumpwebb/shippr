@@ -2,7 +2,7 @@ import { homedir } from 'os'
 import { join } from 'path'
 import { existsSync, mkdirSync, readFileSync, writeFileSync, unlinkSync } from 'fs'
 
-const CONFIG_DIR = join(homedir(), '.ink-starter')
+const CONFIG_DIR = join(homedir(), '.shippr')
 const CREDENTIALS_PATH = join(CONFIG_DIR, 'credentials.json')
 
 export function getToken(): string | null {

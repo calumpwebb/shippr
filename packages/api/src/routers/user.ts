@@ -1,12 +1,13 @@
+import { z } from 'zod'
 import { router, protectedProcedure } from '../trpc'
-import type { Database } from '@ink-starter/db'
+import type { Database } from '@shippr/db'
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type -- tRPC router type used via typeof
 export function createUserRouter(db: Database) {
   void db // reserved for future use
   return router({
     // Just checks the user is authenticated
-    refresh: protectedProcedure.query(() => {
+    refresh: protectedProcedure.output(z.object({ ok: z.boolean() })).query(() => {
       return { ok: true }
     }),
   })

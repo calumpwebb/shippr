@@ -16,7 +16,7 @@ packages/db/dist/
 *.tsbuildinfo
 
 # User credentials
-.ink-starter/
+.shippr/
 
 # Dependencies
 node_modules/

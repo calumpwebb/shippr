@@ -1,10 +1,10 @@
-import { setupTestDb } from '@ink-starter/db/test-utils'
+import { setupTestDb } from '@shippr/db/test-utils'
 import { describe, test, expect, beforeAll, afterAll } from 'bun:test'
 import { createAppRouter } from './index'
-import { passwordResetTokens, users } from '@ink-starter/db/schema'
+import { passwordResetTokens, users } from '@shippr/db/schema'
 import { eq } from 'drizzle-orm'
-import type { Database } from '@ink-starter/db/client'
-import type { TestContainer } from '@ink-starter/db/test-utils'
+import type { Database } from '@shippr/db/client'
+import type { TestContainer } from '@shippr/db/test-utils'
 
 let container: TestContainer
 let db: Database
@@ -124,7 +124,10 @@ describe('auth.resetPassword', () => {
 
     // Get the code from the database for this user
     const [user] = await db.select().from(users).where(eq(users.email, 'resetvalid@example.com'))
-    const [token] = await db.select().from(passwordResetTokens).where(eq(passwordResetTokens.userId, user.id))
+    const [token] = await db
+      .select()
+      .from(passwordResetTokens)
+      .where(eq(passwordResetTokens.userId, user.id))
     const code = token.code
 
     const result = await caller.auth.resetPassword({
@@ -160,4 +163,3 @@ describe('auth.resetPassword', () => {
     ).rejects.toThrow('Invalid code')
   })
 })
-

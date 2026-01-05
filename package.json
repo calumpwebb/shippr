@@ -1,14 +1,14 @@
 {
-  "name": "ink-starter",
+  "name": "shippr",
   "version": "0.0.1",
   "private": true,
   "scripts": {
     "cli": "pnpm --filter cli dev",
     "api": "pnpm --filter api dev",
     "dev": "pnpm --parallel --filter cli --filter api dev",
-    "db:generate": "pnpm --filter @ink-starter/db db:generate",
-    "db:migrate": "pnpm --filter @ink-starter/db db:migrate",
-    "db:studio": "pnpm --filter @ink-starter/db db:studio",
+    "db:generate": "pnpm --filter @shippr/db db:generate",
+    "db:migrate": "pnpm --filter @shippr/db db:migrate",
+    "db:studio": "pnpm --filter @shippr/db db:studio",
     "typecheck": "bun x tsc --build --noEmit",
     "lint": "eslint packages/",
     "lint:fix": "eslint packages/ --fix",

@@ -1,17 +1,17 @@
 services:
   postgres:
     image: postgres:16
-    container_name: ink-starter-postgres
+    container_name: shippr-postgres
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: ink-starter
+      POSTGRES_DB: shippr
     ports:
       - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U user -d ink-starter']
+      test: ['CMD-SHELL', 'pg_isready -U user -d shippr']
       interval: 10s
       timeout: 5s
       retries: 5
