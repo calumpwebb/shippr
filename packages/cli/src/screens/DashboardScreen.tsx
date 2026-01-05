@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Box, Text } from 'ink'
-import SelectInput from 'ink-select-input'
+import { Menu } from '../components/Menu'
 import { clearToken } from '../utils/credentials'
 import { useRouter } from '../components/Router'
 import { trpcClient, toApiError } from '../utils/trpc'
@@ -16,8 +16,8 @@ export function DashboardScreen(): React.ReactNode {
     { label: 'Sign out', value: 'signout' as const },
   ]
 
-  async function handleSelect(item: { value: 'refresh' | 'signout' }): Promise<void> {
-    if (item.value === 'refresh') {
+  async function handleSelect(value: 'refresh' | 'signout'): Promise<void> {
+    if (value === 'refresh') {
       setIsRefreshing(true)
       setError('')
       try {
@@ -27,7 +27,7 @@ export function DashboardScreen(): React.ReactNode {
         setError(apiError.message)
       }
       setIsRefreshing(false)
-    } else if (item.value === 'signout') {
+    } else if (value === 'signout') {
       clearToken()
       reset('welcome')
     }
@@ -35,19 +35,19 @@ export function DashboardScreen(): React.ReactNode {
 
   return (
     <Box flexDirection="column">
-      <Box marginBottom={1}>
+      <Text>Welcome to the dashboard.</Text>
+      <Box marginTop={1}>
         <Text bold color="green">
           ✓ Logged In
         </Text>
       </Box>
-      <Text>Welcome to the dashboard.</Text>
       {error && (
         <Box marginTop={1}>
           <Text color={colors.error}>{error}</Text>
         </Box>
       )}
       <Box marginTop={1}>
-        <SelectInput items={items} onSelect={handleSelect} />
+        <Menu items={items} onSelect={handleSelect} />
       </Box>
     </Box>
   )

@@ -15,6 +15,13 @@
       "when": 1767581381422,
       "tag": "0001_heavy_the_executioner",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1767595212853,
+      "tag": "0002_rich_stryfe",
+      "breakpoints": true
     }
   ]
 }

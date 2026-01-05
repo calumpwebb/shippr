@@ -25,7 +25,7 @@ export function Footer(): React.ReactNode {
     .join(', ')
 
   return (
-    <Box marginTop={1}>
+    <Box>
       {confirmExit ? (
         <Text color={colors.warning}>Press Ctrl+C again to exit!</Text>
       ) : (

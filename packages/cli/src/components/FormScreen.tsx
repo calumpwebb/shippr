@@ -22,15 +22,9 @@ export function FormScreen({
 }: FormScreenProps): React.ReactNode {
   return (
     <Box flexDirection="column">
-      <Box marginBottom={1}>
-        <Text bold>{title}</Text>
-      </Box>
-
-      {subtitle && (
-        <Box marginBottom={1}>
-          <Text color={colors.muted}>{subtitle}</Text>
-        </Box>
-      )}
+      <Text bold>{title}</Text>
+      {subtitle && <Text color={colors.muted}>{subtitle}</Text>}
+      <Box marginTop={1} />
 
       {successMessage && (
         <Box marginBottom={1}>

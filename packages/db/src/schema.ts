@@ -1,4 +1,4 @@
-import { pgTable, uuid, timestamp, varchar, integer } from 'drizzle-orm/pg-core'
+import { pgTable, uuid, timestamp, varchar, integer, boolean } from 'drizzle-orm/pg-core'
 
 export const users = pgTable('users', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -23,3 +23,13 @@ export const passwordResetTokens = pgTable('password_reset_tokens', {
 
 export type PasswordResetToken = typeof passwordResetTokens.$inferSelect
 export type NewPasswordResetToken = typeof passwordResetTokens.$inferInsert
+
+export const motd = pgTable('motd', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  message: varchar('message', { length: 500 }).notNull(),
+  active: boolean('active').notNull().default(true),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+})
+
+export type Motd = typeof motd.$inferSelect
+export type NewMotd = typeof motd.$inferInsert
