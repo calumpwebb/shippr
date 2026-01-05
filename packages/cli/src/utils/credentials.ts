@@ -1,7 +1,6 @@
 import { homedir } from 'os';
 import { join } from 'path';
 import { existsSync, mkdirSync, readFileSync, writeFileSync, unlinkSync } from 'fs';
-import { jwtVerify } from 'jose';
 
 const CONFIG_DIR = join(homedir(), '.ink-starter');
 const CREDENTIALS_PATH = join(CONFIG_DIR, 'credentials.json');

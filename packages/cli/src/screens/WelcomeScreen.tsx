@@ -1,18 +1,16 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Box, Text, useInput } from 'ink';
-
-type MenuProps = {
-  onSelect: (choice: 'login' | 'signup' | 'forgotPassword') => void;
-};
+import { useRouter } from '../components/Router';
 
 const items = [
   { label: 'Login', value: 'login' as const },
-  { label: 'Create Account', value: 'signup' as const },
-  { label: 'Forgot Password', value: 'forgotPassword' as const },
+  { label: 'Create Account', value: 'create-account' as const },
+  { label: 'Forgot Password', value: 'forgot-password' as const },
 ];
 
-export function Menu({ onSelect }: MenuProps) {
+export function WelcomeScreen() {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const { push } = useRouter();
 
   useInput((_input, key) => {
     if (key.upArrow) {
@@ -22,7 +20,7 @@ export function Menu({ onSelect }: MenuProps) {
     } else if (key.tab) {
       setSelectedIndex((i) => (i + 1) % items.length);
     } else if (key.return) {
-      onSelect(items[selectedIndex].value);
+      push(items[selectedIndex].value);
     }
   });
 

@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Box, Text } from 'ink';
 import SelectInput from 'ink-select-input';
 import { clearToken } from '../utils/credentials';
-import { useRouter } from './Router';
+import { useRouter } from '../components/Router';
 import { trpcClient } from '../utils/trpc';
 
-export function Dashboard() {
-  const { replace } = useRouter();
+export function DashboardScreen() {
+  const { reset } = useRouter();
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const items = [
@@ -21,7 +21,7 @@ export function Dashboard() {
       setIsRefreshing(false);
     } else if (item.value === 'signout') {
       clearToken();
-      replace('auth');
+      reset('welcome');
     }
   };
 

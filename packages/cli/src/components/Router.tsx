@@ -1,5 +1,7 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import type { Route, RouteConfig, RouterContextType, RouteStackItem } from '../types';
+import { createContext, useContext, useState, useEffect } from 'react';
+import { Box, Text } from 'ink';
+import type { Route } from '../routes';
+import type { RouteConfig, RouterContextType, RouteStackItem } from '../types';
 import { getToken, clearToken, isTokenValid } from '../utils/credentials';
 import { Footer } from './Footer';
 
@@ -7,7 +9,8 @@ const RouterContext = createContext<RouterContextType>({
   push: () => {},
   pop: () => {},
   replace: () => {},
-  currentRoute: 'auth',
+  reset: () => {},
+  currentRoute: 'welcome',
   params: undefined,
   canGoBack: false,
 });
@@ -21,7 +24,7 @@ type RouterProps = {
 
 export function Router({ routes }: RouterProps) {
   const [routeStack, setRouteStack] = useState<RouteStackItem[]>([
-    { name: 'auth' },
+    { name: 'welcome' },
   ]);
   const [loading, setLoading] = useState(true);
 
@@ -35,7 +38,7 @@ export function Router({ routes }: RouterProps) {
         if (token) {
           clearToken();
         }
-        setRouteStack([{ name: 'auth' }]);
+        setRouteStack([{ name: 'welcome' }]);
       }
 
       setLoading(false);
@@ -44,7 +47,7 @@ export function Router({ routes }: RouterProps) {
     checkAuth();
   }, []);
 
-  const push = (route: Route, params?: any) => {
+  const push = (route: Route, params?: unknown) => {
     setRouteStack([...routeStack, { name: route, params }]);
   };
 
@@ -54,8 +57,12 @@ export function Router({ routes }: RouterProps) {
     }
   };
 
-  const replace = (route: Route, params?: any) => {
+  const replace = (route: Route, params?: unknown) => {
     setRouteStack([...routeStack.slice(0, -1), { name: route, params }]);
+  };
+
+  const reset = (route: Route, params?: unknown) => {
+    setRouteStack([{ name: route, params }]);
   };
 
   const current = routeStack[routeStack.length - 1];
@@ -68,7 +75,7 @@ export function Router({ routes }: RouterProps) {
         const token = getToken();
         if (!token || !(await isTokenValid(token))) {
           clearToken();
-          setRouteStack([{ name: 'auth' }]);
+          setRouteStack([{ name: 'welcome' }]);
         }
       }
     };
@@ -88,6 +95,7 @@ export function Router({ routes }: RouterProps) {
         push,
         pop,
         replace,
+        reset,
         currentRoute: current.name,
         params: current.params,
         canGoBack: routeStack.length > 1,
@@ -95,6 +103,17 @@ export function Router({ routes }: RouterProps) {
     >
       <Component />
       <Footer />
+      <Box marginTop={1} borderStyle="single" borderColor="gray" paddingX={1}>
+        <Text dimColor>
+          route: <Text color="cyan">{current.name}</Text>
+          {current.params ? (
+            <Text> | params: <Text color="yellow">{JSON.stringify(current.params)}</Text></Text>
+          ) : null}
+          {routeStack.length > 1 && (
+            <Text> | stack: [{routeStack.map(r => r.name).join(' → ')}]</Text>
+          )}
+        </Text>
+      </Box>
     </RouterContext.Provider>
   );
 }

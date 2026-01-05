@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Box, Text, useApp, useInput } from 'ink';
 import { useRouter } from './Router';
 
