@@ -10,7 +10,10 @@ type ForgotPasswordFormProps = {
 };
 
 type Stage = 'email' | 'reset';
-type ActiveField = 'email' | 'code' | 'newPassword' | 'confirmPassword' | 'submit';
+
+const emailStageFields = ['email', 'submit'] as const;
+const resetStageFields = ['code', 'newPassword', 'confirmPassword', 'submit'] as const;
+type ActiveField = (typeof emailStageFields)[number] | (typeof resetStageFields)[number];
 
 export function ForgotPasswordForm({ onBack, onSuccess }: ForgotPasswordFormProps) {
   const [stage, setStage] = useState<Stage>('email');
@@ -21,6 +24,17 @@ export function ForgotPasswordForm({ onBack, onSuccess }: ForgotPasswordFormProp
   const [activeField, setActiveField] = useState<ActiveField>('email');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const getFields = () => (stage === 'email' ? emailStageFields : resetStageFields);
+
+  const navigateField = (direction: 1 | -1) => {
+    const fields = getFields();
+    setActiveField((f) => {
+      const idx = fields.indexOf(f as any);
+      if (idx === -1) return fields[0];
+      return fields[(idx + direction + fields.length) % fields.length];
+    });
+  };
 
   const handleRequestCode = async () => {
     if (!email.trim()) {
@@ -82,18 +96,12 @@ export function ForgotPasswordForm({ onBack, onSuccess }: ForgotPasswordFormProp
   };
 
   const handleFieldSubmit = () => {
-    if (stage === 'email') {
-      if (activeField === 'email') {
-        setActiveField('submit');
-      }
-    } else {
-      if (activeField === 'code') setActiveField('newPassword');
-      else if (activeField === 'newPassword') setActiveField('confirmPassword');
-      else if (activeField === 'confirmPassword') setActiveField('submit');
+    if (activeField !== 'submit') {
+      navigateField(1);
     }
   };
 
-  useInput((input, key) => {
+  useInput((_input, key) => {
     if (loading) return;
     if (key.escape) {
       if (stage === 'reset') {
@@ -106,28 +114,10 @@ export function ForgotPasswordForm({ onBack, onSuccess }: ForgotPasswordFormProp
       } else {
         onBack();
       }
-    } else if (key.upArrow || (key.shift && key.tab)) {
-      if (stage === 'email') {
-        setActiveField((f) => (f === 'email' ? 'submit' : 'email'));
-      } else {
-        setActiveField((f) => {
-          if (f === 'code') return 'submit';
-          if (f === 'newPassword') return 'code';
-          if (f === 'confirmPassword') return 'newPassword';
-          return 'confirmPassword';
-        });
-      }
+    } else if (key.upArrow) {
+      navigateField(-1);
     } else if (key.downArrow || key.tab) {
-      if (stage === 'email') {
-        setActiveField((f) => (f === 'email' ? 'submit' : 'email'));
-      } else {
-        setActiveField((f) => {
-          if (f === 'code') return 'newPassword';
-          if (f === 'newPassword') return 'confirmPassword';
-          if (f === 'confirmPassword') return 'submit';
-          return 'code';
-        });
-      }
+      navigateField(1);
     } else if (key.return && activeField === 'submit') {
       if (stage === 'email') {
         handleRequestCode();

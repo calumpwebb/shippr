@@ -12,19 +12,29 @@ type LoginFormProps = {
   successMessage?: string;
 };
 
+const fields = ['email', 'password', 'submit', 'forgot'] as const;
+type Field = (typeof fields)[number];
+
 export function LoginForm({ onBack, onForgotPassword, successMessage }: LoginFormProps) {
-  const [activeField, setActiveField] = useState<'email' | 'password' | 'submit' | 'forgot'>('email');
+  const [activeField, setActiveField] = useState<Field>('email');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const { replace } = useRouter();
 
+  const navigateField = (direction: 1 | -1) => {
+    setActiveField((f) => {
+      const idx = fields.indexOf(f);
+      return fields[(idx + direction + fields.length) % fields.length];
+    });
+  };
+
   const handleFieldSubmit = () => {
-    if (activeField === 'email') {
-      setActiveField('password');
-    } else if (activeField === 'password') {
-      setActiveField('submit');
+    const idx = fields.indexOf(activeField);
+    const submitIdx = fields.indexOf('submit');
+    if (idx < submitIdx) {
+      navigateField(1);
     }
   };
 
@@ -71,24 +81,14 @@ export function LoginForm({ onBack, onForgotPassword, successMessage }: LoginFor
     }
   };
 
-  useInput((input, key) => {
+  useInput((_input, key) => {
     if (loading) return;
     if (key.escape) {
       onBack();
     } else if (key.upArrow) {
-      setActiveField((f) => {
-        if (f === 'email') return 'forgot';
-        if (f === 'password') return 'email';
-        if (f === 'submit') return 'password';
-        return 'submit';
-      });
+      navigateField(-1);
     } else if (key.downArrow || key.tab) {
-      setActiveField((f) => {
-        if (f === 'email') return 'password';
-        if (f === 'password') return 'submit';
-        if (f === 'submit') return 'forgot';
-        return 'email';
-      });
+      navigateField(1);
     } else if (key.return) {
       if (activeField === 'submit') {
         handleSubmit();

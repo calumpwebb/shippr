@@ -45,38 +45,41 @@ export function TextInput({
       let nextValue = value;
       let nextCursorOffset = cursorOffset;
 
+      // Check for word delete first (Option+Backspace / Ctrl+W)
+      // Option+Backspace sends delete:true + meta:true, Ctrl+W sends \x17
+      const isWordDelete = input === '\x17' || (key.delete && key.meta);
+
       if (key.leftArrow) {
         nextCursorOffset = Math.max(0, cursorOffset - 1);
       } else if (key.rightArrow) {
         nextCursorOffset = Math.min(value.length, cursorOffset + 1);
+      } else if (isWordDelete) {
+        // Delete word backward
+        const beforeCursor = value.slice(0, cursorOffset);
+        const afterCursor = value.slice(cursorOffset);
+
+        // Find word boundary (like terminal behavior)
+        let i = beforeCursor.length - 1;
+
+        // Skip trailing whitespace
+        while (i >= 0 && beforeCursor[i] === ' ') i--;
+
+        // Check what type of character we're on
+        const isWordChar = (c: string) => /[a-zA-Z0-9]/.test(c);
+
+        if (i >= 0 && isWordChar(beforeCursor[i])) {
+          // Delete word characters
+          while (i >= 0 && isWordChar(beforeCursor[i])) i--;
+        } else if (i >= 0) {
+          // Delete non-word, non-space characters (like @, ., etc.)
+          while (i >= 0 && !isWordChar(beforeCursor[i]) && beforeCursor[i] !== ' ') i--;
+        }
+
+        const deleteToIndex = i + 1;
+        nextValue = beforeCursor.slice(0, deleteToIndex) + afterCursor;
+        nextCursorOffset = deleteToIndex;
       } else if (key.backspace || key.delete) {
-        if (key.meta || input === '\x17') {
-          // Option+Backspace (meta) or Ctrl+W (\x17) - delete word backward
-          const beforeCursor = value.slice(0, cursorOffset);
-          const afterCursor = value.slice(cursorOffset);
-
-          // Find word boundary (like terminal behavior)
-          // First skip any trailing non-word chars, then skip word chars
-          let i = beforeCursor.length - 1;
-
-          // Skip trailing whitespace
-          while (i >= 0 && beforeCursor[i] === ' ') i--;
-
-          // Check what type of character we're on
-          const isWordChar = (c: string) => /[a-zA-Z0-9]/.test(c);
-
-          if (i >= 0 && isWordChar(beforeCursor[i])) {
-            // Delete word characters
-            while (i >= 0 && isWordChar(beforeCursor[i])) i--;
-          } else if (i >= 0) {
-            // Delete non-word, non-space characters (like @, ., etc.)
-            while (i >= 0 && !isWordChar(beforeCursor[i]) && beforeCursor[i] !== ' ') i--;
-          }
-
-          const deleteToIndex = i + 1;
-          nextValue = beforeCursor.slice(0, deleteToIndex) + afterCursor;
-          nextCursorOffset = deleteToIndex;
-        } else if (cursorOffset > 0) {
+        if (cursorOffset > 0) {
           // Regular backspace - delete single character
           nextValue =
             value.slice(0, cursorOffset - 1) + value.slice(cursorOffset);

@@ -87,7 +87,7 @@ export function SignupForm({ onBack }: SignupFormProps) {
     }
   };
 
-  useInput((input, key) => {
+  useInput((_input, key) => {
     if (loading) return;
     if (key.escape) {
       onBack();
