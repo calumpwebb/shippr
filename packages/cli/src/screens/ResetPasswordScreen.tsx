@@ -105,9 +105,6 @@ export function ResetPasswordScreen() {
       )}
 
       <Box flexDirection="column">
-        <Box marginBottom={1}>
-          <Text dimColor>Check API console for the 6-digit code.</Text>
-        </Box>
         <Box>
           <Text dimColor={activeField !== 'code'}>Code: </Text>
           {activeField === 'code' ? (
