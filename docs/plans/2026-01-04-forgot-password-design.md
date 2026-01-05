@@ -11,14 +11,18 @@ New `password_reset_tokens` table:
 ```ts
 export const passwordResetTokens = pgTable('password_reset_tokens', {
   id: uuid('id').primaryKey().defaultRandom(),
-  userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }).unique(),
+  userId: uuid('user_id')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' })
+    .unique(),
   code: varchar('code', { length: 6 }).notNull(),
   attempts: integer('attempts').notNull().default(0),
   createdAt: timestamp('created_at').notNull().defaultNow(),
-});
+})
 ```
 
 Key points:
+
 - `userId` has unique constraint (one token per user)
 - Old tokens are deleted before creating new ones (belt-and-suspenders with unique constraint)
 - Tokens deleted on successful password reset
@@ -29,8 +33,12 @@ Key points:
 ### `requestPasswordReset`
 
 ```ts
-input: { email: string }
-output: { success: true }
+input: {
+  email: string
+}
+output: {
+  success: true
+}
 ```
 
 - Look up user by email
@@ -67,11 +75,13 @@ output: { success: true }
 Two-stage form component:
 
 **Stage 1: Request Code**
+
 - Email input field
 - Submit button
 - On submit: call `requestPasswordReset`, move to stage 2
 
 **Stage 2: Reset Password**
+
 - Code input (6 digits)
 - New password input (masked)
 - Confirm password input (masked)
@@ -93,15 +103,15 @@ Two-stage form component:
 
 ## Edge Cases
 
-| Case | Handling |
-|------|----------|
-| Email not found | Return success anyway (no enumeration) |
-| Code expired (>10 min) | "Code expired, please request a new one" |
-| Wrong code | Increment attempts, "Invalid code, X attempts remaining" |
-| Max attempts (3) | "Too many attempts, please request a new code" |
-| Password too short | Validation error (<8 chars) |
-| Passwords don't match | Local CLI validation before API call |
-| Request new code | No resend button; user goes back and starts over |
+| Case                   | Handling                                                 |
+| ---------------------- | -------------------------------------------------------- |
+| Email not found        | Return success anyway (no enumeration)                   |
+| Code expired (>10 min) | "Code expired, please request a new one"                 |
+| Wrong code             | Increment attempts, "Invalid code, X attempts remaining" |
+| Max attempts (3)       | "Too many attempts, please request a new code"           |
+| Password too short     | Validation error (<8 chars)                              |
+| Passwords don't match  | Local CLI validation before API call                     |
+| Request new code       | No resend button; user goes back and starts over         |
 
 ## Security Considerations
 

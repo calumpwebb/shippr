@@ -1,24 +1,24 @@
-import type { Route } from './routes';
+import type { Route } from './routes'
 
 export type RouteConfig = {
-  component: React.ComponentType;
-  protected: boolean;
-};
+  component: React.ComponentType
+  protected: boolean
+}
 
 export type RouteParams = {
-  'welcome': undefined;
-  'login': { successMessage?: string };
-  'create-account': undefined;
-  'forgot-password': undefined;
-  'reset-password': { email: string };
-  'dashboard': undefined;
-  'settings': undefined;
-};
+  welcome: undefined
+  login: { successMessage?: string }
+  'create-account': undefined
+  'forgot-password': undefined
+  'reset-password': { email: string }
+  dashboard: undefined
+  settings: undefined
+}
 
 export type RouteStackItem = {
-  name: Route;
-  params?: unknown;
-};
+  name: Route
+  params?: unknown
+}
 
 // Helper: check if params are required, optional, or none
 // - undefined → no args needed
@@ -28,18 +28,18 @@ type ParamsArgs<R extends Route> = RouteParams[R] extends undefined
   ? []
   : {} extends RouteParams[R]
     ? [params?: RouteParams[R]]
-    : [params: RouteParams[R]];
+    : [params: RouteParams[R]]
 
 export type RouterContextType = {
-  push: <R extends Route>(route: R, ...args: ParamsArgs<R>) => void;
-  pop: () => void;
-  replace: <R extends Route>(route: R, ...args: ParamsArgs<R>) => void;
-  reset: <R extends Route>(route: R, ...args: ParamsArgs<R>) => void;
-  currentRoute: Route;
-  params?: unknown;
-  canGoBack: boolean;
-};
+  push: <R extends Route>(route: R, ...args: ParamsArgs<R>) => void
+  pop: () => void
+  replace: <R extends Route>(route: R, ...args: ParamsArgs<R>) => void
+  reset: <R extends Route>(route: R, ...args: ParamsArgs<R>) => void
+  currentRoute: Route
+  params?: unknown
+  canGoBack: boolean
+}
 
 export type Credentials = {
-  token: string;
-};
+  token: string
+}

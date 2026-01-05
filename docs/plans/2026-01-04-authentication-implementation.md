@@ -13,6 +13,7 @@
 ## Task 1: API - Add JWT Utilities
 
 **Files:**
+
 - Create: `packages/api/src/utils/jwt.ts`
 - Create: `packages/api/src/types.ts`
 
@@ -31,19 +32,19 @@ Create `packages/api/src/types.ts`:
 
 ```typescript
 export type TokenPayload = {
-  userId: string;
-  email: string;
-  iat: number;
-  exp: number;
-};
+  userId: string
+  email: string
+  iat: number
+  exp: number
+}
 
 export type AuthResponse = {
-  token: string;
+  token: string
   user: {
-    id: string;
-    email: string;
-  };
-};
+    id: string
+    email: string
+  }
+}
 ```
 
 **Step 3: Create JWT utilities**
@@ -51,12 +52,12 @@ export type AuthResponse = {
 Create `packages/api/src/utils/jwt.ts`:
 
 ```typescript
-import { SignJWT, jwtVerify } from 'jose';
+import { SignJWT, jwtVerify } from 'jose'
 
-const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+const secret = new TextEncoder().encode(process.env.JWT_SECRET)
 
 if (!process.env.JWT_SECRET) {
-  throw new Error('JWT_SECRET environment variable is required');
+  throw new Error('JWT_SECRET environment variable is required')
 }
 
 export async function generateToken(payload: { userId: string; email: string }) {
@@ -64,12 +65,12 @@ export async function generateToken(payload: { userId: string; email: string }) 
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setExpirationTime('7d')
-    .sign(secret);
+    .sign(secret)
 }
 
 export async function verifyToken(token: string) {
-  const { payload } = await jwtVerify(token, secret);
-  return payload as { userId: string; email: string; iat: number; exp: number };
+  const { payload } = await jwtVerify(token, secret)
+  return payload as { userId: string; email: string; iat: number; exp: number }
 }
 ```
 
@@ -104,6 +105,7 @@ git commit -m "feat(api): add JWT signing and verification utilities"
 ## Task 2: API - Add loginUser Mutation
 
 **Files:**
+
 - Modify: `packages/api/src/router.ts`
 
 **Step 1: Import dependencies at top of router.ts**
@@ -111,9 +113,9 @@ git commit -m "feat(api): add JWT signing and verification utilities"
 Add these imports to `packages/api/src/router.ts`:
 
 ```typescript
-import { eq } from 'drizzle-orm';
-import { generateToken } from './utils/jwt';
-import { TRPCError } from '@trpc/server';
+import { eq } from 'drizzle-orm'
+import { generateToken } from './utils/jwt'
+import { TRPCError } from '@trpc/server'
 ```
 
 **Step 2: Add loginUser mutation**
@@ -163,8 +165,8 @@ bun run dev
 Create a test file `packages/api/test-login.ts`:
 
 ```typescript
-import { createTRPCClient, httpBatchLink } from '@trpc/client';
-import type { AppRouter } from './src/router';
+import { createTRPCClient, httpBatchLink } from '@trpc/client'
+import type { AppRouter } from './src/router'
 
 const client = createTRPCClient<AppRouter>({
   links: [
@@ -172,17 +174,17 @@ const client = createTRPCClient<AppRouter>({
       url: 'http://localhost:8080',
     }),
   ],
-});
+})
 
 // Test invalid credentials
 try {
   await client.loginUser.mutate({
     email: 'nonexistent@example.com',
     password: 'wrongpassword',
-  });
-  console.log('❌ Should have thrown error');
+  })
+  console.log('❌ Should have thrown error')
 } catch (error) {
-  console.log('✅ Correctly rejected invalid credentials:', error.message);
+  console.log('✅ Correctly rejected invalid credentials:', error.message)
 }
 ```
 
@@ -206,6 +208,7 @@ git commit -m "feat(api): add loginUser mutation with timing-attack protection"
 ## Task 3: API - Update createUser to Return Token
 
 **Files:**
+
 - Modify: `packages/api/src/router.ts`
 
 **Step 1: Update createUser mutation**
@@ -252,8 +255,8 @@ createUser: publicProcedure
 Update `packages/api/test-login.ts`:
 
 ```typescript
-import { createTRPCClient, httpBatchLink } from '@trpc/client';
-import type { AppRouter } from './src/router';
+import { createTRPCClient, httpBatchLink } from '@trpc/client'
+import type { AppRouter } from './src/router'
 
 const client = createTRPCClient<AppRouter>({
   links: [
@@ -261,19 +264,19 @@ const client = createTRPCClient<AppRouter>({
       url: 'http://localhost:8080',
     }),
   ],
-});
+})
 
 // Test createUser returns token
 const result = await client.createUser.mutate({
   email: `test-${Date.now()}@example.com`,
   password: 'password123',
-});
+})
 
 if (result.token && result.user.id && result.user.email) {
-  console.log('✅ createUser returns token and user');
-  console.log('Token:', result.token.substring(0, 20) + '...');
+  console.log('✅ createUser returns token and user')
+  console.log('Token:', result.token.substring(0, 20) + '...')
 } else {
-  console.log('❌ Missing token or user data');
+  console.log('❌ Missing token or user data')
 }
 ```
 
@@ -295,17 +298,17 @@ try {
   await client.createUser.mutate({
     email: 'duplicate@example.com',
     password: 'password123',
-  });
+  })
   await client.createUser.mutate({
     email: 'duplicate@example.com',
     password: 'password123',
-  });
-  console.log('❌ Should have thrown CONFLICT error');
+  })
+  console.log('❌ Should have thrown CONFLICT error')
 } catch (error: any) {
   if (error.message.includes('Email already registered')) {
-    console.log('✅ Correctly rejected duplicate email');
+    console.log('✅ Correctly rejected duplicate email')
   } else {
-    console.log('❌ Wrong error:', error.message);
+    console.log('❌ Wrong error:', error.message)
   }
 }
 ```
@@ -338,6 +341,7 @@ git commit -m "chore(api): remove temporary test file"
 ## Task 4: API - Add Auth Context and Protected Procedure
 
 **Files:**
+
 - Modify: `packages/api/src/trpc.ts`
 - Modify: `packages/api/src/index.ts`
 
@@ -346,35 +350,35 @@ git commit -m "chore(api): remove temporary test file"
 Replace `packages/api/src/trpc.ts` with:
 
 ```typescript
-import { initTRPC, TRPCError } from '@trpc/server';
-import { verifyToken } from './utils/jwt';
+import { initTRPC, TRPCError } from '@trpc/server'
+import { verifyToken } from './utils/jwt'
 
 export const createContext = async ({ req }: { req: Request }) => {
-  const token = req.headers.get('authorization')?.replace('Bearer ', '');
+  const token = req.headers.get('authorization')?.replace('Bearer ', '')
 
   if (!token) {
-    return { user: null };
+    return { user: null }
   }
 
   try {
-    const payload = await verifyToken(token);
-    return { user: payload };
+    const payload = await verifyToken(token)
+    return { user: payload }
   } catch {
-    return { user: null };
+    return { user: null }
   }
-};
+}
 
-const t = initTRPC.context<typeof createContext>().create();
+const t = initTRPC.context<typeof createContext>().create()
 
-export const router = t.router;
-export const publicProcedure = t.procedure;
+export const router = t.router
+export const publicProcedure = t.procedure
 
 export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
   if (!ctx.user) {
-    throw new TRPCError({ code: 'UNAUTHORIZED' });
+    throw new TRPCError({ code: 'UNAUTHORIZED' })
   }
-  return next({ ctx: { user: ctx.user } });
-});
+  return next({ ctx: { user: ctx.user } })
+})
 ```
 
 **Step 2: Update index.ts to use createContext**
@@ -382,20 +386,20 @@ export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
 Modify `packages/api/src/index.ts` to pass createContext:
 
 ```typescript
-import { createHTTPServer } from '@trpc/server/adapters/standalone';
-import { appRouter } from './router';
-import { createContext } from './trpc';
+import { createHTTPServer } from '@trpc/server/adapters/standalone'
+import { appRouter } from './router'
+import { createContext } from './trpc'
 
 const server = createHTTPServer({
   router: appRouter,
   createContext,
-});
+})
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8080
 
-server.listen(PORT);
+server.listen(PORT)
 
-console.log(`🚀 Server running on http://localhost:${PORT}`);
+console.log(`🚀 Server running on http://localhost:${PORT}`)
 ```
 
 **Step 3: Test protected procedure (create example)**
@@ -416,8 +420,8 @@ getProfile: protectedProcedure.query(({ ctx }) => {
 Create `packages/api/test-auth.ts`:
 
 ```typescript
-import { createTRPCClient, httpBatchLink } from '@trpc/client';
-import type { AppRouter } from './src/router';
+import { createTRPCClient, httpBatchLink } from '@trpc/client'
+import type { AppRouter } from './src/router'
 
 const client = createTRPCClient<AppRouter>({
   links: [
@@ -425,13 +429,13 @@ const client = createTRPCClient<AppRouter>({
       url: 'http://localhost:8080',
     }),
   ],
-});
+})
 
 // Create user and get token
 const { token } = await client.createUser.mutate({
   email: `test-${Date.now()}@example.com`,
   password: 'password123',
-});
+})
 
 // Test protected endpoint without token
 const clientNoAuth = createTRPCClient<AppRouter>({
@@ -440,13 +444,13 @@ const clientNoAuth = createTRPCClient<AppRouter>({
       url: 'http://localhost:8080',
     }),
   ],
-});
+})
 
 try {
-  await clientNoAuth.getProfile.query();
-  console.log('❌ Should require auth');
+  await clientNoAuth.getProfile.query()
+  console.log('❌ Should require auth')
 } catch (error: any) {
-  console.log('✅ Correctly rejected unauthenticated request');
+  console.log('✅ Correctly rejected unauthenticated request')
 }
 
 // Test protected endpoint with token
@@ -459,10 +463,10 @@ const clientWithAuth = createTRPCClient<AppRouter>({
       },
     }),
   ],
-});
+})
 
-const profile = await clientWithAuth.getProfile.query();
-console.log('✅ Authenticated request succeeded:', profile.email);
+const profile = await clientWithAuth.getProfile.query()
+console.log('✅ Authenticated request succeeded:', profile.email)
 ```
 
 Run:
@@ -493,6 +497,7 @@ git commit -m "feat(api): add auth context and protected procedure support"
 ## Task 5: CLI - Add Dependencies
 
 **Files:**
+
 - Modify: `packages/cli/package.json`
 
 **Step 1: Install CLI dependencies**
@@ -516,6 +521,7 @@ git commit -m "feat(cli): add auth dependencies (jose, ink-select-input, ink-tex
 ## Task 6: CLI - Create Types
 
 **Files:**
+
 - Create: `packages/cli/src/types.ts`
 
 **Step 1: Create types file**
@@ -523,29 +529,29 @@ git commit -m "feat(cli): add auth dependencies (jose, ink-select-input, ink-tex
 Create `packages/cli/src/types.ts`:
 
 ```typescript
-export type Route = 'auth' | 'dashboard' | 'settings';
+export type Route = 'auth' | 'dashboard' | 'settings'
 
 export type RouteConfig = {
-  component: React.ComponentType<any>;
-  protected: boolean;
-};
+  component: React.ComponentType<any>
+  protected: boolean
+}
 
 export type RouteStackItem = {
-  name: Route;
-  params?: any;
-};
+  name: Route
+  params?: any
+}
 
 export type RouterContextType = {
-  push: (route: Route, params?: any) => void;
-  pop: () => void;
-  replace: (route: Route, params?: any) => void;
-  currentRoute: Route;
-  params?: any;
-};
+  push: (route: Route, params?: any) => void
+  pop: () => void
+  replace: (route: Route, params?: any) => void
+  currentRoute: Route
+  params?: any
+}
 
 export type Credentials = {
-  token: string;
-};
+  token: string
+}
 ```
 
 **Step 2: Commit**
@@ -560,6 +566,7 @@ git commit -m "feat(cli): add TypeScript types for routing and auth"
 ## Task 7: CLI - Create Credentials Utilities
 
 **Files:**
+
 - Create: `packages/cli/src/utils/credentials.ts`
 
 **Step 1: Create utils directory**
@@ -573,45 +580,45 @@ mkdir -p packages/cli/src/utils
 Create `packages/cli/src/utils/credentials.ts`:
 
 ```typescript
-import { homedir } from 'os';
-import { join } from 'path';
-import { existsSync, mkdirSync, readFileSync, writeFileSync, unlinkSync } from 'fs';
-import { jwtVerify } from 'jose';
+import { homedir } from 'os'
+import { join } from 'path'
+import { existsSync, mkdirSync, readFileSync, writeFileSync, unlinkSync } from 'fs'
+import { jwtVerify } from 'jose'
 
-const CONFIG_DIR = join(homedir(), '.ink-starter');
-const CREDENTIALS_PATH = join(CONFIG_DIR, 'credentials.json');
+const CONFIG_DIR = join(homedir(), '.ink-starter')
+const CREDENTIALS_PATH = join(CONFIG_DIR, 'credentials.json')
 
 export function getToken(): string | null {
   try {
     if (!existsSync(CREDENTIALS_PATH)) {
-      return null;
+      return null
     }
-    const data = readFileSync(CREDENTIALS_PATH, 'utf-8');
-    const { token } = JSON.parse(data);
-    return token || null;
+    const data = readFileSync(CREDENTIALS_PATH, 'utf-8')
+    const { token } = JSON.parse(data)
+    return token || null
   } catch {
-    return null;
+    return null
   }
 }
 
 export function saveToken(token: string): void {
   try {
     if (!existsSync(CONFIG_DIR)) {
-      mkdirSync(CONFIG_DIR, { recursive: true });
+      mkdirSync(CONFIG_DIR, { recursive: true })
     }
-    writeFileSync(CREDENTIALS_PATH, JSON.stringify({ token }, null, 2), 'utf-8');
+    writeFileSync(CREDENTIALS_PATH, JSON.stringify({ token }, null, 2), 'utf-8')
   } catch (error) {
-    console.error('Failed to save credentials:', error);
+    console.error('Failed to save credentials:', error)
   }
 }
 
 export function clearToken(): void {
   try {
     if (existsSync(CREDENTIALS_PATH)) {
-      unlinkSync(CREDENTIALS_PATH);
+      unlinkSync(CREDENTIALS_PATH)
     }
   } catch (error) {
-    console.error('Failed to clear credentials:', error);
+    console.error('Failed to clear credentials:', error)
   }
 }
 
@@ -619,22 +626,22 @@ export async function isTokenValid(token: string): Promise<boolean> {
   try {
     // Just check if token is well-formed and not expired
     // Don't verify signature (we don't have the secret on client)
-    const parts = token.split('.');
+    const parts = token.split('.')
     if (parts.length !== 3) {
-      return false;
+      return false
     }
 
-    const payload = JSON.parse(atob(parts[1]));
-    const exp = payload.exp;
+    const payload = JSON.parse(atob(parts[1]))
+    const exp = payload.exp
 
     if (!exp) {
-      return false;
+      return false
     }
 
     // Check if expired (exp is in seconds, Date.now() is in ms)
-    return exp * 1000 > Date.now();
+    return exp * 1000 > Date.now()
   } catch {
-    return false;
+    return false
   }
 }
 ```
@@ -651,6 +658,7 @@ git commit -m "feat(cli): add token storage and validation utilities"
 ## Task 8: CLI - Create tRPC Client
 
 **Files:**
+
 - Create: `packages/cli/src/utils/trpc.ts`
 
 **Step 1: Install tRPC client dependencies**
@@ -665,21 +673,21 @@ bun add @trpc/client
 Create `packages/cli/src/utils/trpc.ts`:
 
 ```typescript
-import { createTRPCClient, httpBatchLink } from '@trpc/client';
-import type { AppRouter } from '../../../api/src/router';
-import { getToken } from './credentials';
+import { createTRPCClient, httpBatchLink } from '@trpc/client'
+import type { AppRouter } from '../../../api/src/router'
+import { getToken } from './credentials'
 
 export const trpcClient = createTRPCClient<AppRouter>({
   links: [
     httpBatchLink({
       url: 'http://localhost:8080',
       headers() {
-        const token = getToken();
-        return token ? { authorization: `Bearer ${token}` } : {};
+        const token = getToken()
+        return token ? { authorization: `Bearer ${token}` } : {}
       },
     }),
   ],
-});
+})
 ```
 
 **Step 3: Commit**
@@ -694,6 +702,7 @@ git commit -m "feat(cli): add tRPC client with auth header support"
 ## Task 9: CLI - Create Router Component
 
 **Files:**
+
 - Create: `packages/cli/src/components/Router.tsx`
 
 **Step 1: Create components directory**
@@ -817,6 +826,7 @@ git commit -m "feat(cli): add Router component with navigation stack and auth gu
 ## Task 10: CLI - Create Menu Component
 
 **Files:**
+
 - Create: `packages/cli/src/components/Menu.tsx`
 
 **Step 1: Create Menu component**
@@ -861,6 +871,7 @@ git commit -m "feat(cli): add Menu component for login/signup selection"
 ## Task 11: CLI - Create LoginForm Component
 
 **Files:**
+
 - Create: `packages/cli/src/components/LoginForm.tsx`
 
 **Step 1: Create LoginForm component**
@@ -969,6 +980,7 @@ git commit -m "feat(cli): add LoginForm component with error handling"
 ## Task 12: CLI - Create SignupForm Component
 
 **Files:**
+
 - Create: `packages/cli/src/components/SignupForm.tsx`
 
 **Step 1: Create SignupForm component**
@@ -1084,6 +1096,7 @@ git commit -m "feat(cli): add SignupForm component with validation"
 ## Task 13: CLI - Create AuthScreen Component
 
 **Files:**
+
 - Create: `packages/cli/src/components/AuthScreen.tsx`
 
 **Step 1: Create AuthScreen component**
@@ -1125,6 +1138,7 @@ git commit -m "feat(cli): add AuthScreen to orchestrate auth flow"
 ## Task 14: CLI - Create Dashboard Component
 
 **Files:**
+
 - Create: `packages/cli/src/components/Dashboard.tsx`
 
 **Step 1: Create placeholder Dashboard component**
@@ -1171,6 +1185,7 @@ git commit -m "feat(cli): add Dashboard placeholder component"
 ## Task 15: CLI - Wire Up Main App
 
 **Files:**
+
 - Modify: `packages/cli/src/index.tsx`
 
 **Step 1: Update index.tsx to use Router**
@@ -1219,6 +1234,7 @@ git commit -m "feat(cli): wire up Router with auth and dashboard routes"
 ## Task 16: Add .gitignore for Credentials
 
 **Files:**
+
 - Create/Modify: `.gitignore`
 
 **Step 1: Ensure .gitignore excludes credentials and .env**
@@ -1260,6 +1276,7 @@ git commit -m "chore: add .gitignore for credentials and env files"
 ## Task 17: Manual End-to-End Testing
 
 **Files:**
+
 - None (testing only)
 
 **Step 1: Start the API server**
@@ -1340,6 +1357,7 @@ Expected: Returns to auth screen, clears invalid token
 **Step 9: Manual testing complete**
 
 All flows tested:
+
 - ✅ Signup creates account and logs in
 - ✅ Token persists across sessions
 - ✅ Login validates credentials
@@ -1351,13 +1369,14 @@ All flows tested:
 ## Task 18: Create README for Auth System
 
 **Files:**
+
 - Create: `docs/AUTH.md`
 
 **Step 1: Document the auth system**
 
 Create `docs/AUTH.md`:
 
-```markdown
+````markdown
 # Authentication System
 
 ## Overview
@@ -1380,6 +1399,7 @@ JWT-based authentication with persistent token storage.
 ## User Flow
 
 ### Signup
+
 1. CLI → AuthScreen → Menu → SignupForm
 2. User enters email and password (min 8 chars)
 3. API validates, hashes password, creates user, returns JWT
@@ -1387,6 +1407,7 @@ JWT-based authentication with persistent token storage.
 5. Router navigates to dashboard
 
 ### Login
+
 1. CLI → AuthScreen → Menu → LoginForm
 2. User enters email and password
 3. API validates credentials, returns JWT
@@ -1394,6 +1415,7 @@ JWT-based authentication with persistent token storage.
 5. Router navigates to dashboard
 
 ### Token Persistence
+
 - On CLI startup, Router checks for token
 - Valid token → Navigate to dashboard
 - Invalid/expired token → Clear and show auth screen
@@ -1407,6 +1429,7 @@ JWT-based authentication with persistent token storage.
 DATABASE_URL=postgresql://user:password@localhost:5432/ink-starter
 JWT_SECRET=i-am-not-a-secret
 ```
+````
 
 ### Running Locally
 
@@ -1453,10 +1476,9 @@ errors: UNAUTHORIZED (invalid credentials)
 Use `protectedProcedure` instead of `publicProcedure`:
 
 ```typescript
-myProtectedEndpoint: protectedProcedure
-  .query(({ ctx }) => {
-    // ctx.user available: { userId: string, email: string }
-  })
+myProtectedEndpoint: protectedProcedure.query(({ ctx }) => {
+  // ctx.user available: { userId: string, email: string }
+})
 ```
 
 ## File Structure
@@ -1483,14 +1505,15 @@ packages/
         │   └── trpc.ts           # API client
         └── types.ts              # Router types
 ```
-```
+
+````
 
 **Step 2: Commit**
 
 ```bash
 git add docs/AUTH.md
 git commit -m "docs: add authentication system documentation"
-```
+````
 
 ---
 

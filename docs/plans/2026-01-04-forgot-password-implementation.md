@@ -13,6 +13,7 @@
 ### Task 1: Add Database Schema
 
 **Files:**
+
 - Modify: `packages/api/src/db/schema.ts`
 
 **Step 1: Add the password_reset_tokens table**
@@ -20,18 +21,21 @@
 Add after the `users` table:
 
 ```ts
-import { pgTable, uuid, timestamp, varchar, integer } from 'drizzle-orm/pg-core';
+import { pgTable, uuid, timestamp, varchar, integer } from 'drizzle-orm/pg-core'
 
 export const passwordResetTokens = pgTable('password_reset_tokens', {
   id: uuid('id').primaryKey().defaultRandom(),
-  userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }).unique(),
+  userId: uuid('user_id')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' })
+    .unique(),
   code: varchar('code', { length: 6 }).notNull(),
   attempts: integer('attempts').notNull().default(0),
   createdAt: timestamp('created_at').notNull().defaultNow(),
-});
+})
 
-export type PasswordResetToken = typeof passwordResetTokens.$inferSelect;
-export type NewPasswordResetToken = typeof passwordResetTokens.$inferInsert;
+export type PasswordResetToken = typeof passwordResetTokens.$inferSelect
+export type NewPasswordResetToken = typeof passwordResetTokens.$inferInsert
 ```
 
 **Step 2: Run migration**
@@ -51,6 +55,7 @@ git commit -m "feat(api): add password_reset_tokens table"
 ### Task 2: Add requestPasswordReset Endpoint
 
 **Files:**
+
 - Modify: `packages/api/src/router.ts`
 
 **Step 1: Add the requestPasswordReset procedure**
@@ -93,7 +98,7 @@ requestPasswordReset: publicProcedure
 Add import at top:
 
 ```ts
-import { passwordResetTokens } from './db/schema';
+import { passwordResetTokens } from './db/schema'
 ```
 
 **Step 2: Test manually**
@@ -113,6 +118,7 @@ git commit -m "feat(api): add requestPasswordReset endpoint"
 ### Task 3: Add resetPassword Endpoint
 
 **Files:**
+
 - Modify: `packages/api/src/router.ts`
 
 **Step 1: Add the resetPassword procedure**
@@ -200,156 +206,159 @@ git commit -m "feat(api): add resetPassword endpoint"
 ### Task 4: Create ForgotPasswordForm Component
 
 **Files:**
+
 - Create: `packages/cli/src/components/ForgotPasswordForm.tsx`
 
 **Step 1: Create the component**
 
 ```tsx
-import React, { useState } from 'react';
-import { Box, Text, useInput } from 'ink';
-import TextInput from 'ink-text-input';
-import { trpcClient } from '../utils/trpc';
-import { useRouter } from './Router';
-import { Footer } from './Footer';
+import React, { useState } from 'react'
+import { Box, Text, useInput } from 'ink'
+import TextInput from 'ink-text-input'
+import { trpcClient } from '../utils/trpc'
+import { useRouter } from './Router'
+import { Footer } from './Footer'
 
 type ForgotPasswordFormProps = {
-  onBack: () => void;
-};
+  onBack: () => void
+}
 
-type Stage = 'email' | 'reset';
+type Stage = 'email' | 'reset'
 
 export function ForgotPasswordForm({ onBack }: ForgotPasswordFormProps) {
-  const [stage, setStage] = useState<Stage>('email');
-  const [email, setEmail] = useState('');
-  const [code, setCode] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [activeField, setActiveField] = useState<'email' | 'code' | 'newPassword' | 'confirmPassword' | 'submit'>('email');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const { navigate } = useRouter();
+  const [stage, setStage] = useState<Stage>('email')
+  const [email, setEmail] = useState('')
+  const [code, setCode] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [activeField, setActiveField] = useState<
+    'email' | 'code' | 'newPassword' | 'confirmPassword' | 'submit'
+  >('email')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const { navigate } = useRouter()
 
   const handleRequestCode = async () => {
     if (!email.trim()) {
-      setError('Email is required');
-      return;
+      setError('Email is required')
+      return
     }
 
-    setLoading(true);
-    setError('');
+    setLoading(true)
+    setError('')
 
     try {
-      await trpcClient.requestPasswordReset.mutate({ email });
-      setStage('reset');
-      setActiveField('code');
+      await trpcClient.requestPasswordReset.mutate({ email })
+      setStage('reset')
+      setActiveField('code')
     } catch (err: any) {
-      setError('An unexpected error occurred');
+      setError('An unexpected error occurred')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const handleResetPassword = async () => {
     if (!code.trim()) {
-      setError('Code is required');
-      setActiveField('code');
-      return;
+      setError('Code is required')
+      setActiveField('code')
+      return
     }
     if (code.length !== 6) {
-      setError('Code must be 6 digits');
-      setActiveField('code');
-      return;
+      setError('Code must be 6 digits')
+      setActiveField('code')
+      return
     }
     if (!newPassword) {
-      setError('New password is required');
-      setActiveField('newPassword');
-      return;
+      setError('New password is required')
+      setActiveField('newPassword')
+      return
     }
     if (newPassword.length < 8) {
-      setError('Password must be at least 8 characters');
-      setActiveField('newPassword');
-      return;
+      setError('Password must be at least 8 characters')
+      setActiveField('newPassword')
+      return
     }
     if (newPassword !== confirmPassword) {
-      setError('Passwords do not match');
-      setActiveField('confirmPassword');
-      return;
+      setError('Passwords do not match')
+      setActiveField('confirmPassword')
+      return
     }
 
-    setLoading(true);
-    setError('');
+    setLoading(true)
+    setError('')
 
     try {
-      await trpcClient.resetPassword.mutate({ email, code, newPassword });
-      navigate('login', { successMessage: 'Password reset successfully!' });
+      await trpcClient.resetPassword.mutate({ email, code, newPassword })
+      navigate('login', { successMessage: 'Password reset successfully!' })
     } catch (err: any) {
-      setLoading(false);
-      setError(err.message || 'An unexpected error occurred');
+      setLoading(false)
+      setError(err.message || 'An unexpected error occurred')
     }
-  };
+  }
 
   const handleFieldSubmit = () => {
     if (stage === 'email') {
       if (activeField === 'email') {
-        setActiveField('submit');
+        setActiveField('submit')
       }
     } else {
-      if (activeField === 'code') setActiveField('newPassword');
-      else if (activeField === 'newPassword') setActiveField('confirmPassword');
-      else if (activeField === 'confirmPassword') setActiveField('submit');
+      if (activeField === 'code') setActiveField('newPassword')
+      else if (activeField === 'newPassword') setActiveField('confirmPassword')
+      else if (activeField === 'confirmPassword') setActiveField('submit')
     }
-  };
+  }
 
   useInput((input, key) => {
-    if (loading) return;
+    if (loading) return
     if (key.escape) {
       if (stage === 'reset') {
-        setStage('email');
-        setActiveField('email');
-        setCode('');
-        setNewPassword('');
-        setConfirmPassword('');
-        setError('');
+        setStage('email')
+        setActiveField('email')
+        setCode('')
+        setNewPassword('')
+        setConfirmPassword('')
+        setError('')
       } else {
-        onBack();
+        onBack()
       }
     } else if (key.upArrow || (key.shift && key.tab)) {
       if (stage === 'email') {
-        setActiveField((f) => (f === 'email' ? 'submit' : 'email'));
+        setActiveField((f) => (f === 'email' ? 'submit' : 'email'))
       } else {
         setActiveField((f) => {
-          if (f === 'code') return 'submit';
-          if (f === 'newPassword') return 'code';
-          if (f === 'confirmPassword') return 'newPassword';
-          return 'confirmPassword';
-        });
+          if (f === 'code') return 'submit'
+          if (f === 'newPassword') return 'code'
+          if (f === 'confirmPassword') return 'newPassword'
+          return 'confirmPassword'
+        })
       }
     } else if (key.downArrow || key.tab) {
       if (stage === 'email') {
-        setActiveField((f) => (f === 'email' ? 'submit' : 'email'));
+        setActiveField((f) => (f === 'email' ? 'submit' : 'email'))
       } else {
         setActiveField((f) => {
-          if (f === 'code') return 'newPassword';
-          if (f === 'newPassword') return 'confirmPassword';
-          if (f === 'confirmPassword') return 'submit';
-          return 'code';
-        });
+          if (f === 'code') return 'newPassword'
+          if (f === 'newPassword') return 'confirmPassword'
+          if (f === 'confirmPassword') return 'submit'
+          return 'code'
+        })
       }
     } else if (key.return && activeField === 'submit') {
       if (stage === 'email') {
-        handleRequestCode();
+        handleRequestCode()
       } else {
-        handleResetPassword();
+        handleResetPassword()
       }
     }
-  });
+  })
 
   if (loading) {
     return (
       <Box flexDirection="column" padding={1}>
         <Text dimColor>{stage === 'email' ? 'Requesting code...' : 'Resetting password...'}</Text>
       </Box>
-    );
+    )
   }
 
   return (
@@ -366,7 +375,9 @@ export function ForgotPasswordForm({ onBack }: ForgotPasswordFormProps) {
 
       {stage === 'email' && (
         <Box flexDirection="column">
-          <Text dimColor marginBottom={1}>Enter your email to receive a reset code.</Text>
+          <Text dimColor marginBottom={1}>
+            Enter your email to receive a reset code.
+          </Text>
           <Box>
             <Text dimColor={activeField !== 'email'}>Email: </Text>
             {activeField === 'email' ? (
@@ -376,7 +387,10 @@ export function ForgotPasswordForm({ onBack }: ForgotPasswordFormProps) {
             )}
           </Box>
           <Box marginTop={1}>
-            <Text color={activeField === 'submit' ? 'green' : undefined} dimColor={activeField !== 'submit'}>
+            <Text
+              color={activeField === 'submit' ? 'green' : undefined}
+              dimColor={activeField !== 'submit'}
+            >
               [ Send Code ]
             </Text>
           </Box>
@@ -385,7 +399,9 @@ export function ForgotPasswordForm({ onBack }: ForgotPasswordFormProps) {
 
       {stage === 'reset' && (
         <Box flexDirection="column">
-          <Text dimColor marginBottom={1}>Check your console for the 6-digit code.</Text>
+          <Text dimColor marginBottom={1}>
+            Check your console for the 6-digit code.
+          </Text>
           <Box>
             <Text dimColor={activeField !== 'code'}>Code: </Text>
             {activeField === 'code' ? (
@@ -397,7 +413,12 @@ export function ForgotPasswordForm({ onBack }: ForgotPasswordFormProps) {
           <Box>
             <Text dimColor={activeField !== 'newPassword'}>New Password: </Text>
             {activeField === 'newPassword' ? (
-              <TextInput value={newPassword} onChange={setNewPassword} onSubmit={handleFieldSubmit} mask="*" />
+              <TextInput
+                value={newPassword}
+                onChange={setNewPassword}
+                onSubmit={handleFieldSubmit}
+                mask="*"
+              />
             ) : (
               <Text dimColor>{'*'.repeat(newPassword.length)}</Text>
             )}
@@ -405,13 +426,21 @@ export function ForgotPasswordForm({ onBack }: ForgotPasswordFormProps) {
           <Box>
             <Text dimColor={activeField !== 'confirmPassword'}>Confirm Password: </Text>
             {activeField === 'confirmPassword' ? (
-              <TextInput value={confirmPassword} onChange={setConfirmPassword} onSubmit={handleFieldSubmit} mask="*" />
+              <TextInput
+                value={confirmPassword}
+                onChange={setConfirmPassword}
+                onSubmit={handleFieldSubmit}
+                mask="*"
+              />
             ) : (
               <Text dimColor>{'*'.repeat(confirmPassword.length)}</Text>
             )}
           </Box>
           <Box marginTop={1}>
-            <Text color={activeField === 'submit' ? 'green' : undefined} dimColor={activeField !== 'submit'}>
+            <Text
+              color={activeField === 'submit' ? 'green' : undefined}
+              dimColor={activeField !== 'submit'}
+            >
               [ Reset Password ]
             </Text>
           </Box>
@@ -420,7 +449,7 @@ export function ForgotPasswordForm({ onBack }: ForgotPasswordFormProps) {
 
       <Footer />
     </Box>
-  );
+  )
 }
 ```
 
@@ -436,6 +465,7 @@ git commit -m "feat(cli): add ForgotPasswordForm component"
 ### Task 5: Update Router to Support Success Messages
 
 **Files:**
+
 - Modify: `packages/cli/src/components/Router.tsx`
 
 **Step 1: Update RouterContext to support params**
@@ -471,6 +501,7 @@ git commit -m "feat(cli): add route params support to Router"
 ### Task 6: Update LoginForm to Show Success Message
 
 **Files:**
+
 - Modify: `packages/cli/src/components/LoginForm.tsx`
 
 **Step 1: Add success message display**
@@ -478,14 +509,16 @@ git commit -m "feat(cli): add route params support to Router"
 Get params from router and display success message if present:
 
 ```tsx
-const { replace, params } = useRouter();
+const { replace, params } = useRouter()
 
 // Add after error display, before form
-{params?.successMessage && (
-  <Box marginBottom={1}>
-    <Text color="green">{params.successMessage}</Text>
-  </Box>
-)}
+{
+  params?.successMessage && (
+    <Box marginBottom={1}>
+      <Text color="green">{params.successMessage}</Text>
+    </Box>
+  )
+}
 ```
 
 **Step 2: Commit**
@@ -500,6 +533,7 @@ git commit -m "feat(cli): display success message on login screen"
 ### Task 7: Add Forgot Password Link to LoginForm
 
 **Files:**
+
 - Modify: `packages/cli/src/components/LoginForm.tsx`
 
 **Step 1: Add forgot password navigation**
@@ -508,14 +542,11 @@ Add 'forgot' to activeField type and add the link after the login button:
 
 ```tsx
 // Update activeField type
-const [activeField, setActiveField] = useState<'email' | 'password' | 'submit' | 'forgot'>('email');
+const [activeField, setActiveField] = useState<'email' | 'password' | 'submit' | 'forgot'>('email')
 
 // Add after [ Login ] box
-<Box>
-  <Text
-    color={activeField === 'forgot' ? 'cyan' : undefined}
-    dimColor={activeField !== 'forgot'}
-  >
+;<Box>
+  <Text color={activeField === 'forgot' ? 'cyan' : undefined} dimColor={activeField !== 'forgot'}>
     [ Forgot Password? ]
   </Text>
 </Box>
@@ -536,6 +567,7 @@ git commit -m "feat(cli): add forgot password link to login form"
 ### Task 8: Register ForgotPassword Route
 
 **Files:**
+
 - Modify: `packages/cli/src/components/Router.tsx`
 - Modify: `packages/cli/src/index.tsx` (if needed)
 

@@ -12,5 +12,7 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true
-  }
+  },
+  "files": [],
+  "references": [{ "path": "./packages/api" }, { "path": "./packages/cli" }]
 }

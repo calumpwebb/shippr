@@ -1,28 +1,28 @@
-import { useState } from 'react';
-import { Box, Text, useInput } from 'ink';
-import { useRouter } from '../components/Router';
+import { useState } from 'react'
+import { Box, Text, useInput } from 'ink'
+import { useRouter } from '../components/Router'
 
 const items = [
   { label: 'Login', value: 'login' as const },
   { label: 'Create Account', value: 'create-account' as const },
   { label: 'Forgot Password', value: 'forgot-password' as const },
-];
+]
 
 export function WelcomeScreen() {
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const { push } = useRouter();
+  const [selectedIndex, setSelectedIndex] = useState(0)
+  const { push } = useRouter()
 
   useInput((_input, key) => {
     if (key.upArrow) {
-      setSelectedIndex((i) => (i > 0 ? i - 1 : i));
+      setSelectedIndex((i) => (i > 0 ? i - 1 : i))
     } else if (key.downArrow) {
-      setSelectedIndex((i) => (i < items.length - 1 ? i + 1 : i));
+      setSelectedIndex((i) => (i < items.length - 1 ? i + 1 : i))
     } else if (key.tab) {
-      setSelectedIndex((i) => (i + 1) % items.length);
+      setSelectedIndex((i) => (i + 1) % items.length)
     } else if (key.return) {
-      push(items[selectedIndex].value);
+      push(items[selectedIndex].value)
     }
-  });
+  })
 
   return (
     <Box flexDirection="column" padding={1}>
@@ -38,5 +38,5 @@ export function WelcomeScreen() {
         </Box>
       ))}
     </Box>
-  );
+  )
 }

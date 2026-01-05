@@ -1,37 +1,35 @@
-import { useState } from 'react';
-import { Box, Text, useApp, useInput } from 'ink';
-import { useRouter } from './Router';
+import { useState } from 'react'
+import { Box, Text, useApp, useInput } from 'ink'
+import { useRouter } from './Router'
 
 export function Footer() {
-  const [confirmExit, setConfirmExit] = useState(false);
-  const { exit } = useApp();
-  const { canGoBack, currentRoute } = useRouter();
+  const [confirmExit, setConfirmExit] = useState(false)
+  const { exit } = useApp()
+  const { canGoBack } = useRouter()
 
   useInput((input, key) => {
     if (key.ctrl && input === 'c') {
       if (confirmExit) {
-        exit();
+        exit()
       } else {
-        setConfirmExit(true);
+        setConfirmExit(true)
       }
     } else if (confirmExit) {
-      setConfirmExit(false);
+      setConfirmExit(false)
     }
-  });
+  })
 
   const hints = ['↑/↓/TAB navigate', canGoBack && 'ESC back', 'Ctrl+C quit']
     .filter(Boolean)
-    .join(', ');
+    .join(', ')
 
   return (
     <Box marginTop={1}>
       {confirmExit ? (
         <Text color="yellow">Press Ctrl+C again to exit!</Text>
       ) : (
-        <Text dimColor>
-          ({hints}) [route: <Text color="cyan">{currentRoute}</Text>]
-        </Text>
+        <Text dimColor>({hints})</Text>
       )}
     </Box>
-  );
+  )
 }

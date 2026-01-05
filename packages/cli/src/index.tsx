@@ -1,18 +1,18 @@
 #!/usr/bin/env bun
-import { render } from 'ink';
-import { Router } from './components/Router';
-import { routes } from './routes';
+import { render } from 'ink'
+import { Router } from './components/Router'
+import { routes } from './routes'
 
 function App() {
-  return <Router routes={routes} />;
+  return <Router routes={routes} />
 }
 
 // Enter alternate screen buffer
-process.stdout.write('\x1b[?1049h');
+process.stdout.write('\x1b[?1049h')
 
-const { waitUntilExit } = render(<App />, { exitOnCtrlC: false });
+const { waitUntilExit } = render(<App />, { exitOnCtrlC: false })
 
 waitUntilExit().then(() => {
   // Leave alternate screen buffer
-  process.stdout.write('\x1b[?1049l');
-});
+  process.stdout.write('\x1b[?1049l')
+})

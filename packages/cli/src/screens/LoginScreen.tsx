@@ -1,83 +1,83 @@
-import { useState } from 'react';
-import { Box, Text, useInput } from 'ink';
-import { TextInput } from '../components/TextInput';
-import { trpcClient, toApiError, ApiErrorCode } from '../utils/trpc';
-import { saveToken } from '../utils/credentials';
-import { useRouter } from '../components/Router';
+import { useState } from 'react'
+import { Box, Text, useInput } from 'ink'
+import { TextInput } from '../components/TextInput'
+import { trpcClient, toApiError, ApiErrorCode } from '../utils/trpc'
+import { saveToken } from '../utils/credentials'
+import { useRouter } from '../components/Router'
 
-const fields = ['email', 'password', 'submit'] as const;
-type Field = (typeof fields)[number];
+const fields = ['email', 'password', 'submit'] as const
+type Field = (typeof fields)[number]
 
 export function LoginScreen() {
-  const [activeField, setActiveField] = useState<Field>('email');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const { reset, pop, params } = useRouter();
+  const [activeField, setActiveField] = useState<Field>('email')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const { reset, pop, params } = useRouter()
 
-  const successMessage = (params as { successMessage?: string } | undefined)?.successMessage;
+  const successMessage = (params as { successMessage?: string } | undefined)?.successMessage
 
   const navigateField = (direction: 1 | -1) => {
     setActiveField((f) => {
-      const idx = fields.indexOf(f);
-      return fields[(idx + direction + fields.length) % fields.length];
-    });
-  };
+      const idx = fields.indexOf(f)
+      return fields[(idx + direction + fields.length) % fields.length]
+    })
+  }
 
   const handleFieldSubmit = () => {
-    const idx = fields.indexOf(activeField);
-    const submitIdx = fields.indexOf('submit');
+    const idx = fields.indexOf(activeField)
+    const submitIdx = fields.indexOf('submit')
     if (idx < submitIdx) {
-      navigateField(1);
+      navigateField(1)
     }
-  };
+  }
 
   const handleSubmit = async () => {
     if (!email.trim()) {
-      setError('Email is required');
-      setActiveField('email');
-      return;
+      setError('Email is required')
+      setActiveField('email')
+      return
     }
 
     if (!password) {
-      setError('Password is required');
-      setActiveField('password');
-      return;
+      setError('Password is required')
+      setActiveField('password')
+      return
     }
 
-    setLoading(true);
-    setError('');
+    setLoading(true)
+    setError('')
 
     try {
-      const result = await trpcClient.loginUser.mutate({ email, password });
-      saveToken(result.token);
-      reset('dashboard');
+      const result = await trpcClient.auth.login.mutate({ email, password })
+      saveToken(result.token)
+      reset('dashboard')
     } catch (err) {
-      setLoading(false);
-      const apiError = toApiError(err);
+      setLoading(false)
+      const apiError = toApiError(err)
 
       if (apiError.code === ApiErrorCode.UNAUTHORIZED) {
-        setError('Invalid email or password');
+        setError('Invalid email or password')
       } else {
-        setError(apiError.message);
+        setError(apiError.message)
       }
-      setPassword('');
+      setPassword('')
     }
-  };
+  }
 
   useInput((_input, key) => {
-    if (loading) return;
+    if (loading) return
     if (key.escape) {
-      pop();
+      pop()
     } else if (key.upArrow) {
-      navigateField(-1);
+      navigateField(-1)
     } else if (key.downArrow || key.tab) {
-      navigateField(1);
+      navigateField(1)
     } else if (key.return && activeField === 'submit') {
-      handleSubmit();
+      handleSubmit()
     }
-  });
+  })
 
   return (
     <Box flexDirection="column" padding={1}>
@@ -110,13 +110,21 @@ export function LoginScreen() {
           <Box>
             <Text dimColor={activeField !== 'password'}>Password: </Text>
             {activeField === 'password' ? (
-              <TextInput value={password} onChange={setPassword} onSubmit={handleFieldSubmit} mask="*" />
+              <TextInput
+                value={password}
+                onChange={setPassword}
+                onSubmit={handleFieldSubmit}
+                mask="*"
+              />
             ) : (
               <Text dimColor>{'*'.repeat(password.length)}</Text>
             )}
           </Box>
           <Box marginTop={1}>
-            <Text color={activeField === 'submit' ? 'green' : undefined} dimColor={activeField !== 'submit'}>
+            <Text
+              color={activeField === 'submit' ? 'green' : undefined}
+              dimColor={activeField !== 'submit'}
+            >
               [ Login ]
             </Text>
           </Box>
@@ -129,5 +137,5 @@ export function LoginScreen() {
         </Box>
       )}
     </Box>
-  );
+  )
 }

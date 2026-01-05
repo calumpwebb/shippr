@@ -32,39 +32,39 @@ Single source of truth in `routes.ts`:
 
 ```typescript
 export const routes = {
-  'welcome': { component: WelcomeScreen, protected: false },
-  'login': { component: LoginScreen, protected: false },
+  welcome: { component: WelcomeScreen, protected: false },
+  login: { component: LoginScreen, protected: false },
   'create-account': { component: CreateAccountScreen, protected: false },
   'forgot-password': { component: ForgotPasswordScreen, protected: false },
   'reset-password': { component: ResetPasswordScreen, protected: false },
-  'dashboard': { component: DashboardScreen, protected: true },
-  'settings': { component: SettingsScreen, protected: true },
-} as const;
+  dashboard: { component: DashboardScreen, protected: true },
+  settings: { component: SettingsScreen, protected: true },
+} as const
 
-export type Route = keyof typeof routes;
+export type Route = keyof typeof routes
 ```
 
 ## Typed Route Params
 
 ```typescript
 export type RouteParams = {
-  'welcome': undefined;
-  'login': { successMessage?: string };
-  'create-account': undefined;
-  'forgot-password': undefined;
-  'reset-password': { email: string };
-  'dashboard': undefined;
-  'settings': undefined;
-};
+  welcome: undefined
+  login: { successMessage?: string }
+  'create-account': undefined
+  'forgot-password': undefined
+  'reset-password': { email: string }
+  dashboard: undefined
+  settings: undefined
+}
 ```
 
 Router methods are typed to require params when needed:
 
 ```typescript
-router.push('welcome');                           // OK - no params
-router.push('login', { successMessage: 'hi' });   // OK - optional param
-router.push('reset-password', { email: 'a@b' });  // OK - required param
-router.push('reset-password');                    // ERROR - missing email
+router.push('welcome') // OK - no params
+router.push('login', { successMessage: 'hi' }) // OK - optional param
+router.push('reset-password', { email: 'a@b' }) // OK - required param
+router.push('reset-password') // ERROR - missing email
 ```
 
 ## Router Methods
@@ -76,26 +76,27 @@ router.push('reset-password');                    // ERROR - missing email
 
 ## Navigation Flow
 
-| From | To | Params | Trigger |
-|------|----|--------|---------|
-| welcome | login | — | Menu selection |
-| welcome | create-account | — | Menu selection |
-| welcome | forgot-password | — | Menu selection |
-| login | dashboard | — | Successful login |
-| login | welcome | — | ESC / back |
-| create-account | login | `{ successMessage }` | Successful signup |
-| create-account | welcome | — | ESC / back |
-| forgot-password | reset-password | `{ email }` | Code sent |
-| forgot-password | welcome | — | ESC / back |
-| reset-password | login | `{ successMessage }` | Password reset |
-| reset-password | forgot-password | — | ESC / back |
-| dashboard | settings | — | Menu selection |
-| dashboard | welcome | — | Sign out (reset) |
-| settings | dashboard | — | ESC / back |
+| From            | To              | Params               | Trigger           |
+| --------------- | --------------- | -------------------- | ----------------- |
+| welcome         | login           | —                    | Menu selection    |
+| welcome         | create-account  | —                    | Menu selection    |
+| welcome         | forgot-password | —                    | Menu selection    |
+| login           | dashboard       | —                    | Successful login  |
+| login           | welcome         | —                    | ESC / back        |
+| create-account  | login           | `{ successMessage }` | Successful signup |
+| create-account  | welcome         | —                    | ESC / back        |
+| forgot-password | reset-password  | `{ email }`          | Code sent         |
+| forgot-password | welcome         | —                    | ESC / back        |
+| reset-password  | login           | `{ successMessage }` | Password reset    |
+| reset-password  | forgot-password | —                    | ESC / back        |
+| dashboard       | settings        | —                    | Menu selection    |
+| dashboard       | welcome         | —                    | Sign out (reset)  |
+| settings        | dashboard       | —                    | ESC / back        |
 
 ## Implementation Tasks
 
 ### Create (8 files)
+
 - `src/screens/WelcomeScreen.tsx`
 - `src/screens/LoginScreen.tsx`
 - `src/screens/CreateAccountScreen.tsx`
@@ -106,11 +107,13 @@ router.push('reset-password');                    // ERROR - missing email
 - `src/routes.ts`
 
 ### Update (3 files)
+
 - `src/types.ts` — Add RouteParams, update RouterContextType
 - `src/components/Router.tsx` — Add reset(), typed methods, initial route 'welcome'
 - `src/index.tsx` — Import from routes.ts
 
 ### Delete (4 files)
+
 - `src/components/AuthScreen.tsx`
 - `src/components/LoginForm.tsx`
 - `src/components/SignupForm.tsx`

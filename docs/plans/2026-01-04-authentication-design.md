@@ -15,6 +15,7 @@ This design implements JWT-based authentication for the CLI and API. Users log i
 ### User Flow
 
 **New User or No Token:**
+
 ```
 User starts CLI
     ↓
@@ -34,6 +35,7 @@ Show main app (authenticated)
 ```
 
 **Returning User with Token:**
+
 ```
 User starts CLI
     ↓
@@ -80,6 +82,7 @@ packages/cli/src/
 ### Router with Navigation Stack
 
 **Router API:**
+
 ```typescript
 const RouterContext = React.createContext({
   push: (route: string, params?: any) => {},
@@ -87,12 +90,13 @@ const RouterContext = React.createContext({
   replace: (route: string, params?: any) => {},
   currentRoute: string,
   params: any,
-});
+})
 
-const useRouter = () => useContext(RouterContext);
+const useRouter = () => useContext(RouterContext)
 ```
 
 **Router Implementation:**
+
 - Maintains a stack of routes: `RouteStackItem[]`
 - `push(route, params)` navigates to a new screen
 - `pop()` returns to the previous screen
@@ -100,11 +104,13 @@ const useRouter = () => useContext(RouterContext);
 - The top of the stack is the current route
 
 **Route Guards:**
+
 - Each route has a `protected: boolean` flag
 - Protected routes verify token validity on render
 - Invalid tokens trigger credential deletion and redirect to authentication
 
 **Example Navigation:**
+
 ```
 User starts → Stack: ['auth']
 Login success → replace('dashboard') → Stack: ['dashboard']
@@ -116,6 +122,7 @@ Logout → replace('auth') → Stack: ['auth']
 ### Component Breakdown
 
 **`Router.tsx`** – Top-level navigation
+
 - Manages route stack state
 - Provides RouterContext to child components
 - Checks token validity on startup
@@ -123,23 +130,27 @@ Logout → replace('auth') → Stack: ['auth']
 - Enforces authentication guards
 
 **`AuthScreen.tsx`** – Authentication flow orchestration
+
 - Maintains state for `screen` (menu, login, or signup)
 - Renders Menu, LoginForm, or SignupForm based on state
 - Transitions between screens on user action
 - Stores token and navigates to dashboard on successful authentication
 
 **`Menu.tsx`** – Initial selection screen
+
 - Uses `ink-select-input` for arrow key navigation
 - Presents two options: "Login" and "Create Account"
 - Calls callback to switch screen when user selects an option
 
 **`LoginForm.tsx` and `SignupForm.tsx`** – Input forms
+
 - Sequential inputs: email, then password (Enter advances between fields)
 - Display loading state during API calls
 - Handle errors including invalid credentials and network failures
 - Return token to parent on successful submission
 
 **`utils/credentials.ts`** – Token management
+
 ```typescript
 // Read token from ~/.ink-starter/credentials.json
 export function getToken(): string | null
@@ -155,18 +166,19 @@ export function isTokenValid(token: string): boolean
 ```
 
 **`utils/trpc.ts`** – tRPC client with authentication
+
 ```typescript
 export const trpcClient = createTRPCClient({
   links: [
     httpBatchLink({
       url: 'http://localhost:8080',
       headers() {
-        const token = getToken();
-        return token ? { authorization: `Bearer ${token}` } : {};
+        const token = getToken()
+        return token ? { authorization: `Bearer ${token}` } : {}
       },
     }),
   ],
-});
+})
 ```
 
 ---
@@ -189,12 +201,12 @@ JWT_SECRET=<openssl rand -base64 32>
 **`src/utils/jwt.ts`** – New JWT utilities:
 
 ```typescript
-import { SignJWT, jwtVerify } from 'jose';
+import { SignJWT, jwtVerify } from 'jose'
 
-const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+const secret = new TextEncoder().encode(process.env.JWT_SECRET)
 
 if (!process.env.JWT_SECRET) {
-  throw new Error('JWT_SECRET environment variable is required');
+  throw new Error('JWT_SECRET environment variable is required')
 }
 
 export async function generateToken(payload: { userId: string; email: string }) {
@@ -202,12 +214,12 @@ export async function generateToken(payload: { userId: string; email: string }) 
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setExpirationTime('7d')
-    .sign(secret);
+    .sign(secret)
 }
 
 export async function verifyToken(token: string) {
-  const { payload } = await jwtVerify(token, secret);
-  return payload as { userId: string; email: string; iat: number; exp: number };
+  const { payload } = await jwtVerify(token, secret)
+  return payload as { userId: string; email: string; iat: number; exp: number }
 }
 ```
 
@@ -216,58 +228,57 @@ export async function verifyToken(token: string) {
 ```typescript
 // loginUser mutation (timing-attack resistant)
 loginUser: publicProcedure
-  .input(z.object({
-    email: z.string().email(),
-    password: z.string(),
-  }))
+  .input(
+    z.object({
+      email: z.string().email(),
+      password: z.string(),
+    })
+  )
   .mutation(async ({ input }) => {
     // Find user by email
-    const [user] = await db
-      .select()
-      .from(users)
-      .where(eq(users.email, input.email));
+    const [user] = await db.select().from(users).where(eq(users.email, input.email))
 
     // Always verify a hash to prevent timing attacks
     // Use dummy hash if user doesn't exist
-    const dummyHash = '$argon2id$v=19$m=65536,t=2,p=1$somesalt$somehash';
-    const hashToVerify = user?.passwordHash || dummyHash;
-    const isValid = await Bun.password.verify(input.password, hashToVerify);
+    const dummyHash = '$argon2id$v=19$m=65536,t=2,p=1$somesalt$somehash'
+    const hashToVerify = user?.passwordHash || dummyHash
+    const isValid = await Bun.password.verify(input.password, hashToVerify)
 
     if (!user || !isValid) {
-      throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Invalid credentials' });
+      throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Invalid credentials' })
     }
 
-    const token = await generateToken({ userId: user.id, email: user.email });
+    const token = await generateToken({ userId: user.id, email: user.email })
 
-    return { token, user: { id: user.id, email: user.email } };
+    return { token, user: { id: user.id, email: user.email } }
   })
 
 // createUser mutation with token generation
 createUser: publicProcedure
-  .input(z.object({
-    email: z.string().email(),
-    password: z.string().min(8),
-  }))
+  .input(
+    z.object({
+      email: z.string().email(),
+      password: z.string().min(8),
+    })
+  )
   .mutation(async ({ input }) => {
-    const passwordHash = await Bun.password.hash(input.password);
+    const passwordHash = await Bun.password.hash(input.password)
 
     try {
-      const [user] = await db
-        .insert(users)
-        .values({ email: input.email, passwordHash })
-        .returning();
+      const [user] = await db.insert(users).values({ email: input.email, passwordHash }).returning()
 
-      const token = await generateToken({ userId: user.id, email: user.email });
+      const token = await generateToken({ userId: user.id, email: user.email })
 
-      return { token, user: { id: user.id, email: user.email } };
+      return { token, user: { id: user.id, email: user.email } }
     } catch (error) {
-      if (error.code === '23505') { // PostgreSQL unique constraint violation
+      if (error.code === '23505') {
+        // PostgreSQL unique constraint violation
         throw new TRPCError({
           code: 'CONFLICT',
-          message: 'Email already registered'
-        });
+          message: 'Email already registered',
+        })
       }
-      throw error;
+      throw error
     }
   })
 ```
@@ -275,34 +286,34 @@ createUser: publicProcedure
 **`src/trpc.ts`** – Add authentication context and protected procedure:
 
 ```typescript
-import { verifyToken } from './utils/jwt';
+import { verifyToken } from './utils/jwt'
 
 export const createContext = async ({ req }: { req: Request }) => {
-  const token = req.headers.get('authorization')?.replace('Bearer ', '');
+  const token = req.headers.get('authorization')?.replace('Bearer ', '')
 
   if (!token) {
-    return { user: null };
+    return { user: null }
   }
 
   try {
-    const payload = await verifyToken(token);
-    return { user: payload };
+    const payload = await verifyToken(token)
+    return { user: payload }
   } catch {
-    return { user: null };
+    return { user: null }
   }
-};
+}
 
-const t = initTRPC.context<typeof createContext>().create();
+const t = initTRPC.context<typeof createContext>().create()
 
 export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
   if (!ctx.user) {
-    throw new TRPCError({ code: 'UNAUTHORIZED' });
+    throw new TRPCError({ code: 'UNAUTHORIZED' })
   }
-  return next({ ctx: { user: ctx.user } });
-});
+  return next({ ctx: { user: ctx.user } })
+})
 
-export const router = t.router;
-export const publicProcedure = t.procedure;
+export const router = t.router
+export const publicProcedure = t.procedure
 ```
 
 ---
@@ -313,48 +324,48 @@ export const publicProcedure = t.procedure;
 
 ```typescript
 export type TokenPayload = {
-  userId: string;
-  email: string;
-  iat: number;
-  exp: number;
-};
+  userId: string
+  email: string
+  iat: number
+  exp: number
+}
 
 export type AuthResponse = {
-  token: string;
+  token: string
   user: {
-    id: string;
-    email: string;
-  };
-};
+    id: string
+    email: string
+  }
+}
 ```
 
 ### CLI Types (`packages/cli/src/types.ts`)
 
 ```typescript
-export type Route = 'auth' | 'dashboard' | 'settings';
+export type Route = 'auth' | 'dashboard' | 'settings'
 
 export type RouteConfig = {
-  component: React.ComponentType<any>;
-  protected: boolean;
-};
+  component: React.ComponentType<any>
+  protected: boolean
+}
 
 export type RouteStackItem = {
-  name: Route;
-  params?: any;
-};
+  name: Route
+  params?: any
+}
 
 export type RouterContextType = {
-  push: (route: Route, params?: any) => void;
-  pop: () => void;
-  replace: (route: Route, params?: any) => void;
-  currentRoute: Route;
-  params?: any;
-};
+  push: (route: Route, params?: any) => void
+  pop: () => void
+  replace: (route: Route, params?: any) => void
+  currentRoute: Route
+  params?: any
+}
 
 export type Credentials = {
-  token: string;
-  expiresAt: number;
-};
+  token: string
+  expiresAt: number
+}
 ```
 
 ---
@@ -365,16 +376,16 @@ export type Credentials = {
 
 ```typescript
 try {
-  const result = await trpcClient.loginUser.mutate({ email, password });
-  saveToken(result.token);
-  replace('dashboard');
+  const result = await trpcClient.loginUser.mutate({ email, password })
+  saveToken(result.token)
+  replace('dashboard')
 } catch (error) {
   if (error.code === 'UNAUTHORIZED') {
-    setError('Invalid email or password');
+    setError('Invalid email or password')
   } else if (error.message.includes('fetch')) {
-    setError('Cannot connect to server. Is the API running?');
+    setError('Cannot connect to server. Is the API running?')
   } else {
-    setError('An unexpected error occurred');
+    setError('An unexpected error occurred')
   }
 }
 ```
@@ -382,22 +393,22 @@ try {
 **CLI – Token Validation**
 
 ```typescript
-const token = getToken();
+const token = getToken()
 
 if (token) {
   try {
     if (isTokenValid(token)) {
-      setInitialRoute('dashboard');
+      setInitialRoute('dashboard')
     } else {
-      clearToken();
-      setInitialRoute('auth');
+      clearToken()
+      setInitialRoute('auth')
     }
   } catch {
-    clearToken();
-    setInitialRoute('auth');
+    clearToken()
+    setInitialRoute('auth')
   }
 } else {
-  setInitialRoute('auth');
+  setInitialRoute('auth')
 }
 ```
 
@@ -406,11 +417,11 @@ if (token) {
 ```typescript
 export function getToken(): string | null {
   try {
-    const data = fs.readFileSync(credentialsPath, 'utf-8');
-    const { token } = JSON.parse(data);
-    return token;
+    const data = fs.readFileSync(credentialsPath, 'utf-8')
+    const { token } = JSON.parse(data)
+    return token
   } catch {
-    return null; // File doesn't exist or is corrupted
+    return null // File doesn't exist or is corrupted
   }
 }
 ```

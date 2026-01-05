@@ -33,7 +33,6 @@ Monorepo starter template with:
    ```
 
    The Docker Compose setup includes:
-
    - PostgreSQL 16 on port 5432
    - Credentials matching `.env.example` (user/password/ink-starter)
    - Persistent volume for data storage

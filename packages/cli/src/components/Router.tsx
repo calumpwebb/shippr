@@ -1,8 +1,8 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import type { Route } from '../routes';
-import type { RouteConfig, RouterContextType, RouteStackItem } from '../types';
-import { getToken, clearToken, isTokenValid } from '../utils/credentials';
-import { Footer } from './Footer';
+import { createContext, useContext, useState, useEffect } from 'react'
+import type { Route } from '../routes'
+import type { RouteConfig, RouterContextType, RouteStackItem } from '../types'
+import { getToken, clearToken, isTokenValid } from '../utils/credentials'
+import { Footer } from './Footer'
 
 const RouterContext = createContext<RouterContextType>({
   push: () => {},
@@ -12,81 +12,79 @@ const RouterContext = createContext<RouterContextType>({
   currentRoute: 'welcome',
   params: undefined,
   canGoBack: false,
-});
+})
 
-export const useRouter = () => useContext(RouterContext);
+export const useRouter = () => useContext(RouterContext)
 
 type RouterProps = {
-  routes: Record<Route, RouteConfig>;
-  children?: React.ReactNode;
-};
+  routes: Record<Route, RouteConfig>
+  children?: React.ReactNode
+}
 
 export function Router({ routes }: RouterProps) {
-  const [routeStack, setRouteStack] = useState<RouteStackItem[]>([
-    { name: 'welcome' },
-  ]);
-  const [loading, setLoading] = useState(true);
+  const [routeStack, setRouteStack] = useState<RouteStackItem[]>([{ name: 'welcome' }])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const checkAuth = async () => {
-      const token = getToken();
+      const token = getToken()
 
-      if (token && await isTokenValid(token)) {
-        setRouteStack([{ name: 'dashboard' }]);
+      if (token && (await isTokenValid(token))) {
+        setRouteStack([{ name: 'dashboard' }])
       } else {
         if (token) {
-          clearToken();
+          clearToken()
         }
-        setRouteStack([{ name: 'welcome' }]);
+        setRouteStack([{ name: 'welcome' }])
       }
 
-      setLoading(false);
-    };
+      setLoading(false)
+    }
 
-    checkAuth();
-  }, []);
+    checkAuth()
+  }, [])
 
   const push = (route: Route, params?: unknown) => {
-    setRouteStack([...routeStack, { name: route, params }]);
-  };
+    setRouteStack([...routeStack, { name: route, params }])
+  }
 
   const pop = () => {
     if (routeStack.length > 1) {
-      setRouteStack(routeStack.slice(0, -1));
+      setRouteStack(routeStack.slice(0, -1))
     }
-  };
+  }
 
   const replace = (route: Route, params?: unknown) => {
-    setRouteStack([...routeStack.slice(0, -1), { name: route, params }]);
-  };
+    setRouteStack([...routeStack.slice(0, -1), { name: route, params }])
+  }
 
   const reset = (route: Route, params?: unknown) => {
-    setRouteStack([{ name: route, params }]);
-  };
+    setRouteStack([{ name: route, params }])
+  }
 
-  const current = routeStack[routeStack.length - 1];
-  const routeConfig = routes[current.name];
+  const current = routeStack[routeStack.length - 1]
+  const routeConfig = routes[current.name]
 
   // Check auth guard
   useEffect(() => {
     const checkGuard = async () => {
       if (routeConfig.protected) {
-        const token = getToken();
+        const token = getToken()
         if (!token || !(await isTokenValid(token))) {
-          clearToken();
-          setRouteStack([{ name: 'welcome' }]);
+          clearToken()
+          setRouteStack([{ name: 'welcome' }])
         }
       }
-    };
+    }
 
-    checkGuard();
-  }, [current.name, routeConfig.protected]);
+    checkGuard()
+  }, [current.name, routeConfig.protected])
 
   if (loading) {
-    return null;
+    return null
   }
 
-  const Component = routeConfig.component;
+  const Component = routeConfig.component
 
   return (
     <RouterContext.Provider
@@ -103,5 +101,5 @@ export function Router({ routes }: RouterProps) {
       <Component />
       <Footer />
     </RouterContext.Provider>
-  );
+  )
 }

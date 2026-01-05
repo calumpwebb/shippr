@@ -1,41 +1,43 @@
-import { useState } from 'react';
-import { Box, Text } from 'ink';
-import SelectInput from 'ink-select-input';
-import { clearToken } from '../utils/credentials';
-import { useRouter } from '../components/Router';
-import { trpcClient, toApiError } from '../utils/trpc';
+import { useState } from 'react'
+import { Box, Text } from 'ink'
+import SelectInput from 'ink-select-input'
+import { clearToken } from '../utils/credentials'
+import { useRouter } from '../components/Router'
+import { trpcClient, toApiError } from '../utils/trpc'
 
 export function DashboardScreen() {
-  const { reset } = useRouter();
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const [error, setError] = useState('');
+  const { reset } = useRouter()
+  const [isRefreshing, setIsRefreshing] = useState(false)
+  const [error, setError] = useState('')
 
   const items = [
     { label: isRefreshing ? 'Refreshing...' : 'Refresh', value: 'refresh' as const },
     { label: 'Sign out', value: 'signout' as const },
-  ];
+  ]
 
   const handleSelect = async (item: { value: 'refresh' | 'signout' }) => {
     if (item.value === 'refresh') {
-      setIsRefreshing(true);
-      setError('');
+      setIsRefreshing(true)
+      setError('')
       try {
-        await trpcClient.refresh.query();
+        await trpcClient.user.refresh.query()
       } catch (err) {
-        const apiError = toApiError(err);
-        setError(apiError.message);
+        const apiError = toApiError(err)
+        setError(apiError.message)
       }
-      setIsRefreshing(false);
+      setIsRefreshing(false)
     } else if (item.value === 'signout') {
-      clearToken();
-      reset('welcome');
+      clearToken()
+      reset('welcome')
     }
-  };
+  }
 
   return (
     <Box flexDirection="column" padding={1}>
       <Box marginBottom={1}>
-        <Text bold color="green">✓ Logged In</Text>
+        <Text bold color="green">
+          ✓ Logged In
+        </Text>
       </Box>
       <Text>Welcome to the dashboard.</Text>
       {error && (
@@ -47,5 +49,5 @@ export function DashboardScreen() {
         <SelectInput items={items} onSelect={handleSelect} />
       </Box>
     </Box>
-  );
+  )
 }

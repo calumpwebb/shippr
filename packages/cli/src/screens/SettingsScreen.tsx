@@ -1,14 +1,14 @@
-import { Box, Text, useInput } from 'ink';
-import { useRouter } from '../components/Router';
+import { Box, Text, useInput } from 'ink'
+import { useRouter } from '../components/Router'
 
 export function SettingsScreen() {
-  const { pop } = useRouter();
+  const { pop } = useRouter()
 
   useInput((_input, key) => {
     if (key.escape) {
-      pop();
+      pop()
     }
-  });
+  })
 
   return (
     <Box flexDirection="column" padding={1}>
@@ -20,5 +20,5 @@ export function SettingsScreen() {
         <Text dimColor>Press ESC to go back</Text>
       </Box>
     </Box>
-  );
+  )
 }

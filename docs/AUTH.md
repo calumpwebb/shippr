@@ -20,6 +20,7 @@ JWT-based authentication with persistent token storage.
 ## User Flow
 
 ### Signup
+
 1. CLI → AuthScreen → Menu → SignupForm
 2. User enters email and password (min 8 chars)
 3. API validates, hashes password, creates user, returns JWT
@@ -27,6 +28,7 @@ JWT-based authentication with persistent token storage.
 5. Router navigates to dashboard
 
 ### Login
+
 1. CLI → AuthScreen → Menu → LoginForm
 2. User enters email and password
 3. API validates credentials, returns JWT
@@ -34,6 +36,7 @@ JWT-based authentication with persistent token storage.
 5. Router navigates to dashboard
 
 ### Token Persistence
+
 - On CLI startup, Router checks for token
 - Valid token → Navigate to dashboard
 - Invalid/expired token → Clear and show auth screen
@@ -93,10 +96,9 @@ errors: UNAUTHORIZED (invalid credentials)
 Use `protectedProcedure` instead of `publicProcedure`:
 
 ```typescript
-myProtectedEndpoint: protectedProcedure
-  .query(({ ctx }) => {
-    // ctx.user available: { userId: string, email: string }
-  })
+myProtectedEndpoint: protectedProcedure.query(({ ctx }) => {
+  // ctx.user available: { userId: string, email: string }
+})
 ```
 
 ## File Structure
