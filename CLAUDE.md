@@ -2,6 +2,8 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+See [todos.md](./todos.md) for project roadmap and outstanding tasks.
+
 ## Commands
 
 ```bash

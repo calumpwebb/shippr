@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "cli": "pnpm --filter cli dev",
-    "api": "pnpm --filter api dev",
-    "dev": "pnpm --parallel --filter cli --filter api dev",
+    "cli": "pnpm --filter @calumpwebb/shippr dev",
+    "api": "pnpm --filter @shippr/api dev",
+    "dev": "pnpm --parallel --filter @calumpwebb/shippr --filter @shippr/api dev",
     "db:generate": "pnpm --filter @shippr/db db:generate",
     "db:migrate": "pnpm --filter @shippr/db db:migrate",
     "db:studio": "pnpm --filter @shippr/db db:studio",

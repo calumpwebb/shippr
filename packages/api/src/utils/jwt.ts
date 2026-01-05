@@ -1,4 +1,5 @@
 import { SignJWT, jwtVerify } from 'jose'
+import type { JwtPayload } from '@shippr/shared'
 
 const secret = new TextEncoder().encode(process.env.JWT_SECRET)
 
@@ -6,7 +7,7 @@ if (!process.env.JWT_SECRET) {
   throw new Error('JWT_SECRET environment variable is required')
 }
 
-export async function generateToken(payload: { userId: string; email: string }): Promise<string> {
+export async function generateToken(payload: JwtPayload): Promise<string> {
   return await new SignJWT(payload)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
@@ -14,7 +15,7 @@ export async function generateToken(payload: { userId: string; email: string }):
     .sign(secret)
 }
 
-export async function verifyToken(token: string): Promise<{ userId: string; email: string }> {
+export async function verifyToken(token: string): Promise<JwtPayload> {
   const { payload } = await jwtVerify(token, secret)
-  return payload as { userId: string; email: string }
+  return payload as JwtPayload
 }

@@ -1,6 +1,6 @@
 import { createTRPCClient, httpBatchLink, TRPCClientError } from '@trpc/client'
 import superjson from 'superjson'
-import type { AppRouter } from 'api/router'
+import type { AppRouter } from '@shippr/api/router'
 import { getToken, clearToken } from './credentials'
 
 // Standardized error codes

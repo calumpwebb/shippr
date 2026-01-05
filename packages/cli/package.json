@@ -1,18 +1,20 @@
 {
-  "name": "cli",
-  "version": "0.0.1",
+  "name": "@calumpwebb/shippr",
+  "version": "0.0.2",
   "type": "module",
   "bin": {
-    "cli": "./dist/index.js"
+    "shippr": "dist/index.js"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "bun run src/index.tsx",
-    "build": "bun build src/index.tsx --outdir dist --target bun",
-    "compile": "bun build src/index.tsx --compile --outfile cli"
+    "build": "bun build src/index.tsx --outdir dist --target node --packages bundle --external react-devtools-core --define process.env.NODE_ENV='\"production\"' && sed -i '' 's|#!/usr/bin/env bun|#!/usr/bin/env node|' dist/index.js && sed -i '' 's|import devtools from \"react-devtools-core\";|var devtools = { connect: () => ({ isConnected: false }) };|g' dist/index.js",
+    "compile": "bun build src/index.tsx --compile --outfile shippr"
   },
   "dependencies": {
     "@trpc/client": "^11.8.1",
-    "api": "workspace:*",
     "chalk": "^5.6.2",
     "ink": "^5.0.1",
     "ink-select-input": "^6.2.0",
@@ -22,6 +24,7 @@
     "superjson": "^2.2.6"
   },
   "devDependencies": {
+    "@shippr/api": "workspace:*",
     "@types/react": "^18.3.12",
     "bun-types": "latest",
     "typescript": "^5.7.2"

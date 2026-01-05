@@ -1,5 +1,5 @@
 {
-  "name": "api",
+  "name": "@shippr/api",
   "version": "0.0.1",
   "type": "module",
   "exports": {
@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@shippr/db": "workspace:*",
+    "@shippr/shared": "workspace:*",
     "@trpc/client": "^11.8.1",
     "@trpc/server": "^11.0.0",
     "jose": "^6.1.3",

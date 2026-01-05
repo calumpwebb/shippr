@@ -35,7 +35,13 @@ const loggerMiddleware = t.middleware(async ({ path, type, next }) => {
   const start = Date.now()
 
   // sleep for 0.5s (between 200 and 500ms randomly) to simultate some delay for development
-  const sleepTime = Math.floor(Math.random() * 300) + 200
+  let sleepTime = Math.floor(Math.random() * 300) + 200
+
+  // for 5% of requests, add 1s exyra
+  if (Math.random() < 0.05) {
+    sleepTime += 1000
+  }
+
   await new Promise((resolve) => setTimeout(resolve, sleepTime))
 
   try {
