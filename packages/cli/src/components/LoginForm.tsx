@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Text, useInput } from 'ink';
-import TextInput from 'ink-text-input';
+import { TextInput } from './TextInput';
 import { trpcClient } from '../utils/trpc';
 import { saveToken } from '../utils/credentials';
 import { useRouter } from './Router';
@@ -8,10 +8,12 @@ import { Footer } from './Footer';
 
 type LoginFormProps = {
   onBack: () => void;
+  onForgotPassword: () => void;
+  successMessage?: string;
 };
 
-export function LoginForm({ onBack }: LoginFormProps) {
-  const [activeField, setActiveField] = useState<'email' | 'password' | 'submit'>('email');
+export function LoginForm({ onBack, onForgotPassword, successMessage }: LoginFormProps) {
+  const [activeField, setActiveField] = useState<'email' | 'password' | 'submit' | 'forgot'>('email');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -74,13 +76,25 @@ export function LoginForm({ onBack }: LoginFormProps) {
     if (key.escape) {
       onBack();
     } else if (key.upArrow) {
-      setActiveField((f) => (f === 'email' ? 'submit' : f === 'password' ? 'email' : 'password'));
-    } else if (key.downArrow) {
-      setActiveField((f) => (f === 'email' ? 'password' : f === 'password' ? 'submit' : 'email'));
-    } else if (key.tab) {
-      setActiveField((f) => (f === 'email' ? 'password' : f === 'password' ? 'submit' : 'email'));
-    } else if (key.return && activeField === 'submit') {
-      handleSubmit();
+      setActiveField((f) => {
+        if (f === 'email') return 'forgot';
+        if (f === 'password') return 'email';
+        if (f === 'submit') return 'password';
+        return 'submit';
+      });
+    } else if (key.downArrow || key.tab) {
+      setActiveField((f) => {
+        if (f === 'email') return 'password';
+        if (f === 'password') return 'submit';
+        if (f === 'submit') return 'forgot';
+        return 'email';
+      });
+    } else if (key.return) {
+      if (activeField === 'submit') {
+        handleSubmit();
+      } else if (activeField === 'forgot') {
+        onForgotPassword();
+      }
     }
   });
 
@@ -89,6 +103,12 @@ export function LoginForm({ onBack }: LoginFormProps) {
       <Box marginBottom={1}>
         <Text bold>Sign in now!</Text>
       </Box>
+
+      {successMessage && (
+        <Box marginBottom={1}>
+          <Text color="green">{successMessage}</Text>
+        </Box>
+      )}
 
       {error && (
         <Box marginBottom={1}>
@@ -117,6 +137,11 @@ export function LoginForm({ onBack }: LoginFormProps) {
           <Box marginTop={1}>
             <Text color={activeField === 'submit' ? 'green' : undefined} dimColor={activeField !== 'submit'}>
               [ Login ]
+            </Text>
+          </Box>
+          <Box>
+            <Text color={activeField === 'forgot' ? 'cyan' : undefined} dimColor={activeField !== 'forgot'}>
+              [ Forgot Password? ]
             </Text>
           </Box>
         </Box>

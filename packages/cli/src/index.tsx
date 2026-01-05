@@ -25,4 +25,12 @@ function App() {
   return <Router routes={routes} />;
 }
 
-render(<App />, { enterAltScreen: true });
+// Enter alternate screen buffer
+process.stdout.write('\x1b[?1049h');
+
+const { waitUntilExit } = render(<App />);
+
+waitUntilExit().then(() => {
+  // Leave alternate screen buffer
+  process.stdout.write('\x1b[?1049l');
+});

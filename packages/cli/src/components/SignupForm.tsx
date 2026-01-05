@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Text, useInput } from 'ink';
-import TextInput from 'ink-text-input';
+import { TextInput } from './TextInput';
 import { trpcClient } from '../utils/trpc';
 import { saveToken } from '../utils/credentials';
 import { useRouter } from './Router';
@@ -10,8 +10,11 @@ type SignupFormProps = {
   onBack: () => void;
 };
 
+const fields = ['email', 'password', 'confirmPassword', 'submit'] as const;
+type Field = (typeof fields)[number];
+
 export function SignupForm({ onBack }: SignupFormProps) {
-  const [activeField, setActiveField] = useState<'email' | 'password' | 'confirmPassword' | 'submit'>('email');
+  const [activeField, setActiveField] = useState<Field>('email');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -19,13 +22,16 @@ export function SignupForm({ onBack }: SignupFormProps) {
   const [error, setError] = useState('');
   const { replace } = useRouter();
 
+  const navigateField = (direction: 1 | -1) => {
+    setActiveField((f) => {
+      const idx = fields.indexOf(f);
+      return fields[(idx + direction + fields.length) % fields.length];
+    });
+  };
+
   const handleFieldSubmit = () => {
-    if (activeField === 'email') {
-      setActiveField('password');
-    } else if (activeField === 'password') {
-      setActiveField('confirmPassword');
-    } else if (activeField === 'confirmPassword') {
-      setActiveField('submit');
+    if (activeField !== 'submit') {
+      navigateField(1);
     }
   };
 
@@ -86,26 +92,9 @@ export function SignupForm({ onBack }: SignupFormProps) {
     if (key.escape) {
       onBack();
     } else if (key.upArrow) {
-      setActiveField((f) => {
-        if (f === 'email') return 'submit';
-        if (f === 'password') return 'email';
-        if (f === 'confirmPassword') return 'password';
-        return 'confirmPassword';
-      });
-    } else if (key.downArrow) {
-      setActiveField((f) => {
-        if (f === 'email') return 'password';
-        if (f === 'password') return 'confirmPassword';
-        if (f === 'confirmPassword') return 'submit';
-        return 'email';
-      });
-    } else if (key.tab) {
-      setActiveField((f) => {
-        if (f === 'email') return 'password';
-        if (f === 'password') return 'confirmPassword';
-        if (f === 'confirmPassword') return 'submit';
-        return 'email';
-      });
+      navigateField(-1);
+    } else if (key.downArrow || key.tab) {
+      navigateField(1);
     } else if (key.return && activeField === 'submit') {
       handleSubmit();
     }
