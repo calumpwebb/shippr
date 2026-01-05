@@ -9,6 +9,12 @@ packages/api/dist/
 packages/cli/dist/
 packages/cli/cli
 
+# DB build artifacts
+packages/db/dist/
+
+# TypeScript build info
+*.tsbuildinfo
+
 # User credentials
 .ink-starter/
 

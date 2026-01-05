@@ -1,0 +1,28 @@
+{
+  "name": "@ink-starter/db",
+  "version": "0.0.1",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./schema": "./src/schema.ts",
+    "./client": "./src/client.ts",
+    "./test-utils": "./src/test-utils.ts"
+  },
+  "scripts": {
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "bun src/migrate.ts",
+    "db:studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.45.1",
+    "postgres": "^3.4.5"
+  },
+  "devDependencies": {
+    "@testcontainers/postgresql": "^11.11.0",
+    "@types/bun": "latest",
+    "bun-types": "latest",
+    "drizzle-kit": "^0.31.8",
+    "testcontainers": "^11.11.0",
+    "typescript": "^5.7.2"
+  }
+}
