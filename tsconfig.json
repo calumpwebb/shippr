@@ -15,9 +15,9 @@
   },
   "files": [],
   "references": [
-    { "path": "./packages/db" },
-    { "path": "./packages/shared" },
-    { "path": "./apps/api" },
-    { "path": "./apps/cli" }
+    { "path": "./packages/lib/db" },
+    { "path": "./packages/lib/shared" },
+    { "path": "./packages/apps/api" },
+    { "path": "./packages/apps/cli" }
   ]
 }

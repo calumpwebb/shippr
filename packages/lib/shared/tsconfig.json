@@ -1,10 +1,10 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../../tsconfig.json",
   "compilerOptions": {
     "composite": true,
     "outDir": "./dist",
     "rootDir": ".",
     "types": ["bun-types"]
   },
-  "include": ["src/**/*", "drizzle.config.ts"]
+  "include": ["src/**/*"]
 }

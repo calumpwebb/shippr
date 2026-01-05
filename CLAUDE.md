@@ -22,16 +22,16 @@ pnpm lint          # Run ESLint
 pnpm lint:fix      # Fix ESLint issues
 pnpm typecheck     # Type check all packages
 
-# Testing (in packages/api)
-cd packages/api && bun test              # Run all tests
-cd packages/api && bun test auth.test    # Run specific test file
+# Testing (in packages/apps/api)
+cd packages/apps/api && bun test              # Run all tests
+cd packages/apps/api && bun test auth.test    # Run specific test file
 ```
 
 ## Architecture
 
-**Monorepo** using pnpm workspaces with three packages:
+**Monorepo** using pnpm workspaces with two package categories:
 
-### packages/db (`@shippr/db`)
+### packages/lib/db (`@shippr/db`)
 
 Database layer using Drizzle ORM with PostgreSQL. Exports:
 
@@ -39,7 +39,11 @@ Database layer using Drizzle ORM with PostgreSQL. Exports:
 - `./client` - `createDbService(connectionString)` factory returning typed Drizzle instance
 - `./test-utils` - `setupTestDb()` spins up Docker PostgreSQL container with migrations
 
-### packages/api
+### packages/lib/shared (`@shippr/shared`)
+
+Shared utilities and types used across apps.
+
+### packages/apps/api (`@shippr/api`)
 
 tRPC server with JWT auth. Key files:
 
@@ -49,7 +53,7 @@ tRPC server with JWT auth. Key files:
 
 **Pattern**: Router factories accept database instance for testability. Tests use `setupTestDb()` to get isolated PostgreSQL container.
 
-### packages/cli
+### packages/apps/cli (`@calumpwebb/shippr`)
 
 Ink (React for CLIs) application with custom routing. Key patterns:
 
