@@ -15,23 +15,31 @@ export const appRouter = router({
       })
     )
     .mutation(async ({ input }) => {
-      // In production, you'd hash the password with bcrypt/argon2
-      // For this starter, we'll just store a simple hash placeholder
       const passwordHash = await Bun.password.hash(input.password);
 
-      const [user] = await db
-        .insert(users)
-        .values({
-          email: input.email,
-          passwordHash,
-        })
-        .returning();
+      try {
+        const [user] = await db
+          .insert(users)
+          .values({
+            email: input.email,
+            passwordHash,
+          })
+          .returning();
 
-      return {
-        id: user.id,
-        email: user.email,
-        createdAt: user.createdAt,
-      };
+        const token = await generateToken({ userId: user.id, email: user.email });
+
+        return { token, user: { id: user.id, email: user.email } };
+      } catch (error: any) {
+        // Check both the error itself and its cause for the constraint violation code
+        const errorCode = error.code || error.cause?.code;
+        if (errorCode === '23505') { // PostgreSQL unique constraint violation
+          throw new TRPCError({
+            code: 'CONFLICT',
+            message: 'Email already registered',
+          });
+        }
+        throw error;
+      }
     }),
   loginUser: publicProcedure
     .input(
