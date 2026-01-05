@@ -1,4 +1,5 @@
 import { createHTTPServer } from '@trpc/server/adapters/standalone'
+import { env } from '@shippr/shared/env'
 import { appRouter } from './router'
 import { createContext } from './trpc'
 
@@ -7,7 +8,5 @@ const server = createHTTPServer({
   createContext,
 })
 
-const PORT = process.env.PORT || 8080
-
-server.listen(PORT)
-console.log(`🚀 API server running on http://localhost:${PORT}`)
+server.listen(env.PORT)
+console.log(`🚀 API server running on http://localhost:${env.PORT}`)

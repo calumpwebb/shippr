@@ -18,6 +18,9 @@ packages/db/dist/
 # User credentials
 .shippr/
 
+# Serena
+.serena/
+
 # Dependencies
 node_modules/
 bun.lockb

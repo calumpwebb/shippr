@@ -62,3 +62,24 @@ Ink (React for CLIs) application with custom routing. Key patterns:
 
 - ESLint enforces `@typescript-eslint/explicit-function-return-type` on all functions
 - Exception: tRPC router factory functions use `eslint-disable` comment because their return types are inferred via `typeof`
+
+## Code Navigation (Serena MCP)
+
+**Proactively use Serena MCP tools** for all code exploration and editing tasks. Serena provides semantic code intelligence that is more accurate and token-efficient than text-based search.
+
+**Prefer Serena tools over basic search:**
+
+- `get_symbols_overview` - First step when understanding a new file
+- `find_symbol` - Locate classes, functions, methods by name path
+- `find_referencing_symbols` - Find all usages of a symbol
+- `replace_symbol_body` / `insert_after_symbol` / `insert_before_symbol` - Precise code edits
+- `rename_symbol` - Refactor names across the entire codebase
+
+**When to use Serena:**
+
+- Exploring unfamiliar code → `get_symbols_overview` first, then `find_symbol` with `include_body=True`
+- Finding where something is used → `find_referencing_symbols`
+- Making code changes → symbolic editing tools over text-based find/replace
+- Understanding relationships → follow symbol references rather than grepping
+
+**Avoid reading entire files** unless necessary. Use symbolic tools to read only the specific functions/classes you need.

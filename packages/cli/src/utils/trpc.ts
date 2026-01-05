@@ -2,6 +2,7 @@ import { createTRPCClient, httpBatchLink, TRPCClientError } from '@trpc/client'
 import superjson from 'superjson'
 import type { AppRouter } from '@shippr/api/router'
 import { getToken, clearToken } from './credentials'
+import { logger } from './logger'
 
 // Standardized error codes
 export const ApiErrorCode = {
@@ -180,32 +181,66 @@ function isProcedure(value: unknown): boolean {
   return typeof obj.query === 'function' || typeof obj.mutate === 'function'
 }
 
-// Proxy handler that wraps all calls with retry logic (supports nested routers)
-function createRetryProxy<T extends object>(target: T): T {
+// Wrapper that adds logging around tRPC calls
+async function withLogging<T>(
+  type: 'query' | 'mutate',
+  path: string,
+  fn: () => Promise<T>
+): Promise<T> {
+  const start = Date.now()
+  try {
+    const result = await fn()
+    const duration = Date.now() - start
+    logger.info(
+      { type, path, duration, status: 'OK' },
+      `[tRPC] (${type}) /${path} - ${duration}ms OK`
+    )
+    return result
+  } catch (error) {
+    const duration = Date.now() - start
+    const message = error instanceof Error ? error.message : 'Unknown error'
+    logger.error(
+      { type, path, duration, status: 'ERROR', error: message },
+      `[tRPC] (${type}) /${path} - ${duration}ms ERROR: ${message}`
+    )
+    throw error
+  }
+}
+
+// Proxy handler that wraps all calls with retry logic and logging (supports nested routers)
+function createRetryProxy<T extends object>(target: T, path: string[] = []): T {
   return new Proxy(target, {
     get(obj, prop): unknown {
-      const value = (obj as Record<string | symbol, unknown>)[prop]
+      if (typeof prop === 'symbol') return (obj as Record<symbol, unknown>)[prop]
+
+      const value = (obj as Record<string, unknown>)[prop]
+      const currentPath = [...path, prop]
 
       if (typeof value === 'object' && value !== null) {
         if (isProcedure(value)) {
-          // It's a procedure - wrap query/mutate
+          // It's a procedure - wrap query/mutate with retry and logging
           const procedure = value as {
             query?: (input?: unknown) => Promise<unknown>
             mutate?: (input?: unknown) => Promise<unknown>
           }
+          const procedurePath = currentPath.join('.')
           return {
             query: procedure.query
               ? async (input?: unknown): Promise<unknown> =>
-                  withRetry(() => procedure.query!(input))
+                  withLogging('query', procedurePath, () =>
+                    withRetry(() => procedure.query!(input))
+                  )
               : undefined,
             mutate: procedure.mutate
               ? async (input?: unknown): Promise<unknown> =>
-                  withRetry(() => procedure.mutate!(input))
+                  withLogging('mutate', procedurePath, () =>
+                    withRetry(() => procedure.mutate!(input))
+                  )
               : undefined,
           }
         } else {
           // It's a nested router - recursively wrap
-          return createRetryProxy(value as object)
+          return createRetryProxy(value as object, currentPath)
         }
       }
 

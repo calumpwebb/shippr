@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Box, Text } from 'ink'
-import { LogoNeon } from './LogoNeon'
 import { trpcClient } from '../utils/trpc'
+import { Logo } from './Logo'
 
 function formatDateTime(date: Date): string {
   return date.toLocaleString('en-US', {
@@ -45,7 +45,7 @@ export function Header(): React.ReactNode {
 
   return (
     <Box gap={2}>
-      <LogoNeon />
+      <Logo />
       <Box flexDirection="column">
         <Text>{formatDateTime(currentTime)}</Text>
         {motd && (
