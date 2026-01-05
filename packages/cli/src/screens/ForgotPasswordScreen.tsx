@@ -1,6 +1,8 @@
 import { useState } from 'react'
-import { Box, Text, useInput } from 'ink'
+import { Box, useInput } from 'ink'
 import { TextInput } from '../components/TextInput'
+import { Button } from '../components/Button'
+import { FormScreen } from '../components/FormScreen'
 import { trpcClient, toApiError } from '../utils/trpc'
 import { useRouter } from '../components/Router'
 
@@ -55,53 +57,27 @@ export function ForgotPasswordScreen(): React.ReactNode {
       navigateField(-1)
     } else if (key.downArrow || key.tab) {
       navigateField(1)
-    } else if (key.return && activeField === 'submit') {
-      handleSubmit()
     }
   })
 
-  if (loading) {
-    return (
-      <Box flexDirection="column" padding={1}>
-        <Text dimColor>Requesting code...</Text>
-      </Box>
-    )
-  }
-
   return (
-    <Box flexDirection="column" padding={1}>
-      <Box marginBottom={1}>
-        <Text bold>Forgot Your Password?</Text>
+    <FormScreen
+      title="Forgot your password?"
+      subtitle="Enter your email to receive a reset code."
+      error={error}
+      loading={loading}
+      loadingMessage="Requesting code..."
+    >
+      <TextInput
+        label="Email: "
+        value={email}
+        onChange={setEmail}
+        onSubmit={handleFieldSubmit}
+        focus={activeField === 'email'}
+      />
+      <Box marginTop={1}>
+        <Button label="Send Code" onPress={handleSubmit} focus={activeField === 'submit'} />
       </Box>
-
-      {error && (
-        <Box marginBottom={1}>
-          <Text color="red">{error}</Text>
-        </Box>
-      )}
-
-      <Box flexDirection="column">
-        <Box marginBottom={1}>
-          <Text dimColor>Enter your email to receive a reset code.</Text>
-        </Box>
-        <Box>
-          <Text dimColor={activeField !== 'email'}>Email: </Text>
-          <TextInput
-            value={email}
-            onChange={setEmail}
-            onSubmit={handleFieldSubmit}
-            focus={activeField === 'email'}
-          />
-        </Box>
-        <Box marginTop={1}>
-          <Text
-            color={activeField === 'submit' ? 'green' : undefined}
-            dimColor={activeField !== 'submit'}
-          >
-            [ Send Code ]
-          </Text>
-        </Box>
-      </Box>
-    </Box>
+    </FormScreen>
   )
 }

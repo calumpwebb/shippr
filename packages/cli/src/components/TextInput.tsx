@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
-import { Text, useInput } from 'ink'
+import { Box, Text, useInput } from 'ink'
 import chalk from 'chalk'
+import { colors } from '../utils/colors'
 
 type TextInputProps = {
   value: string
@@ -9,6 +10,7 @@ type TextInputProps = {
   placeholder?: string
   mask?: string
   focus?: boolean
+  label?: string
 }
 
 export function TextInput({
@@ -18,6 +20,7 @@ export function TextInput({
   placeholder = '',
   mask,
   focus = true,
+  label,
 }: TextInputProps): React.ReactNode {
   const [cursorOffset, setCursorOffset] = useState(value.length)
 
@@ -119,28 +122,37 @@ export function TextInput({
   // the entire value renders as one element, avoiding vertical artifacts when pasting
   let renderedValue: string
 
-  // When not focused, show dimmed value without cursor
+  // When not focused, show muted value without cursor
   if (!focus) {
     if (hasValue) {
-      renderedValue = chalk.dim(displayValue)
+      renderedValue = chalk.hex(colors.muted)(displayValue)
     } else if (placeholder) {
-      renderedValue = chalk.dim(placeholder)
+      renderedValue = chalk.hex(colors.muted)(placeholder)
     } else {
       renderedValue = ' '
     }
-    return <Text>{renderedValue}</Text>
-  }
-
-  if (!hasValue && placeholder) {
-    renderedValue = chalk.inverse(placeholder[0] ?? ' ') + chalk.dim(placeholder.slice(1))
+  } else if (!hasValue && placeholder) {
+    renderedValue =
+      chalk.inverse(placeholder[0] ?? ' ') + chalk.hex(colors.muted)(placeholder.slice(1))
   } else if (hasValue) {
     const beforeCursor = displayValue.slice(0, safeCursor)
     const atCursor = displayValue[safeCursor] ?? ' '
     const afterCursor = displayValue.slice(safeCursor + 1)
-    renderedValue = beforeCursor + chalk.inverse(atCursor) + afterCursor
+    renderedValue = chalk.white(beforeCursor) + chalk.inverse(atCursor) + chalk.white(afterCursor)
   } else {
     renderedValue = chalk.inverse(' ')
   }
 
-  return <Text>{renderedValue}</Text>
+  const input = <Text>{renderedValue}</Text>
+
+  if (label) {
+    return (
+      <Box>
+        <Text>{focus ? chalk.hex(colors.label)(label) : chalk.hex(colors.labelDim)(label)}</Text>
+        {input}
+      </Box>
+    )
+  }
+
+  return input
 }

@@ -1,6 +1,8 @@
 import { useState } from 'react'
-import { Box, Text, useInput } from 'ink'
+import { Box, useInput } from 'ink'
 import { TextInput } from '../components/TextInput'
+import { Button } from '../components/Button'
+import { FormScreen } from '../components/FormScreen'
 import { trpcClient, toApiError, ApiErrorCode } from '../utils/trpc'
 import { saveToken } from '../utils/credentials'
 import { useRouter } from '../components/Router'
@@ -74,66 +76,36 @@ export function LoginScreen(): React.ReactNode {
       navigateField(-1)
     } else if (key.downArrow || key.tab) {
       navigateField(1)
-    } else if (key.return && activeField === 'submit') {
-      handleSubmit()
     }
   })
 
   return (
-    <Box flexDirection="column" padding={1}>
-      <Box marginBottom={1}>
-        <Text bold>Sign in now!</Text>
+    <FormScreen
+      title="Sign in"
+      subtitle="Welcome back! Enter your credentials."
+      successMessage={successMessage}
+      error={error}
+      loading={loading}
+      loadingMessage="Logging in..."
+    >
+      <TextInput
+        label="Email: "
+        value={email}
+        onChange={setEmail}
+        onSubmit={handleFieldSubmit}
+        focus={activeField === 'email'}
+      />
+      <TextInput
+        label="Password: "
+        value={password}
+        onChange={setPassword}
+        onSubmit={handleFieldSubmit}
+        mask="*"
+        focus={activeField === 'password'}
+      />
+      <Box marginTop={1}>
+        <Button label="Login" onPress={handleSubmit} focus={activeField === 'submit'} />
       </Box>
-
-      {successMessage && (
-        <Box marginBottom={1}>
-          <Text color="green">{successMessage}</Text>
-        </Box>
-      )}
-
-      {error && (
-        <Box marginBottom={1}>
-          <Text color="red">{error}</Text>
-        </Box>
-      )}
-
-      {!loading && (
-        <Box flexDirection="column">
-          <Box>
-            <Text dimColor={activeField !== 'email'}>Email: </Text>
-            <TextInput
-              value={email}
-              onChange={setEmail}
-              onSubmit={handleFieldSubmit}
-              focus={activeField === 'email'}
-            />
-          </Box>
-          <Box>
-            <Text dimColor={activeField !== 'password'}>Password: </Text>
-            <TextInput
-              value={password}
-              onChange={setPassword}
-              onSubmit={handleFieldSubmit}
-              mask="*"
-              focus={activeField === 'password'}
-            />
-          </Box>
-          <Box marginTop={1}>
-            <Text
-              color={activeField === 'submit' ? 'green' : undefined}
-              dimColor={activeField !== 'submit'}
-            >
-              [ Login ]
-            </Text>
-          </Box>
-        </Box>
-      )}
-
-      {loading && (
-        <Box>
-          <Text dimColor>Logging in...</Text>
-        </Box>
-      )}
-    </Box>
+    </FormScreen>
   )
 }

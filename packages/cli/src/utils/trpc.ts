@@ -91,9 +91,18 @@ export function toApiError(error: unknown): ApiError {
       }
     }
 
+    // For internal server errors, don't expose details to user
+    if (code === 'INTERNAL_SERVER_ERROR') {
+      return {
+        code: ApiErrorCode.SERVER_ERROR,
+        message: 'Something went wrong. Please try again later.',
+        originalError: error,
+      }
+    }
+
     return {
       code: ApiErrorCode.SERVER_ERROR,
-      message: error.message || 'Server error',
+      message: 'Something went wrong. Please try again later.',
       originalError: error,
     }
   }
@@ -107,10 +116,10 @@ export function toApiError(error: unknown): ApiError {
     }
   }
 
-  // Unknown error
+  // Unknown error - don't expose internal details
   return {
     code: ApiErrorCode.UNKNOWN,
-    message: error instanceof Error ? error.message : 'An unexpected error occurred',
+    message: 'An unexpected error occurred. Please try again later.',
     originalError: error,
   }
 }

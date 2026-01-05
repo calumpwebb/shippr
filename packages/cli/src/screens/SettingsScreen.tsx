@@ -1,5 +1,6 @@
 import { Box, Text, useInput } from 'ink'
 import { useRouter } from '../components/Router'
+import { colors } from '../utils/colors'
 
 export function SettingsScreen(): React.ReactNode {
   const { pop } = useRouter()
@@ -11,13 +12,13 @@ export function SettingsScreen(): React.ReactNode {
   })
 
   return (
-    <Box flexDirection="column" padding={1}>
+    <Box flexDirection="column">
       <Box marginBottom={1}>
         <Text bold>Settings</Text>
       </Box>
-      <Text dimColor>Coming soon...</Text>
+      <Text color={colors.muted}>Coming soon...</Text>
       <Box marginTop={1}>
-        <Text dimColor>Press ESC to go back</Text>
+        <Text color={colors.muted}>Press ESC to go back</Text>
       </Box>
     </Box>
   )

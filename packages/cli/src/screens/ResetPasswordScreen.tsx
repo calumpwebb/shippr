@@ -1,6 +1,8 @@
 import { useState } from 'react'
-import { Box, Text, useInput } from 'ink'
+import { Box, useInput } from 'ink'
 import { TextInput } from '../components/TextInput'
+import { Button } from '../components/Button'
+import { FormScreen } from '../components/FormScreen'
 import { trpcClient, toApiError } from '../utils/trpc'
 import { useRouter } from '../components/Router'
 
@@ -79,70 +81,43 @@ export function ResetPasswordScreen(): React.ReactNode {
       navigateField(-1)
     } else if (key.downArrow || key.tab) {
       navigateField(1)
-    } else if (key.return && activeField === 'submit') {
-      handleSubmit()
     }
   })
 
-  if (loading) {
-    return (
-      <Box flexDirection="column" padding={1}>
-        <Text dimColor>Resetting password...</Text>
-      </Box>
-    )
-  }
-
   return (
-    <Box flexDirection="column" padding={1}>
-      <Box marginBottom={1}>
-        <Text bold>Reset Password</Text>
+    <FormScreen
+      title="Reset password"
+      subtitle="Enter the code from your email and choose a new password."
+      error={error}
+      loading={loading}
+      loadingMessage="Resetting password..."
+    >
+      <TextInput
+        label="Code: "
+        value={code}
+        onChange={setCode}
+        onSubmit={handleFieldSubmit}
+        focus={activeField === 'code'}
+      />
+      <TextInput
+        label="New Password: "
+        value={newPassword}
+        onChange={setNewPassword}
+        onSubmit={handleFieldSubmit}
+        mask="*"
+        focus={activeField === 'newPassword'}
+      />
+      <TextInput
+        label="Confirm Password: "
+        value={confirmPassword}
+        onChange={setConfirmPassword}
+        onSubmit={handleFieldSubmit}
+        mask="*"
+        focus={activeField === 'confirmPassword'}
+      />
+      <Box marginTop={1}>
+        <Button label="Reset Password" onPress={handleSubmit} focus={activeField === 'submit'} />
       </Box>
-
-      {error && (
-        <Box marginBottom={1}>
-          <Text color="red">{error}</Text>
-        </Box>
-      )}
-
-      <Box flexDirection="column">
-        <Box>
-          <Text dimColor={activeField !== 'code'}>Code: </Text>
-          <TextInput
-            value={code}
-            onChange={setCode}
-            onSubmit={handleFieldSubmit}
-            focus={activeField === 'code'}
-          />
-        </Box>
-        <Box>
-          <Text dimColor={activeField !== 'newPassword'}>New Password: </Text>
-          <TextInput
-            value={newPassword}
-            onChange={setNewPassword}
-            onSubmit={handleFieldSubmit}
-            mask="*"
-            focus={activeField === 'newPassword'}
-          />
-        </Box>
-        <Box>
-          <Text dimColor={activeField !== 'confirmPassword'}>Confirm Password: </Text>
-          <TextInput
-            value={confirmPassword}
-            onChange={setConfirmPassword}
-            onSubmit={handleFieldSubmit}
-            mask="*"
-            focus={activeField === 'confirmPassword'}
-          />
-        </Box>
-        <Box marginTop={1}>
-          <Text
-            color={activeField === 'submit' ? 'green' : undefined}
-            dimColor={activeField !== 'submit'}
-          >
-            [ Reset Password ]
-          </Text>
-        </Box>
-      </Box>
-    </Box>
+    </FormScreen>
   )
 }

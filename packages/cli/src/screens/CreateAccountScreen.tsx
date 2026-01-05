@@ -1,6 +1,8 @@
 import { useState } from 'react'
-import { Box, Text, useInput } from 'ink'
+import { Box, useInput } from 'ink'
 import { TextInput } from '../components/TextInput'
+import { Button } from '../components/Button'
+import { FormScreen } from '../components/FormScreen'
 import { trpcClient, toApiError, ApiErrorCode } from '../utils/trpc'
 import { saveToken } from '../utils/credentials'
 import { useRouter } from '../components/Router'
@@ -81,70 +83,43 @@ export function CreateAccountScreen(): React.ReactNode {
       navigateField(-1)
     } else if (key.downArrow || key.tab) {
       navigateField(1)
-    } else if (key.return && activeField === 'submit') {
-      handleSubmit()
     }
   })
 
   return (
-    <Box flexDirection="column" padding={1}>
-      <Box marginBottom={1}>
-        <Text bold>Create your account!</Text>
+    <FormScreen
+      title="Create your account"
+      subtitle="Join us! Fill in your details below."
+      error={error}
+      loading={loading}
+      loadingMessage="Creating account..."
+    >
+      <TextInput
+        label="Email: "
+        value={email}
+        onChange={setEmail}
+        onSubmit={handleFieldSubmit}
+        focus={activeField === 'email'}
+      />
+      <TextInput
+        label="Password: "
+        value={password}
+        onChange={setPassword}
+        onSubmit={handleFieldSubmit}
+        mask="*"
+        focus={activeField === 'password'}
+      />
+      <TextInput
+        label="Confirm Password: "
+        value={confirmPassword}
+        onChange={setConfirmPassword}
+        onSubmit={handleFieldSubmit}
+        mask="*"
+        focus={activeField === 'confirmPassword'}
+      />
+      <Box marginTop={1}>
+        <Button label="Sign Up" onPress={handleSubmit} focus={activeField === 'submit'} />
       </Box>
-
-      {error && (
-        <Box marginBottom={1}>
-          <Text color="red">{error}</Text>
-        </Box>
-      )}
-
-      {!loading && (
-        <Box flexDirection="column">
-          <Box>
-            <Text dimColor={activeField !== 'email'}>Email: </Text>
-            <TextInput
-              value={email}
-              onChange={setEmail}
-              onSubmit={handleFieldSubmit}
-              focus={activeField === 'email'}
-            />
-          </Box>
-          <Box>
-            <Text dimColor={activeField !== 'password'}>Password: </Text>
-            <TextInput
-              value={password}
-              onChange={setPassword}
-              onSubmit={handleFieldSubmit}
-              mask="*"
-              focus={activeField === 'password'}
-            />
-          </Box>
-          <Box>
-            <Text dimColor={activeField !== 'confirmPassword'}>Confirm Password: </Text>
-            <TextInput
-              value={confirmPassword}
-              onChange={setConfirmPassword}
-              onSubmit={handleFieldSubmit}
-              mask="*"
-              focus={activeField === 'confirmPassword'}
-            />
-          </Box>
-          <Box marginTop={1}>
-            <Text
-              color={activeField === 'submit' ? 'green' : undefined}
-              dimColor={activeField !== 'submit'}
-            >
-              [ Sign Up ]
-            </Text>
-          </Box>
-        </Box>
-      )}
-
-      {loading && (
-        <Box>
-          <Text dimColor>Creating account...</Text>
-        </Box>
-      )}
-    </Box>
+    </FormScreen>
   )
 }

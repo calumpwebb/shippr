@@ -4,6 +4,7 @@ import SelectInput from 'ink-select-input'
 import { clearToken } from '../utils/credentials'
 import { useRouter } from '../components/Router'
 import { trpcClient, toApiError } from '../utils/trpc'
+import { colors } from '../utils/colors'
 
 export function DashboardScreen(): React.ReactNode {
   const { reset } = useRouter()
@@ -33,7 +34,7 @@ export function DashboardScreen(): React.ReactNode {
   }
 
   return (
-    <Box flexDirection="column" padding={1}>
+    <Box flexDirection="column">
       <Box marginBottom={1}>
         <Text bold color="green">
           ✓ Logged In
@@ -42,7 +43,7 @@ export function DashboardScreen(): React.ReactNode {
       <Text>Welcome to the dashboard.</Text>
       {error && (
         <Box marginTop={1}>
-          <Text color="red">{error}</Text>
+          <Text color={colors.error}>{error}</Text>
         </Box>
       )}
       <Box marginTop={1}>

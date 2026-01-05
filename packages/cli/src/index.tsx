@@ -7,8 +7,8 @@ function App(): React.ReactNode {
   return <Router routes={routes} />
 }
 
-// Enter alternate screen buffer
-process.stdout.write('\x1b[?1049h')
+// Enter alternate screen buffer and position cursor at top-left
+process.stdout.write('\x1b[?1049h\x1b[H')
 
 const { waitUntilExit } = render(<App />, { exitOnCtrlC: false })
 

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Box, Text, useApp, useInput } from 'ink'
 import { useRouter } from './Router'
+import { colors } from '../utils/colors'
 
 export function Footer(): React.ReactNode {
   const [confirmExit, setConfirmExit] = useState(false)
@@ -26,9 +27,11 @@ export function Footer(): React.ReactNode {
   return (
     <Box marginTop={1}>
       {confirmExit ? (
-        <Text color="yellow">Press Ctrl+C again to exit!</Text>
+        <Text color={colors.warning}>Press Ctrl+C again to exit!</Text>
       ) : (
-        <Text dimColor>({hints})</Text>
+        <Text italic color={colors.footer}>
+          ({hints})
+        </Text>
       )}
     </Box>
   )

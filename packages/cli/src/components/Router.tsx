@@ -1,8 +1,11 @@
 import { createContext, useContext, useState, useEffect } from 'react'
+import { Box } from 'ink'
 import type { Route } from '../routes'
 import type { RouteConfig, RouterContextType, RouteStackItem } from '../types'
 import { getToken, clearToken, isTokenValid } from '../utils/credentials'
 import { Footer } from './Footer'
+import { Logo } from './Logo'
+import { LogoNeon } from './LogoNeon'
 
 const RouterContext = createContext<RouterContextType>({
   push: () => {},
@@ -26,6 +29,7 @@ type RouterProps = {
 export function Router({ routes }: RouterProps): React.ReactNode {
   const [routeStack, setRouteStack] = useState<RouteStackItem[]>([{ name: 'welcome' }])
   const [loading, setLoading] = useState(true)
+  const [useNeonLogo] = useState(() => Math.random() < 0.5)
 
   useEffect(() => {
     async function checkAuth(): Promise<void> {
@@ -100,8 +104,13 @@ export function Router({ routes }: RouterProps): React.ReactNode {
         canGoBack: routeStack.length > 1,
       }}
     >
-      <Component />
-      <Footer />
+      <Box flexDirection="column" padding={1}>
+        {useNeonLogo ? <LogoNeon /> : <Logo />}
+        <Box flexDirection="column" paddingLeft={1}>
+          <Component />
+        </Box>
+        <Footer />
+      </Box>
     </RouterContext.Provider>
   )
 }
