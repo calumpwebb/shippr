@@ -20,10 +20,21 @@ export const createContext = async ({ req }: { req: any }) => {
 
 const t = initTRPC.context<typeof createContext>().create();
 
-export const router = t.router;
-export const publicProcedure = t.procedure;
+const loggerMiddleware = t.middleware(async ({ path, type, next }) => {
+  const start = Date.now();
+  const result = await next();
+  const duration = Date.now() - start;
+  console.log(`[tRPC] (${type}) /${path} - ${duration}ms, ${JSON.stringify(result)}`);
+  return result;
+});
 
-export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
+export const router = t.router;
+
+const baseProcedure = t.procedure.use(loggerMiddleware);
+
+export const publicProcedure = baseProcedure;
+
+export const protectedProcedure = baseProcedure.use(async ({ ctx, next }) => {
   if (!ctx.user) {
     throw new TRPCError({ code: 'UNAUTHORIZED' });
   }

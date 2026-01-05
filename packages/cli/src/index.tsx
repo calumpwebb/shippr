@@ -25,4 +25,4 @@ function App() {
   return <Router routes={routes} />;
 }
 
-render(<App />);
+render(<App />, { enterAltScreen: true });
