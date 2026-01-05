@@ -4,7 +4,7 @@ import * as schema from './schema'
 
 export type Database = PostgresJsDatabase<typeof schema>
 
-export function createDb(connectionString: string): Database {
+export function createDbService(connectionString: string): Database {
   const client = postgres(connectionString)
   return drizzle(client, { schema })
 }

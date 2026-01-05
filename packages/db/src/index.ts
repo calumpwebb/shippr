@@ -1,5 +1,5 @@
 // Re-export the factory and types - no env dependency
-export { createDb, type Database } from './client'
+export { createDbService, type Database } from './client'
 export * from './schema'
 
 // Re-export commonly used drizzle-orm operators

@@ -1,6 +1,6 @@
 import { migrate } from 'drizzle-orm/postgres-js/migrator'
 import postgres from 'postgres'
-import { createDb, type Database } from './client'
+import { createDbService, type Database } from './client'
 
 const MIGRATIONS_PATH = new URL('../drizzle', import.meta.url).pathname
 const TEST_CONTAINER_LABEL = 'shippr-test'
@@ -81,7 +81,7 @@ export async function setupTestDb(): Promise<{ db: Database; container: TestCont
   await waitForPostgres(connectionString)
   console.log('[test-setup] Postgres is ready!')
 
-  const db = createDb(connectionString)
+  const db = createDbService(connectionString)
 
   console.log('[test-setup] Running migrations from:', MIGRATIONS_PATH)
   await migrate(db, { migrationsFolder: MIGRATIONS_PATH })

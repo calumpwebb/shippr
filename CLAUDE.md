@@ -36,7 +36,7 @@ cd packages/api && bun test auth.test    # Run specific test file
 Database layer using Drizzle ORM with PostgreSQL. Exports:
 
 - `./schema` - Drizzle table definitions (`users`, `passwordResetTokens`)
-- `./client` - `createDb(connectionString)` factory returning typed Drizzle instance
+- `./client` - `createDbService(connectionString)` factory returning typed Drizzle instance
 - `./test-utils` - `setupTestDb()` spins up Docker PostgreSQL container with migrations
 
 ### packages/api
