@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import { Box, Text } from 'ink';
+import { Box, Text, useInput } from 'ink';
 import TextInput from 'ink-text-input';
 import { trpcClient } from '../utils/trpc';
 import { saveToken } from '../utils/credentials';
 import { useRouter } from './Router';
 
-export function LoginForm() {
+type LoginFormProps = {
+  onBack: () => void;
+};
+
+export function LoginForm({ onBack }: LoginFormProps) {
   const [step, setStep] = useState<'email' | 'password'>('email');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -40,6 +44,12 @@ export function LoginForm() {
       setStep('password');
     }
   };
+
+  useInput((input, key) => {
+    if (key.escape && !loading) {
+      onBack();
+    }
+  });
 
   return (
     <Box flexDirection="column" padding={1}>
@@ -82,6 +92,10 @@ export function LoginForm() {
           <Text color="red">{error}</Text>
         </Box>
       )}
+
+      <Box marginTop={1}>
+        <Text dimColor>(Press ESC to go back)</Text>
+      </Box>
     </Box>
   );
 }
