@@ -33,18 +33,31 @@ const t = initTRPC.context<typeof createContext>().create({
 
 const loggerMiddleware = t.middleware(async ({ path, type, next }) => {
   const start = Date.now()
+
+  // sleep for 0.5s (between 200 and 500ms randomly) to simultate some delay for development
+  const sleepTime = Math.floor(Math.random() * 300) + 200
+  await new Promise((resolve) => setTimeout(resolve, sleepTime))
+
   try {
     const result = await next()
     const duration = Date.now() - start
     if (!result.ok) {
-      console.error(`[tRPC] (${type}) /${path} - ${duration}ms ERROR:`, result.error)
+      console.error(
+        `[tRPC] (${type}) /${path} - ::${duration - sleepTime}ms actual, ${sleepTime}ms sleep, ${duration}ms total:: ERROR:`,
+        result.error
+      )
     } else {
-      console.log(`[tRPC] (${type}) /${path} - ${duration}ms OK`)
+      console.log(
+        `[tRPC] (${type}) /${path} - ::${duration - sleepTime}ms actual, ${sleepTime}ms sleep, ${duration}ms total:: OK`
+      )
     }
     return result
   } catch (err) {
     const duration = Date.now() - start
-    console.error(`[tRPC] (${type}) /${path} - ${duration}ms UNCAUGHT:`, err)
+    console.error(
+      `[tRPC] (${type}) /${path} - ::${duration - sleepTime}ms actual, ${sleepTime}ms sleep, ${duration}ms total:: UNCAUGHT:`,
+      err
+    )
     throw err
   }
 })
