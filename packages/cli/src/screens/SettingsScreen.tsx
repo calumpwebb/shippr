@@ -1,7 +1,7 @@
 import { Box, Text, useInput } from 'ink'
 import { useRouter } from '../components/Router'
 
-export function SettingsScreen() {
+export function SettingsScreen(): React.ReactNode {
   const { pop } = useRouter()
 
   useInput((_input, key) => {

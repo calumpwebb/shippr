@@ -8,7 +8,7 @@ const items = [
   { label: 'Forgot Password', value: 'forgot-password' as const },
 ]
 
-export function WelcomeScreen() {
+export function WelcomeScreen(): React.ReactNode {
   const [selectedIndex, setSelectedIndex] = useState(0)
   const { push } = useRouter()
 

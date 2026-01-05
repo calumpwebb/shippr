@@ -26,7 +26,7 @@ export type RouteStackItem = {
 // - any required props → required arg
 type ParamsArgs<R extends Route> = RouteParams[R] extends undefined
   ? []
-  : {} extends RouteParams[R]
+  : Record<string, never> extends RouteParams[R]
     ? [params?: RouteParams[R]]
     : [params: RouteParams[R]]
 

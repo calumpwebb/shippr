@@ -18,7 +18,7 @@ export function TextInput({
   placeholder = '',
   mask,
   focus = true,
-}: TextInputProps) {
+}: TextInputProps): React.ReactNode {
   const [cursorOffset, setCursorOffset] = useState(value.length)
 
   useEffect(() => {
@@ -73,7 +73,7 @@ export function TextInput({
         while (i >= 0 && beforeCursor[i] === ' ') i--
 
         // Check what type of character we're on
-        const isWordChar = (c: string) => /[a-zA-Z0-9]/.test(c)
+        const isWordChar = (c: string): boolean => /[a-zA-Z0-9]/.test(c)
 
         if (i >= 0 && isWordChar(beforeCursor[i])) {
           // Delete word characters

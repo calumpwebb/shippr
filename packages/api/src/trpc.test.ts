@@ -32,7 +32,10 @@ afterAll(async () => {
 })
 
 /** Helper to create a real user and get their token payload */
-async function createRealUser(email: string, password: string) {
+async function createRealUser(
+  email: string,
+  password: string
+): Promise<Awaited<ReturnType<typeof verifyToken>>> {
   const caller = appRouter.createCaller({ user: null })
   const { token } = await caller.auth.createUser({ email, password })
   return verifyToken(token)

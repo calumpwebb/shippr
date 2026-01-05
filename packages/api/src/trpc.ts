@@ -2,7 +2,15 @@ import { initTRPC, TRPCError } from '@trpc/server'
 import superjson from 'superjson'
 import { verifyToken } from './utils/jwt'
 
-export const createContext = async ({ req }: { req: any }) => {
+type ContextRequest = {
+  headers?: { get?: (name: string) => string | null; authorization?: string }
+}
+
+export async function createContext({
+  req,
+}: {
+  req: ContextRequest
+}): Promise<{ user: Awaited<ReturnType<typeof verifyToken>> | null }> {
   // Handle both standard Request objects and Node.js IncomingMessage
   const authHeader = req.headers?.get?.('authorization') || req.headers?.authorization
   const token = authHeader?.replace('Bearer ', '')

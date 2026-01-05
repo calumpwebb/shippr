@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Box, Text, useApp, useInput } from 'ink'
 import { useRouter } from './Router'
 
-export function Footer() {
+export function Footer(): React.ReactNode {
   const [confirmExit, setConfirmExit] = useState(false)
   const { exit } = useApp()
   const { canGoBack } = useRouter()

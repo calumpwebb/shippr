@@ -8,7 +8,7 @@ import { useRouter } from '../components/Router'
 const fields = ['email', 'password', 'confirmPassword', 'submit'] as const
 type Field = (typeof fields)[number]
 
-export function CreateAccountScreen() {
+export function CreateAccountScreen(): React.ReactNode {
   const [activeField, setActiveField] = useState<Field>('email')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -17,20 +17,20 @@ export function CreateAccountScreen() {
   const [error, setError] = useState('')
   const { reset, pop } = useRouter()
 
-  const navigateField = (direction: 1 | -1) => {
+  function navigateField(direction: 1 | -1): void {
     setActiveField((f) => {
       const idx = fields.indexOf(f)
       return fields[(idx + direction + fields.length) % fields.length]
     })
   }
 
-  const handleFieldSubmit = () => {
+  function handleFieldSubmit(): void {
     if (activeField !== 'submit') {
       navigateField(1)
     }
   }
 
-  const handleSubmit = async () => {
+  async function handleSubmit(): Promise<void> {
     if (!email.trim()) {
       setError('Email is required')
       setActiveField('email')

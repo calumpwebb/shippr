@@ -14,19 +14,21 @@ const RouterContext = createContext<RouterContextType>({
   canGoBack: false,
 })
 
-export const useRouter = () => useContext(RouterContext)
+export function useRouter(): RouterContextType {
+  return useContext(RouterContext)
+}
 
 type RouterProps = {
   routes: Record<Route, RouteConfig>
   children?: React.ReactNode
 }
 
-export function Router({ routes }: RouterProps) {
+export function Router({ routes }: RouterProps): React.ReactNode {
   const [routeStack, setRouteStack] = useState<RouteStackItem[]>([{ name: 'welcome' }])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const checkAuth = async () => {
+    async function checkAuth(): Promise<void> {
       const token = getToken()
 
       if (token && (await isTokenValid(token))) {
@@ -44,21 +46,21 @@ export function Router({ routes }: RouterProps) {
     checkAuth()
   }, [])
 
-  const push = (route: Route, params?: unknown) => {
+  function push(route: Route, params?: unknown): void {
     setRouteStack([...routeStack, { name: route, params }])
   }
 
-  const pop = () => {
+  function pop(): void {
     if (routeStack.length > 1) {
       setRouteStack(routeStack.slice(0, -1))
     }
   }
 
-  const replace = (route: Route, params?: unknown) => {
+  function replace(route: Route, params?: unknown): void {
     setRouteStack([...routeStack.slice(0, -1), { name: route, params }])
   }
 
-  const reset = (route: Route, params?: unknown) => {
+  function reset(route: Route, params?: unknown): void {
     setRouteStack([{ name: route, params }])
   }
 
@@ -67,7 +69,7 @@ export function Router({ routes }: RouterProps) {
 
   // Check auth guard
   useEffect(() => {
-    const checkGuard = async () => {
+    async function checkGuard(): Promise<void> {
       if (routeConfig.protected) {
         const token = getToken()
         if (!token || !(await isTokenValid(token))) {

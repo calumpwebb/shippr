@@ -3,7 +3,7 @@ import { render } from 'ink'
 import { Router } from './components/Router'
 import { routes } from './routes'
 
-function App() {
+function App(): React.ReactNode {
   return <Router routes={routes} />
 }
 

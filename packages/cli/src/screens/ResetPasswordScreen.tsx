@@ -7,7 +7,7 @@ import { useRouter } from '../components/Router'
 const fields = ['code', 'newPassword', 'confirmPassword', 'submit'] as const
 type Field = (typeof fields)[number]
 
-export function ResetPasswordScreen() {
+export function ResetPasswordScreen(): React.ReactNode {
   const [activeField, setActiveField] = useState<Field>('code')
   const [code, setCode] = useState('')
   const [newPassword, setNewPassword] = useState('')
@@ -18,20 +18,20 @@ export function ResetPasswordScreen() {
 
   const email = (params as { email: string } | undefined)?.email ?? ''
 
-  const navigateField = (direction: 1 | -1) => {
+  function navigateField(direction: 1 | -1): void {
     setActiveField((f) => {
       const idx = fields.indexOf(f)
       return fields[(idx + direction + fields.length) % fields.length]
     })
   }
 
-  const handleFieldSubmit = () => {
+  function handleFieldSubmit(): void {
     if (activeField !== 'submit') {
       navigateField(1)
     }
   }
 
-  const handleSubmit = async () => {
+  async function handleSubmit(): Promise<void> {
     if (!code.trim()) {
       setError('Code is required')
       setActiveField('code')

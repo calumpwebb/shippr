@@ -5,7 +5,7 @@ import { clearToken } from '../utils/credentials'
 import { useRouter } from '../components/Router'
 import { trpcClient, toApiError } from '../utils/trpc'
 
-export function DashboardScreen() {
+export function DashboardScreen(): React.ReactNode {
   const { reset } = useRouter()
   const [isRefreshing, setIsRefreshing] = useState(false)
   const [error, setError] = useState('')
@@ -15,7 +15,7 @@ export function DashboardScreen() {
     { label: 'Sign out', value: 'signout' as const },
   ]
 
-  const handleSelect = async (item: { value: 'refresh' | 'signout' }) => {
+  async function handleSelect(item: { value: 'refresh' | 'signout' }): Promise<void> {
     if (item.value === 'refresh') {
       setIsRefreshing(true)
       setError('')

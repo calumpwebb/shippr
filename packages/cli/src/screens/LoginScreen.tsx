@@ -8,7 +8,7 @@ import { useRouter } from '../components/Router'
 const fields = ['email', 'password', 'submit'] as const
 type Field = (typeof fields)[number]
 
-export function LoginScreen() {
+export function LoginScreen(): React.ReactNode {
   const [activeField, setActiveField] = useState<Field>('email')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -18,14 +18,14 @@ export function LoginScreen() {
 
   const successMessage = (params as { successMessage?: string } | undefined)?.successMessage
 
-  const navigateField = (direction: 1 | -1) => {
+  function navigateField(direction: 1 | -1): void {
     setActiveField((f) => {
       const idx = fields.indexOf(f)
       return fields[(idx + direction + fields.length) % fields.length]
     })
   }
 
-  const handleFieldSubmit = () => {
+  function handleFieldSubmit(): void {
     const idx = fields.indexOf(activeField)
     const submitIdx = fields.indexOf('submit')
     if (idx < submitIdx) {
@@ -33,7 +33,7 @@ export function LoginScreen() {
     }
   }
 
-  const handleSubmit = async () => {
+  async function handleSubmit(): Promise<void> {
     if (!email.trim()) {
       setError('Email is required')
       setActiveField('email')

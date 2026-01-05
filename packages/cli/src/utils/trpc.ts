@@ -13,10 +13,10 @@ export const ApiErrorCode = {
   UNKNOWN: 'UNKNOWN',
 } as const
 
-export type ApiErrorCode = (typeof ApiErrorCode)[keyof typeof ApiErrorCode]
+export type ApiErrorCodeType = (typeof ApiErrorCode)[keyof typeof ApiErrorCode]
 
 export type ApiError = {
-  code: ApiErrorCode
+  code: ApiErrorCodeType
   message: string
   originalError?: unknown
 }
@@ -64,7 +64,9 @@ export function toApiError(error: unknown): ApiError {
             originalError: error,
           }
         }
-      } catch {}
+      } catch {
+        // JSON parse failed, use default message
+      }
       return {
         code: ApiErrorCode.BAD_REQUEST,
         message: error.message || 'Invalid request',
@@ -118,7 +120,7 @@ const RETRY_DELAYS = [100, 1000]
 const MAX_ATTEMPTS = 3
 
 // Sleep helper
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+const sleep = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms))
 
 // Wrapper that adds retry logic and error normalization
 async function withRetry<T>(fn: () => Promise<T>): Promise<T> {
@@ -172,7 +174,7 @@ function isProcedure(value: unknown): boolean {
 // Proxy handler that wraps all calls with retry logic (supports nested routers)
 function createRetryProxy<T extends object>(target: T): T {
   return new Proxy(target, {
-    get(obj, prop) {
+    get(obj, prop): unknown {
       const value = (obj as Record<string | symbol, unknown>)[prop]
 
       if (typeof value === 'object' && value !== null) {
@@ -184,10 +186,12 @@ function createRetryProxy<T extends object>(target: T): T {
           }
           return {
             query: procedure.query
-              ? async (input?: unknown) => withRetry(() => procedure.query!(input))
+              ? async (input?: unknown): Promise<unknown> =>
+                  withRetry(() => procedure.query!(input))
               : undefined,
             mutate: procedure.mutate
-              ? async (input?: unknown) => withRetry(() => procedure.mutate!(input))
+              ? async (input?: unknown): Promise<unknown> =>
+                  withRetry(() => procedure.mutate!(input))
               : undefined,
           }
         } else {
