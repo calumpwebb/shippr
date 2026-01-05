@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Box, Text, useInput } from 'ink';
 import { TextInput } from '../components/TextInput';
-import { trpcClient } from '../utils/trpc';
+import { trpcClient, toApiError } from '../utils/trpc';
 import { useRouter } from '../components/Router';
 
 const fields = ['email', 'submit'] as const;
@@ -40,10 +40,10 @@ export function ForgotPasswordScreen() {
     try {
       await trpcClient.requestPasswordReset.mutate({ email });
       push('reset-password', { email });
-    } catch {
-      setError('An unexpected error occurred');
-    } finally {
+    } catch (err) {
       setLoading(false);
+      const apiError = toApiError(err);
+      setError(apiError.message);
     }
   };
 
@@ -71,7 +71,7 @@ export function ForgotPasswordScreen() {
   return (
     <Box flexDirection="column" padding={1}>
       <Box marginBottom={1}>
-        <Text bold>Forgot Password</Text>
+        <Text bold>Forgot Your Password?</Text>
       </Box>
 
       {error && (

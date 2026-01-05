@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Box, Text, useInput } from 'ink';
 import { TextInput } from '../components/TextInput';
-import { trpcClient } from '../utils/trpc';
+import { trpcClient, toApiError, ApiErrorCode } from '../utils/trpc';
 import { saveToken } from '../utils/credentials';
 import { useRouter } from '../components/Router';
 
@@ -59,23 +59,14 @@ export function CreateAccountScreen() {
       const result = await trpcClient.createUser.mutate({ email, password });
       saveToken(result.token);
       reset('dashboard');
-    } catch (err: any) {
+    } catch (err) {
       setLoading(false);
-      if (err.data?.code === 'BAD_REQUEST') {
-        try {
-          const issues = JSON.parse(err.message);
-          if (Array.isArray(issues)) {
-            setError(issues.map((i: any) => i.message).join(', '));
-            return;
-          }
-        } catch {}
-      }
-      if (err.data?.code === 'CONFLICT') {
+      const apiError = toApiError(err);
+
+      if (apiError.code === ApiErrorCode.CONFLICT) {
         setError('Email already registered');
-      } else if (err.message?.includes('fetch')) {
-        setError('Cannot connect to server. Is the API running?');
       } else {
-        setError('An unexpected error occurred');
+        setError(apiError.message);
       }
       setPassword('');
       setConfirmPassword('');

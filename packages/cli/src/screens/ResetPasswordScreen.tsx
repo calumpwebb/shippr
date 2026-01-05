@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Box, Text, useInput } from 'ink';
 import { TextInput } from '../components/TextInput';
-import { trpcClient } from '../utils/trpc';
+import { trpcClient, toApiError } from '../utils/trpc';
 import { useRouter } from '../components/Router';
 
 const fields = ['code', 'newPassword', 'confirmPassword', 'submit'] as const;
@@ -64,9 +64,10 @@ export function ResetPasswordScreen() {
     try {
       await trpcClient.resetPassword.mutate({ email, code, newPassword });
       push('login', { successMessage: 'Password reset successfully!' });
-    } catch (err: any) {
+    } catch (err) {
       setLoading(false);
-      setError(err.message || 'An unexpected error occurred');
+      const apiError = toApiError(err);
+      setError(apiError.message);
     }
   };
 

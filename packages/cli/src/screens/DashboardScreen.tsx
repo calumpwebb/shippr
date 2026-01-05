@@ -3,11 +3,12 @@ import { Box, Text } from 'ink';
 import SelectInput from 'ink-select-input';
 import { clearToken } from '../utils/credentials';
 import { useRouter } from '../components/Router';
-import { trpcClient } from '../utils/trpc';
+import { trpcClient, toApiError } from '../utils/trpc';
 
 export function DashboardScreen() {
   const { reset } = useRouter();
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [error, setError] = useState('');
 
   const items = [
     { label: isRefreshing ? 'Refreshing...' : 'Refresh', value: 'refresh' as const },
@@ -17,7 +18,13 @@ export function DashboardScreen() {
   const handleSelect = async (item: { value: 'refresh' | 'signout' }) => {
     if (item.value === 'refresh') {
       setIsRefreshing(true);
-      await trpcClient.refresh.query();
+      setError('');
+      try {
+        await trpcClient.refresh.query();
+      } catch (err) {
+        const apiError = toApiError(err);
+        setError(apiError.message);
+      }
       setIsRefreshing(false);
     } else if (item.value === 'signout') {
       clearToken();
@@ -31,6 +38,11 @@ export function DashboardScreen() {
         <Text bold color="green">✓ Logged In</Text>
       </Box>
       <Text>Welcome to the dashboard.</Text>
+      {error && (
+        <Box marginTop={1}>
+          <Text color="red">{error}</Text>
+        </Box>
+      )}
       <Box marginTop={1}>
         <SelectInput items={items} onSelect={handleSelect} />
       </Box>
