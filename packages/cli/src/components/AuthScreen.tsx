@@ -15,11 +15,6 @@ export function AuthScreen() {
     setSuccessMessage('');
   };
 
-  const handleForgotPassword = () => {
-    setSuccessMessage('');
-    setScreen('forgotPassword');
-  };
-
   const handlePasswordResetSuccess = () => {
     setSuccessMessage('Password reset successfully!');
     setScreen('login');
@@ -30,22 +25,11 @@ export function AuthScreen() {
   }
 
   if (screen === 'login') {
-    return (
-      <LoginForm
-        onBack={handleBack}
-        onForgotPassword={handleForgotPassword}
-        successMessage={successMessage}
-      />
-    );
+    return <LoginForm onBack={handleBack} successMessage={successMessage} />;
   }
 
   if (screen === 'forgotPassword') {
-    return (
-      <ForgotPasswordForm
-        onBack={() => setScreen('login')}
-        onSuccess={handlePasswordResetSuccess}
-      />
-    );
+    return <ForgotPasswordForm onBack={handleBack} onSuccess={handlePasswordResetSuccess} />;
   }
 
   return <SignupForm onBack={handleBack} />;

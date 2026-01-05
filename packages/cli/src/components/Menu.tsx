@@ -3,18 +3,19 @@ import { Box, Text, useInput } from 'ink';
 import { Footer } from './Footer';
 
 type MenuProps = {
-  onSelect: (choice: 'login' | 'signup') => void;
+  onSelect: (choice: 'login' | 'signup' | 'forgotPassword') => void;
 };
 
 const items = [
   { label: 'Login', value: 'login' as const },
   { label: 'Create Account', value: 'signup' as const },
+  { label: 'Forgot Password', value: 'forgotPassword' as const },
 ];
 
 export function Menu({ onSelect }: MenuProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  useInput((input, key) => {
+  useInput((_input, key) => {
     if (key.upArrow) {
       setSelectedIndex((i) => (i > 0 ? i - 1 : i));
     } else if (key.downArrow) {

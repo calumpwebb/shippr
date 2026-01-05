@@ -8,14 +8,13 @@ import { Footer } from './Footer';
 
 type LoginFormProps = {
   onBack: () => void;
-  onForgotPassword: () => void;
   successMessage?: string;
 };
 
-const fields = ['email', 'password', 'submit', 'forgot'] as const;
+const fields = ['email', 'password', 'submit'] as const;
 type Field = (typeof fields)[number];
 
-export function LoginForm({ onBack, onForgotPassword, successMessage }: LoginFormProps) {
+export function LoginForm({ onBack, successMessage }: LoginFormProps) {
   const [activeField, setActiveField] = useState<Field>('email');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -89,12 +88,8 @@ export function LoginForm({ onBack, onForgotPassword, successMessage }: LoginFor
       navigateField(-1);
     } else if (key.downArrow || key.tab) {
       navigateField(1);
-    } else if (key.return) {
-      if (activeField === 'submit') {
-        handleSubmit();
-      } else if (activeField === 'forgot') {
-        onForgotPassword();
-      }
+    } else if (key.return && activeField === 'submit') {
+      handleSubmit();
     }
   });
 
@@ -137,11 +132,6 @@ export function LoginForm({ onBack, onForgotPassword, successMessage }: LoginFor
           <Box marginTop={1}>
             <Text color={activeField === 'submit' ? 'green' : undefined} dimColor={activeField !== 'submit'}>
               [ Login ]
-            </Text>
-          </Box>
-          <Box>
-            <Text color={activeField === 'forgot' ? 'cyan' : undefined} dimColor={activeField !== 'forgot'}>
-              [ Forgot Password? ]
             </Text>
           </Box>
         </Box>

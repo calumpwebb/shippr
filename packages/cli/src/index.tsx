@@ -28,7 +28,7 @@ function App() {
 // Enter alternate screen buffer
 process.stdout.write('\x1b[?1049h');
 
-const { waitUntilExit } = render(<App />);
+const { waitUntilExit } = render(<App />, { exitOnCtrlC: false });
 
 waitUntilExit().then(() => {
   // Leave alternate screen buffer
