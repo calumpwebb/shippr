@@ -4,7 +4,7 @@
     "": {
       "name": "cli",
       "dependencies": {
-        "@trpc/client": "^11.0.0",
+        "@trpc/client": "^11.8.1",
         "ink": "^5.0.1",
         "ink-select-input": "^6.2.0",
         "ink-text-input": "^6.0.0",
