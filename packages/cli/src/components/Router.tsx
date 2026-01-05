@@ -1,5 +1,4 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { Box, Text } from 'ink';
 import type { Route } from '../routes';
 import type { RouteConfig, RouterContextType, RouteStackItem } from '../types';
 import { getToken, clearToken, isTokenValid } from '../utils/credentials';
@@ -103,17 +102,6 @@ export function Router({ routes }: RouterProps) {
     >
       <Component />
       <Footer />
-      <Box marginTop={1} borderStyle="single" borderColor="gray" paddingX={1}>
-        <Text dimColor>
-          route: <Text color="cyan">{current.name}</Text>
-          {current.params ? (
-            <Text> | params: <Text color="yellow">{JSON.stringify(current.params)}</Text></Text>
-          ) : null}
-          {routeStack.length > 1 && (
-            <Text> | stack: [{routeStack.map(r => r.name).join(' → ')}]</Text>
-          )}
-        </Text>
-      </Box>
     </RouterContext.Provider>
   );
 }
