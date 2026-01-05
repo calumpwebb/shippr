@@ -1,0 +1,27 @@
+# Environment variables
+.env
+.env.local
+
+# API build artifacts
+packages/api/dist/
+
+# CLI build artifacts
+packages/cli/dist/
+packages/cli/cli
+
+# User credentials
+.ink-starter/
+
+# Dependencies
+node_modules/
+bun.lockb
+bun.lock
+
+# Database
+postgres_data/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
