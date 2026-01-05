@@ -107,37 +107,32 @@ export function ResetPasswordScreen() {
       <Box flexDirection="column">
         <Box>
           <Text dimColor={activeField !== 'code'}>Code: </Text>
-          {activeField === 'code' ? (
-            <TextInput value={code} onChange={setCode} onSubmit={handleFieldSubmit} />
-          ) : (
-            <Text dimColor>{code}</Text>
-          )}
+          <TextInput
+            value={code}
+            onChange={setCode}
+            onSubmit={handleFieldSubmit}
+            focus={activeField === 'code'}
+          />
         </Box>
         <Box>
           <Text dimColor={activeField !== 'newPassword'}>New Password: </Text>
-          {activeField === 'newPassword' ? (
-            <TextInput
-              value={newPassword}
-              onChange={setNewPassword}
-              onSubmit={handleFieldSubmit}
-              mask="*"
-            />
-          ) : (
-            <Text dimColor>{'*'.repeat(newPassword.length)}</Text>
-          )}
+          <TextInput
+            value={newPassword}
+            onChange={setNewPassword}
+            onSubmit={handleFieldSubmit}
+            mask="*"
+            focus={activeField === 'newPassword'}
+          />
         </Box>
         <Box>
           <Text dimColor={activeField !== 'confirmPassword'}>Confirm Password: </Text>
-          {activeField === 'confirmPassword' ? (
-            <TextInput
-              value={confirmPassword}
-              onChange={setConfirmPassword}
-              onSubmit={handleFieldSubmit}
-              mask="*"
-            />
-          ) : (
-            <Text dimColor>{'*'.repeat(confirmPassword.length)}</Text>
-          )}
+          <TextInput
+            value={confirmPassword}
+            onChange={setConfirmPassword}
+            onSubmit={handleFieldSubmit}
+            mask="*"
+            focus={activeField === 'confirmPassword'}
+          />
         </Box>
         <Box marginTop={1}>
           <Text

@@ -86,11 +86,12 @@ export function ForgotPasswordScreen() {
         </Box>
         <Box>
           <Text dimColor={activeField !== 'email'}>Email: </Text>
-          {activeField === 'email' ? (
-            <TextInput value={email} onChange={setEmail} onSubmit={handleFieldSubmit} />
-          ) : (
-            <Text dimColor>{email}</Text>
-          )}
+          <TextInput
+            value={email}
+            onChange={setEmail}
+            onSubmit={handleFieldSubmit}
+            focus={activeField === 'email'}
+          />
         </Box>
         <Box marginTop={1}>
           <Text

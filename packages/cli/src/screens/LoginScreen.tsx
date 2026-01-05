@@ -101,24 +101,22 @@ export function LoginScreen() {
         <Box flexDirection="column">
           <Box>
             <Text dimColor={activeField !== 'email'}>Email: </Text>
-            {activeField === 'email' ? (
-              <TextInput value={email} onChange={setEmail} onSubmit={handleFieldSubmit} />
-            ) : (
-              <Text dimColor>{email}</Text>
-            )}
+            <TextInput
+              value={email}
+              onChange={setEmail}
+              onSubmit={handleFieldSubmit}
+              focus={activeField === 'email'}
+            />
           </Box>
           <Box>
             <Text dimColor={activeField !== 'password'}>Password: </Text>
-            {activeField === 'password' ? (
-              <TextInput
-                value={password}
-                onChange={setPassword}
-                onSubmit={handleFieldSubmit}
-                mask="*"
-              />
-            ) : (
-              <Text dimColor>{'*'.repeat(password.length)}</Text>
-            )}
+            <TextInput
+              value={password}
+              onChange={setPassword}
+              onSubmit={handleFieldSubmit}
+              mask="*"
+              focus={activeField === 'password'}
+            />
           </Box>
           <Box marginTop={1}>
             <Text

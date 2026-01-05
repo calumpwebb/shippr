@@ -119,6 +119,18 @@ export function TextInput({
   // the entire value renders as one element, avoiding vertical artifacts when pasting
   let renderedValue: string
 
+  // When not focused, show dimmed value without cursor
+  if (!focus) {
+    if (hasValue) {
+      renderedValue = chalk.dim(displayValue)
+    } else if (placeholder) {
+      renderedValue = chalk.dim(placeholder)
+    } else {
+      renderedValue = ' '
+    }
+    return <Text>{renderedValue}</Text>
+  }
+
   if (!hasValue && placeholder) {
     renderedValue = chalk.inverse(placeholder[0] ?? ' ') + chalk.dim(placeholder.slice(1))
   } else if (hasValue) {
