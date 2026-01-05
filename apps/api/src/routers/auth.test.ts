@@ -1,22 +1,27 @@
 import { setupTestDb } from '@shippr/db/test-utils'
 import { describe, test, expect, beforeAll, afterAll } from 'bun:test'
-import { createAppRouter } from './index'
+import { appRouter } from './index'
 import { passwordResetTokens, users } from '@shippr/db/schema'
 import { eq } from 'drizzle-orm'
+import { createJwtService } from '@shippr/shared/jwt'
 import type { Database } from '@shippr/db/client'
 import type { TestContainer } from '@shippr/db/test-utils'
 
+// Test secret - must be at least 32 characters
+const TEST_JWT_SECRET = 'test-secret-that-is-at-least-32-characters-long'
+const jwt = createJwtService(TEST_JWT_SECRET)
+
 let container: TestContainer
 let db: Database
-let caller: ReturnType<ReturnType<typeof createAppRouter>['createCaller']>
+let caller: ReturnType<typeof appRouter.createCaller>
 
 beforeAll(async () => {
   const testDb = await setupTestDb()
   container = testDb.container
   db = testDb.db
 
-  const router = createAppRouter(db)
-  caller = router.createCaller({ user: null })
+  // Create caller with context containing db and jwt service
+  caller = appRouter.createCaller({ db, jwt, user: null })
 }, 60000)
 
 afterAll(async () => {

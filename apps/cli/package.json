@@ -26,7 +26,6 @@
   },
   "devDependencies": {
     "@shippr/api": "workspace:*",
-    "@shippr/shared": "workspace:*",
     "@types/react": "^18.3.12",
     "bun-types": "latest",
     "typescript": "^5.7.2"

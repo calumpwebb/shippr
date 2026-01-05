@@ -29,6 +29,13 @@ export default [
     },
   },
   {
-    ignores: ["node_modules/", "dist/", "build/", "*.js"],
+    // tRPC routers use inferred return types via typeof (types are deeply nested generics)
+    files: ["**/routers/*.ts"],
+    rules: {
+      "@typescript-eslint/explicit-function-return-type": "off",
+    },
+  },
+  {
+    ignores: ["**/node_modules/**", "**/dist/**", "**/build/**", "**/*.js"],
   },
 ];

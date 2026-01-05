@@ -61,7 +61,7 @@ Ink (React for CLIs) application with custom routing. Key patterns:
 ## Code Style
 
 - ESLint enforces `@typescript-eslint/explicit-function-return-type` on all functions
-- Exception: tRPC router factory functions use `eslint-disable` comment because their return types are inferred via `typeof`
+- Exception: Router files (`**/routers/*.ts`) are exempt (config override) - tRPC router return types are deeply nested generics that are impractical to write manually
 
 ## Code Navigation (Serena MCP)
 

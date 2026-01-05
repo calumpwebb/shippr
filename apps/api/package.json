@@ -4,8 +4,7 @@
   "type": "module",
   "exports": {
     "./router": "./src/router.ts",
-    "./trpc": "./src/trpc.ts",
-    "./utils/jwt": "./src/utils/jwt.ts"
+    "./trpc": "./src/trpc.ts"
   },
   "scripts": {
     "dev": "bun --watch src/index.ts",

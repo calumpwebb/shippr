@@ -1,9 +1,18 @@
 import { drizzle } from 'drizzle-orm/postgres-js'
 import { migrate } from 'drizzle-orm/postgres-js/migrator'
 import postgres from 'postgres'
-import { env } from '@shippr/shared/env'
+import { loadEnvFile } from './load-env'
 
-const client = postgres(env.DATABASE_URL, { max: 1 })
+// Load .env from monorepo root
+loadEnvFile()
+
+const connectionString = process.env.DATABASE_URL
+if (!connectionString) {
+  console.error('❌ DATABASE_URL is required')
+  process.exit(1)
+}
+
+const client = postgres(connectionString, { max: 1 })
 const db = drizzle(client)
 
 async function main(): Promise<void> {

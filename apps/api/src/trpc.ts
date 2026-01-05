@@ -1,33 +1,47 @@
 import { initTRPC, TRPCError } from '@trpc/server'
 import superjson from 'superjson'
-import { verifyToken } from './utils/jwt'
+import type { JwtPayload, JwtService } from '@shippr/shared/jwt'
+import type { Database } from '@shippr/db'
 
 type ContextRequest = {
   headers?: { get?: (name: string) => string | null; authorization?: string }
 }
 
-export async function createContext({
-  req,
-}: {
-  req: ContextRequest
-}): Promise<{ user: Awaited<ReturnType<typeof verifyToken>> | null }> {
-  // Handle both standard Request objects and Node.js IncomingMessage
-  const authHeader = req.headers?.get?.('authorization') || req.headers?.authorization
-  const token = authHeader?.replace('Bearer ', '')
+// Type for the context - used by routers
+export type Context = {
+  db: Database
+  jwt: JwtService
+  user: JwtPayload | null
+}
 
-  if (!token) {
-    return { user: null }
-  }
+export interface ContextDeps {
+  db: Database
+  jwt: JwtService
+}
 
-  try {
-    const payload = await verifyToken(token)
-    return { user: payload }
-  } catch {
-    return { user: null }
+/**
+ * Creates the context factory for tRPC.
+ * Dependencies (db, jwt) are injected and available to all procedures via ctx.
+ */
+export function createContextFactory({ db, jwt }: ContextDeps) {
+  return async function createContext({ req }: { req: ContextRequest }): Promise<Context> {
+    const authHeader = req.headers?.get?.('authorization') || req.headers?.authorization
+    const token = authHeader?.replace('Bearer ', '')
+
+    if (!token) {
+      return { db, jwt, user: null }
+    }
+
+    try {
+      const payload = await jwt.verifyToken(token)
+      return { db, jwt, user: payload }
+    } catch {
+      return { db, jwt, user: null }
+    }
   }
 }
 
-const t = initTRPC.context<typeof createContext>().create({
+const t = initTRPC.context<Context>().create({
   transformer: superjson,
 })
 
@@ -37,7 +51,7 @@ const loggerMiddleware = t.middleware(async ({ path, type, next }) => {
   // sleep for 0.5s (between 200 and 500ms randomly) to simultate some delay for development
   let sleepTime = Math.floor(Math.random() * 300) + 200
 
-  // for 5% of requests, add 1s exyra
+  // for 5% of requests, add 1s extra
   if (Math.random() < 0.05) {
     sleepTime += 1000
   }

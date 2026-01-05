@@ -2,7 +2,6 @@ import { mkdirSync } from 'fs'
 import { homedir } from 'os'
 import { join } from 'path'
 import pino from 'pino'
-import { env } from '@shippr/shared/env'
 
 const LOG_DIR = join(homedir(), '.shippr', 'logs')
 const LOG_FILE = join(LOG_DIR, 'cli.log')
@@ -16,9 +15,12 @@ const destination = pino.destination({
   sync: true, // Sync writes ensure logs aren't lost
 })
 
+// TODO: Replace with config file approach
+const LOG_LEVEL = process.env.LOG_LEVEL ?? 'info'
+
 export const logger = pino(
   {
-    level: env.LOG_LEVEL,
+    level: LOG_LEVEL,
   },
   destination
 )

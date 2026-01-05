@@ -1,11 +1,10 @@
-import { drizzle } from 'drizzle-orm/postgres-js'
+import { drizzle, type PostgresJsDatabase } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
 import * as schema from './schema'
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type -- return type used via typeof for Database
-export function createDb(connectionString: string) {
+export type Database = PostgresJsDatabase<typeof schema>
+
+export function createDb(connectionString: string): Database {
   const client = postgres(connectionString)
   return drizzle(client, { schema })
 }
-
-export type Database = ReturnType<typeof createDb>
