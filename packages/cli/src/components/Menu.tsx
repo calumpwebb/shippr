@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Box, Text, useInput } from 'ink';
-import { Footer } from './Footer';
 
 type MenuProps = {
   onSelect: (choice: 'login' | 'signup' | 'forgotPassword') => void;
@@ -40,7 +39,6 @@ export function Menu({ onSelect }: MenuProps) {
           </Text>
         </Box>
       ))}
-      <Footer />
     </Box>
   );
 }

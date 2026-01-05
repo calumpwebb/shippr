@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { Route, RouteConfig, RouterContextType, RouteStackItem } from '../types';
 import { getToken, clearToken, isTokenValid } from '../utils/credentials';
+import { Footer } from './Footer';
 
 const RouterContext = createContext<RouterContextType>({
   push: () => {},
@@ -8,6 +9,7 @@ const RouterContext = createContext<RouterContextType>({
   replace: () => {},
   currentRoute: 'auth',
   params: undefined,
+  canGoBack: false,
 });
 
 export const useRouter = () => useContext(RouterContext);
@@ -88,9 +90,11 @@ export function Router({ routes }: RouterProps) {
         replace,
         currentRoute: current.name,
         params: current.params,
+        canGoBack: routeStack.length > 1,
       }}
     >
       <Component />
+      <Footer />
     </RouterContext.Provider>
   );
 }

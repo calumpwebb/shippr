@@ -45,11 +45,18 @@ export function TextInput({
       let nextValue = value;
       let nextCursorOffset = cursorOffset;
 
-      // Check for word delete first (Option+Backspace / Ctrl+W)
+      // Check for line delete (Cmd+Backspace / Ctrl+U)
+      const isLineDelete = input === '\x15' || (key.ctrl && input === 'u');
+
+      // Check for word delete (Option+Backspace / Ctrl+W)
       // Option+Backspace sends delete:true + meta:true, Ctrl+W sends \x17
       const isWordDelete = input === '\x17' || (key.delete && key.meta);
 
-      if (key.leftArrow) {
+      if (isLineDelete) {
+        // Delete everything before cursor
+        nextValue = value.slice(cursorOffset);
+        nextCursorOffset = 0;
+      } else if (key.leftArrow) {
         nextCursorOffset = Math.max(0, cursorOffset - 1);
       } else if (key.rightArrow) {
         nextCursorOffset = Math.min(value.length, cursorOffset + 1);
@@ -105,10 +112,13 @@ export function TextInput({
   const displayValue = mask ? mask.repeat(value.length) : value;
   const hasValue = value.length > 0;
 
+  // Clamp cursor to valid range to prevent rendering glitches during paste
+  const safeCursor = Math.min(cursorOffset, displayValue.length);
+
   // Render with cursor
-  const beforeCursor = displayValue.slice(0, cursorOffset);
-  const atCursor = displayValue[cursorOffset] ?? ' ';
-  const afterCursor = displayValue.slice(cursorOffset + 1);
+  const beforeCursor = displayValue.slice(0, safeCursor);
+  const atCursor = displayValue[safeCursor] ?? ' ';
+  const afterCursor = displayValue.slice(safeCursor + 1);
 
   if (!hasValue && placeholder) {
     return (

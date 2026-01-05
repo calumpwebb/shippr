@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { router, publicProcedure } from './trpc';
+import { router, publicProcedure, protectedProcedure } from './trpc';
 import { db } from './db';
 import { users, passwordResetTokens } from './db/schema';
 import { eq } from 'drizzle-orm';
@@ -86,7 +86,7 @@ export const appRouter = router({
       await db.delete(passwordResetTokens).where(eq(passwordResetTokens.userId, user.id));
 
       // Generate 6-digit code
-      const code = crypto.randomInt(100000, 999999).toString();
+      const code = String(Math.floor(Math.random() * 900000) + 100000);
 
       // Insert new token
       await db.insert(passwordResetTokens).values({
@@ -161,6 +161,9 @@ export const appRouter = router({
 
       return { success: true };
     }),
+  refresh: protectedProcedure.query(() => {
+    return { ok: true };
+  }),
 });
 
 export type AppRouter = typeof appRouter;

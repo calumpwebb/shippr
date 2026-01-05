@@ -16,6 +16,7 @@ export type RouterContextType = {
   replace: (route: Route, params?: any) => void;
   currentRoute: Route;
   params?: any;
+  canGoBack: boolean;
 };
 
 export type Credentials = {

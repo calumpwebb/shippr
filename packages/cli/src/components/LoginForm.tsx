@@ -4,7 +4,6 @@ import { TextInput } from './TextInput';
 import { trpcClient } from '../utils/trpc';
 import { saveToken } from '../utils/credentials';
 import { useRouter } from './Router';
-import { Footer } from './Footer';
 
 type LoginFormProps = {
   onBack: () => void;
@@ -99,7 +98,7 @@ export function LoginForm({ onBack, successMessage }: LoginFormProps) {
         <Text bold>Sign in now!</Text>
       </Box>
 
-      {successMessage && (
+      {successMessage && !error && (
         <Box marginBottom={1}>
           <Text color="green">{successMessage}</Text>
         </Box>
@@ -143,7 +142,6 @@ export function LoginForm({ onBack, successMessage }: LoginFormProps) {
         </Box>
       )}
 
-      <Footer />
     </Box>
   );
 }

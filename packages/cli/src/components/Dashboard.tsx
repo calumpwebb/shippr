@@ -1,19 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Text } from 'ink';
 import SelectInput from 'ink-select-input';
 import { clearToken } from '../utils/credentials';
 import { useRouter } from './Router';
+import { trpcClient } from '../utils/trpc';
 
 export function Dashboard() {
   const { replace } = useRouter();
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const items = [
-    { label: 'Refresh', value: 'refresh' as const },
+    { label: isRefreshing ? 'Refreshing...' : 'Refresh', value: 'refresh' as const },
     { label: 'Sign out', value: 'signout' as const },
   ];
 
-  const handleSelect = (item: { value: 'refresh' | 'signout' }) => {
-    if (item.value === 'signout') {
+  const handleSelect = async (item: { value: 'refresh' | 'signout' }) => {
+    if (item.value === 'refresh') {
+      setIsRefreshing(true);
+      await trpcClient.refresh.query();
+      setIsRefreshing(false);
+    } else if (item.value === 'signout') {
       clearToken();
       replace('auth');
     }

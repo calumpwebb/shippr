@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Box, Text, useInput } from 'ink';
 import { TextInput } from './TextInput';
 import { trpcClient } from '../utils/trpc';
-import { Footer } from './Footer';
 
 type ForgotPasswordFormProps = {
   onBack: () => void;
@@ -205,7 +204,6 @@ export function ForgotPasswordForm({ onBack, onSuccess }: ForgotPasswordFormProp
         </Box>
       )}
 
-      <Footer />
     </Box>
   );
 }
