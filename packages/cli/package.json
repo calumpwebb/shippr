@@ -1,6 +1,6 @@
 {
   "name": "@calumpwebb/shippr",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "type": "module",
   "bin": {
     "shippr": "dist/index.js"
@@ -14,7 +14,6 @@
     "compile": "bun build src/index.tsx --compile --outfile shippr"
   },
   "dependencies": {
-    "@shippr/shared": "workspace:*",
     "@trpc/client": "^11.8.1",
     "chalk": "^5.6.2",
     "ink": "^5.0.1",
@@ -27,6 +26,7 @@
   },
   "devDependencies": {
     "@shippr/api": "workspace:*",
+    "@shippr/shared": "workspace:*",
     "@types/react": "^18.3.12",
     "bun-types": "latest",
     "typescript": "^5.7.2"

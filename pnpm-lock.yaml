@@ -84,9 +84,6 @@ importers:
 
   packages/cli:
     dependencies:
-      '@shippr/shared':
-        specifier: workspace:*
-        version: link:../shared
       '@trpc/client':
         specifier: ^11.8.1
         version: 11.8.1(@trpc/server@11.8.1(typescript@5.9.3))(typescript@5.9.3)
@@ -118,6 +115,9 @@ importers:
       '@shippr/api':
         specifier: workspace:*
         version: link:../api
+      '@shippr/shared':
+        specifier: workspace:*
+        version: link:../shared
       '@types/react':
         specifier: ^18.3.12
         version: 18.3.27
