@@ -26,15 +26,15 @@ export function FormScreen({
       {subtitle && <Text color={colors.muted}>{subtitle}</Text>}
       <Box marginTop={1} />
 
-      {successMessage && (
+      {successMessage && !error && (
         <Box marginBottom={1}>
-          <Text color="green">{successMessage}</Text>
+          <Text color="green">✓ {successMessage}</Text>
         </Box>
       )}
 
       {error && (
         <Box marginBottom={1}>
-          <Text color={colors.error}>{error}</Text>
+          <Text color={colors.error}>✗ {error}</Text>
         </Box>
       )}
 

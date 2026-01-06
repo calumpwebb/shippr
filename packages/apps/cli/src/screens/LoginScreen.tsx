@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { z } from 'zod'
 import { Box, useInput } from 'ink'
 import { TextInput } from '../components/TextInput'
 import { Button } from '../components/Button'
@@ -38,6 +39,12 @@ export function LoginScreen(): React.ReactNode {
   async function handleSubmit(): Promise<void> {
     if (!email.trim()) {
       setError('Email is required')
+      setActiveField('email')
+      return
+    }
+
+    if (!z.string().email().safeParse(email).success) {
+      setError('Please enter a valid email address')
       setActiveField('email')
       return
     }

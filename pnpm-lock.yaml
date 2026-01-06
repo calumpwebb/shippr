@@ -126,6 +126,9 @@ importers:
       superjson:
         specifier: ^2.2.6
         version: 2.2.6
+      zod:
+        specifier: ^3.24.1
+        version: 3.25.76
     devDependencies:
       '@shippr/api':
         specifier: workspace:*

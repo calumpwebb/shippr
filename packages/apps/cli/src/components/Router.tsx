@@ -92,7 +92,7 @@ export function Router({ routes }: RouterProps): React.ReactNode {
         canGoBack: routeStack.length > 1,
       }}
     >
-      <Box marginLeft={2} marginTop={1}>
+      <Box paddingX={2} paddingY={1}>
         <Box flexDirection="column" gap={1}>
           <Header />
           <Box flexDirection="column">
