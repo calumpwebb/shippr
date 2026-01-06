@@ -24,7 +24,7 @@
   ],
   "scripts": {
     "dev": "bun run src/index.tsx",
-    "build": "bun build src/index.tsx --outdir dist --target node --packages bundle --external react-devtools-core --define process.env.NODE_ENV='\"production\"' && sed -i.bak 's|#!/usr/bin/env bun|#!/usr/bin/env node|' dist/index.js && sed -i.bak 's|import devtools from \"react-devtools-core\";|var devtools = { connect: () => ({ isConnected: false }) };|g' dist/index.js && rm -f dist/index.js.bak",
+    "build": "bun build src/index.tsx --outdir dist --target node --packages bundle --production --external react-devtools-core && sed -i.bak 's|#!/usr/bin/env bun|#!/usr/bin/env node|' dist/index.js && sed -i.bak 's|import[^;]*react-devtools-core[^;]*;|var devtools = { connect: () => ({ isConnected: false }) };|g' dist/index.js && rm -f dist/index.js.bak",
     "compile": "bun build src/index.tsx --compile --outfile shippr"
   },
   "dependencies": {
