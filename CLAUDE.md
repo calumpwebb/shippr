@@ -67,6 +67,25 @@ Ink (React for CLIs) application with custom routing. Key patterns:
 - ESLint enforces `@typescript-eslint/explicit-function-return-type` on all functions
 - Exception: Router files (`**/routers/*.ts`) are exempt (config override) - tRPC router return types are deeply nested generics that are impractical to write manually
 
+## Commit Conventions
+
+This repo uses [Conventional Commits](https://www.conventionalcommits.org/) with semantic-release for automated versioning and publishing. Commit messages determine the version bump:
+
+| Prefix                                  | Version Bump  | Example                                  |
+| --------------------------------------- | ------------- | ---------------------------------------- |
+| `fix:`                                  | Patch (0.0.x) | `fix(cli): correct login error handling` |
+| `feat:`                                 | Minor (0.x.0) | `feat(api): add password reset endpoint` |
+| `feat!:` or `BREAKING CHANGE:`          | Major (x.0.0) | `feat!: change auth token format`        |
+| `chore:`, `docs:`, `refactor:`, `test:` | No release    | `chore: update dependencies`             |
+
+**Format**: `type(scope): description`
+
+- **type**: `feat`, `fix`, `chore`, `docs`, `refactor`, `test`, `perf`, `ci`
+- **scope** (optional): `cli`, `api`, `db`, `shared`
+- **description**: lowercase, imperative mood, no period
+
+Releases are automated via GitHub Actions on push to `main`.
+
 ## Code Navigation (Serena MCP)
 
 **Proactively use Serena MCP tools** for all code exploration and editing tasks. Serena provides semantic code intelligence that is more accurate and token-efficient than text-based search.

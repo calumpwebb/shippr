@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Box, Text, useApp, useInput } from 'ink'
-import { useRouter } from './Router'
+import { useRouter } from './RouterContext'
 import { colors } from '../utils/colors'
 
 export function Footer(): React.ReactNode {

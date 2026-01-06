@@ -41,7 +41,8 @@ export function TextInput({
         return
       }
 
-      if (key.return) {
+      // Handle both \r (Bun) and \n (Node) for Enter key
+      if (key.return || input === '\n') {
         onSubmit?.(value)
         return
       }

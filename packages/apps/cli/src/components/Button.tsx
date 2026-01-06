@@ -9,8 +9,9 @@ type ButtonProps = {
 
 export function Button({ label, onPress, focus = false }: ButtonProps): React.ReactNode {
   useInput(
-    (_input, key) => {
-      if (key.return) {
+    (input, key) => {
+      // Handle both \r (Bun) and \n (Node) for Enter key
+      if (key.return || input === '\n') {
         onPress()
       }
     },

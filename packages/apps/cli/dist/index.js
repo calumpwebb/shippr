@@ -9225,6 +9225,46 @@ var require_stack_utils = __commonJS((exports, module) => {
   module.exports = StackUtils;
 });
 
+// ../../../node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react-jsx-runtime.production.min.js
+var exports_react_jsx_runtime_production_min = {};
+__export(exports_react_jsx_runtime_production_min, {
+  jsxs: () => $jsxs,
+  jsx: () => $jsx,
+  Fragment: () => $Fragment2
+});
+function q2(c, a, g) {
+  var b, d = {}, e = null, h = null;
+  g !== undefined && (e = "" + g);
+  a.key !== undefined && (e = "" + a.key);
+  a.ref !== undefined && (h = a.ref);
+  for (b in a)
+    m.call(a, b) && !p2.hasOwnProperty(b) && (d[b] = a[b]);
+  if (c && c.defaultProps)
+    for (b in a = c.defaultProps, a)
+      d[b] === undefined && (d[b] = a[b]);
+  return { $$typeof: k, type: c, key: e, ref: h, props: d, _owner: n2.current };
+}
+var f, k, l2, m, n2, p2, $Fragment2, $jsx, $jsxs;
+var init_react_jsx_runtime_production_min = __esm(() => {
+  f = __toESM(require_react(), 1);
+  k = Symbol.for("react.element");
+  l2 = Symbol.for("react.fragment");
+  m = Object.prototype.hasOwnProperty;
+  n2 = f.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentOwner;
+  p2 = { key: true, ref: true, __self: true, __source: true };
+  $Fragment2 = l2;
+  $jsx = q2;
+  $jsxs = q2;
+});
+
+// ../../../node_modules/.pnpm/react@18.3.1/node_modules/react/jsx-runtime.js
+var require_jsx_runtime = __commonJS((exports, module) => {
+  init_react_jsx_runtime_production_min();
+  if (true) {
+    module.exports = exports_react_jsx_runtime_production_min;
+  } else {}
+});
+
 // ../../../node_modules/.pnpm/pino-std-serializers@7.0.0/node_modules/pino-std-serializers/lib/err-helpers.js
 var require_err_helpers = __commonJS((exports, module) => {
   var isErrorLike = (err) => {
@@ -10142,9 +10182,9 @@ var require_redaction = __commonJS((exports, module) => {
         o[ns].push(...o[wildcardFirstSym] || []);
       }
       if (ns === wildcardFirstSym) {
-        Object.keys(o).forEach(function(k) {
-          if (o[k]) {
-            o[k].push(nextPath);
+        Object.keys(o).forEach(function(k2) {
+          if (o[k2]) {
+            o[k2].push(nextPath);
           }
         });
       }
@@ -10157,15 +10197,15 @@ var require_redaction = __commonJS((exports, module) => {
     const topCensor = (...args) => {
       return typeof censor === "function" ? serialize2(censor(...args)) : serialize2(censor);
     };
-    return [...Object.keys(shape), ...Object.getOwnPropertySymbols(shape)].reduce((o, k) => {
-      if (shape[k] === null) {
-        o[k] = (value) => topCensor(value, [k]);
+    return [...Object.keys(shape), ...Object.getOwnPropertySymbols(shape)].reduce((o, k2) => {
+      if (shape[k2] === null) {
+        o[k2] = (value) => topCensor(value, [k2]);
       } else {
         const wrappedCensor = typeof censor === "function" ? (value, path) => {
-          return censor(value, [k, ...path]);
+          return censor(value, [k2, ...path]);
         } : censor;
-        o[k] = Redact({
-          paths: shape[k],
+        o[k2] = Redact({
+          paths: shape[k2],
           censor: wrappedCensor,
           serialize: serialize2,
           strict,
@@ -10229,34 +10269,34 @@ var require_quick_format_unescaped = __commonJS((exports, module) => {
     }
   }
   module.exports = format;
-  function format(f, args, opts) {
+  function format(f2, args, opts) {
     var ss = opts && opts.stringify || tryStringify;
     var offset = 1;
-    if (typeof f === "object" && f !== null) {
+    if (typeof f2 === "object" && f2 !== null) {
       var len = args.length + offset;
       if (len === 1)
-        return f;
+        return f2;
       var objects = new Array(len);
-      objects[0] = ss(f);
+      objects[0] = ss(f2);
       for (var index = 1;index < len; index++) {
         objects[index] = ss(args[index]);
       }
       return objects.join(" ");
     }
-    if (typeof f !== "string") {
-      return f;
+    if (typeof f2 !== "string") {
+      return f2;
     }
     var argLen = args.length;
     if (argLen === 0)
-      return f;
+      return f2;
     var str = "";
     var a = 1 - offset;
     var lastPos = -1;
-    var flen = f && f.length || 0;
+    var flen = f2 && f2.length || 0;
     for (var i = 0;i < flen; ) {
-      if (f.charCodeAt(i) === 37 && i + 1 < flen) {
+      if (f2.charCodeAt(i) === 37 && i + 1 < flen) {
         lastPos = lastPos > -1 ? lastPos : 0;
-        switch (f.charCodeAt(i + 1)) {
+        switch (f2.charCodeAt(i + 1)) {
           case 100:
           case 102:
             if (a >= argLen)
@@ -10264,7 +10304,7 @@ var require_quick_format_unescaped = __commonJS((exports, module) => {
             if (args[a] == null)
               break;
             if (lastPos < i)
-              str += f.slice(lastPos, i);
+              str += f2.slice(lastPos, i);
             str += Number(args[a]);
             lastPos = i + 2;
             i++;
@@ -10275,7 +10315,7 @@ var require_quick_format_unescaped = __commonJS((exports, module) => {
             if (args[a] == null)
               break;
             if (lastPos < i)
-              str += f.slice(lastPos, i);
+              str += f2.slice(lastPos, i);
             str += Math.floor(Number(args[a]));
             lastPos = i + 2;
             i++;
@@ -10288,7 +10328,7 @@ var require_quick_format_unescaped = __commonJS((exports, module) => {
             if (args[a] === undefined)
               break;
             if (lastPos < i)
-              str += f.slice(lastPos, i);
+              str += f2.slice(lastPos, i);
             var type = typeof args[a];
             if (type === "string") {
               str += "'" + args[a] + "'";
@@ -10310,14 +10350,14 @@ var require_quick_format_unescaped = __commonJS((exports, module) => {
             if (a >= argLen)
               break;
             if (lastPos < i)
-              str += f.slice(lastPos, i);
+              str += f2.slice(lastPos, i);
             str += String(args[a]);
             lastPos = i + 2;
             i++;
             break;
           case 37:
             if (lastPos < i)
-              str += f.slice(lastPos, i);
+              str += f2.slice(lastPos, i);
             str += "%";
             lastPos = i + 2;
             i++;
@@ -10329,9 +10369,9 @@ var require_quick_format_unescaped = __commonJS((exports, module) => {
       ++i;
     }
     if (lastPos === -1)
-      return f;
+      return f2;
     else if (lastPos < flen) {
-      str += f.slice(lastPos);
+      str += f2.slice(lastPos);
     }
     return str;
   }
@@ -10507,7 +10547,7 @@ var require_sonic_boom = __commonJS((exports, module) => {
     if (this.minLength >= this.maxWrite) {
       throw new Error(`minLength should be smaller than maxWrite (${this.maxWrite})`);
     }
-    this.release = (err, n2) => {
+    this.release = (err, n3) => {
       if (err) {
         if ((err.code === "EAGAIN" || err.code === "EBUSY") && this.retryEAGAIN(err, this._writingBuf.length, this._len - this._writingBuf.length)) {
           if (this.sync) {
@@ -10526,8 +10566,8 @@ var require_sonic_boom = __commonJS((exports, module) => {
         }
         return;
       }
-      this.emit("write", n2);
-      const releasedBufObj = releaseWritingBuf(this._writingBuf, this._len, n2);
+      this.emit("write", n3);
+      const releasedBufObj = releaseWritingBuf(this._writingBuf, this._len, n3);
       this._len = releasedBufObj.len;
       this._writingBuf = releasedBufObj.writingBuf;
       if (this._writingBuf.length) {
@@ -10537,8 +10577,8 @@ var require_sonic_boom = __commonJS((exports, module) => {
         }
         try {
           do {
-            const n3 = fsWriteSync();
-            const releasedBufObj2 = releaseWritingBuf(this._writingBuf, this._len, n3);
+            const n4 = fsWriteSync();
+            const releasedBufObj2 = releaseWritingBuf(this._writingBuf, this._len, n4);
             this._len = releasedBufObj2.len;
             this._writingBuf = releasedBufObj2.writingBuf;
           } while (this._writingBuf.length);
@@ -10586,12 +10626,12 @@ var require_sonic_boom = __commonJS((exports, module) => {
       this._periodicFlushTimer.unref();
     }
   }
-  function releaseWritingBuf(writingBuf, len, n2) {
-    if (typeof writingBuf === "string" && Buffer.byteLength(writingBuf) !== n2) {
-      n2 = Buffer.from(writingBuf).subarray(0, n2).toString().length;
+  function releaseWritingBuf(writingBuf, len, n3) {
+    if (typeof writingBuf === "string" && Buffer.byteLength(writingBuf) !== n3) {
+      n3 = Buffer.from(writingBuf).subarray(0, n3).toString().length;
     }
-    len = Math.max(len - n2, 0);
-    writingBuf = writingBuf.slice(n2);
+    len = Math.max(len - n3, 0);
+    writingBuf = writingBuf.slice(n3);
     return { writingBuf, len };
   }
   function emitDrain(sonic) {
@@ -10812,8 +10852,8 @@ var require_sonic_boom = __commonJS((exports, module) => {
         buf = this._bufs[0];
       }
       try {
-        const n2 = fs2.writeSync(this.fd, buf, "utf8");
-        const releasedBufObj = releaseWritingBuf(buf, this._len, n2);
+        const n3 = fs2.writeSync(this.fd, buf, "utf8");
+        const releasedBufObj = releaseWritingBuf(buf, this._len, n3);
         buf = releasedBufObj.writingBuf;
         this._len = releasedBufObj.len;
         if (buf.length <= 0) {
@@ -10848,9 +10888,9 @@ var require_sonic_boom = __commonJS((exports, module) => {
         buf = mergeBuf(this._bufs[0], this._lens[0]);
       }
       try {
-        const n2 = fs2.writeSync(this.fd, buf);
-        buf = buf.subarray(n2);
-        this._len = Math.max(this._len - n2, 0);
+        const n3 = fs2.writeSync(this.fd, buf);
+        buf = buf.subarray(n3);
+        this._len = Math.max(this._len - n3, 0);
         if (buf.length <= 0) {
           this._bufs.shift();
           this._lens.shift();
@@ -11744,7 +11784,7 @@ var require_tools = __commonJS((exports, module) => {
     return function hookWrappedLog(...args) {
       hook.call(this, args, LOG, level);
     };
-    function LOG(o, ...n2) {
+    function LOG(o, ...n3) {
       if (typeof o === "object") {
         let msg = o;
         if (o !== null) {
@@ -11755,22 +11795,22 @@ var require_tools = __commonJS((exports, module) => {
           }
         }
         let formatParams;
-        if (msg === null && n2.length === 0) {
+        if (msg === null && n3.length === 0) {
           formatParams = [null];
         } else {
-          msg = n2.shift();
-          formatParams = n2;
+          msg = n3.shift();
+          formatParams = n3;
         }
         if (typeof this[msgPrefixSym] === "string" && msg !== undefined && msg !== null) {
           msg = this[msgPrefixSym] + msg;
         }
         this[writeSym](o, format(msg, formatParams, this[formatOptsSym]), level);
       } else {
-        let msg = o === undefined ? n2.shift() : o;
+        let msg = o === undefined ? n3.shift() : o;
         if (typeof this[msgPrefixSym] === "string" && msg !== undefined && msg !== null) {
           msg = this[msgPrefixSym] + msg;
         }
-        this[writeSym](null, format(msg, n2, this[formatOptsSym]), level);
+        this[writeSym](null, format(msg, n3, this[formatOptsSym]), level);
       }
     }
   }
@@ -11779,11 +11819,11 @@ var require_tools = __commonJS((exports, module) => {
     let last = 0;
     let found = false;
     let point = 255;
-    const l2 = str.length;
-    if (l2 > 100) {
+    const l3 = str.length;
+    if (l3 > 100) {
       return JSON.stringify(str);
     }
-    for (var i = 0;i < l2 && point >= 32; i++) {
+    for (var i = 0;i < l3 && point >= 32; i++) {
       point = str.charCodeAt(i);
       if (point === 34 || point === 92) {
         result += str.slice(last, i) + "\\";
@@ -12089,12 +12129,12 @@ var require_levels = __commonJS((exports, module) => {
     debug: (hook) => genLog(DEFAULT_LEVELS.debug, hook),
     trace: (hook) => genLog(DEFAULT_LEVELS.trace, hook)
   };
-  var nums = Object.keys(DEFAULT_LEVELS).reduce((o, k) => {
-    o[DEFAULT_LEVELS[k]] = k;
+  var nums = Object.keys(DEFAULT_LEVELS).reduce((o, k2) => {
+    o[DEFAULT_LEVELS[k2]] = k2;
     return o;
   }, {});
-  var initialLsCache = Object.keys(nums).reduce((o, k) => {
-    o[k] = '{"level":' + Number(k);
+  var initialLsCache = Object.keys(nums).reduce((o, k2) => {
+    o[k2] = '{"level":' + Number(k2);
     return o;
   }, {});
   function genLsCache(instance) {
@@ -12169,8 +12209,8 @@ var require_levels = __commonJS((exports, module) => {
     return levelComparison;
   }
   function mappings(customLevels = null, useOnlyCustomLevels = false) {
-    const customNums = customLevels ? Object.keys(customLevels).reduce((o, k) => {
-      o[customLevels[k]] = k;
+    const customNums = customLevels ? Object.keys(customLevels).reduce((o, k2) => {
+      o[customLevels[k2]] = k2;
       return o;
     }, {}) : null;
     const labels = Object.assign(Object.create(Object.prototype, { Infinity: { value: "silent" } }), useOnlyCustomLevels ? null : nums, customNums);
@@ -12192,11 +12232,11 @@ var require_levels = __commonJS((exports, module) => {
   }
   function assertNoLevelCollisions(levels, customLevels) {
     const { labels, values } = levels;
-    for (const k in customLevels) {
-      if (k in values) {
+    for (const k2 in customLevels) {
+      if (k2 in values) {
         throw Error("levels cannot be overridden");
       }
-      if (customLevels[k] in labels) {
+      if (customLevels[k2] in labels) {
         throw Error("pre-existing level values cannot be used for new levels");
       }
     }
@@ -12298,7 +12338,7 @@ var require_proto = __commonJS((exports, module) => {
     get levelVal() {
       return this[levelValSym];
     },
-    set levelVal(n2) {
+    set levelVal(n3) {
       throw Error("levelVal is read-only");
     },
     get msgPrefix() {
@@ -12337,8 +12377,8 @@ var require_proto = __commonJS((exports, module) => {
     }
     if (options.hasOwnProperty("serializers") === true) {
       instance[serializersSym] = Object.create(null);
-      for (const k in serializers) {
-        instance[serializersSym][k] = serializers[k];
+      for (const k2 in serializers) {
+        instance[serializersSym][k2] = serializers[k2];
       }
       const parentSymbols = Object.getOwnPropertySymbols(serializers);
       for (var i = 0;i < parentSymbols.length; i++) {
@@ -13401,46 +13441,6 @@ var require_pino = __commonJS((exports, module) => {
   module.exports.version = version;
   module.exports.default = pino;
   module.exports.pino = pino;
-});
-
-// ../../../node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react-jsx-runtime.production.min.js
-var exports_react_jsx_runtime_production_min = {};
-__export(exports_react_jsx_runtime_production_min, {
-  jsxs: () => $jsxs,
-  jsx: () => $jsx,
-  Fragment: () => $Fragment2
-});
-function q2(c, a, g) {
-  var b, d = {}, e = null, h = null;
-  g !== undefined && (e = "" + g);
-  a.key !== undefined && (e = "" + a.key);
-  a.ref !== undefined && (h = a.ref);
-  for (b in a)
-    m.call(a, b) && !p2.hasOwnProperty(b) && (d[b] = a[b]);
-  if (c && c.defaultProps)
-    for (b in a = c.defaultProps, a)
-      d[b] === undefined && (d[b] = a[b]);
-  return { $$typeof: k, type: c, key: e, ref: h, props: d, _owner: n2.current };
-}
-var f, k, l2, m, n2, p2, $Fragment2, $jsx, $jsxs;
-var init_react_jsx_runtime_production_min = __esm(() => {
-  f = __toESM(require_react(), 1);
-  k = Symbol.for("react.element");
-  l2 = Symbol.for("react.fragment");
-  m = Object.prototype.hasOwnProperty;
-  n2 = f.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentOwner;
-  p2 = { key: true, ref: true, __self: true, __source: true };
-  $Fragment2 = l2;
-  $jsx = q2;
-  $jsxs = q2;
-});
-
-// ../../../node_modules/.pnpm/react@18.3.1/node_modules/react/jsx-runtime.js
-var require_jsx_runtime = __commonJS((exports, module) => {
-  init_react_jsx_runtime_production_min();
-  if (true) {
-    module.exports = exports_react_jsx_runtime_production_min;
-  } else {}
 });
 
 // ../../../node_modules/.pnpm/react@18.3.1/node_modules/react/jsx-runtime.js
@@ -18951,13 +18951,71 @@ async function isTokenValid(token) {
 }
 
 // src/components/Footer.tsx
-var import_react24 = __toESM(require_react(), 1);
-
-// src/components/Router.tsx
 var import_react23 = __toESM(require_react(), 1);
 
-// src/components/Header.tsx
+// src/components/RouterContext.tsx
 var import_react22 = __toESM(require_react(), 1);
+var RouterContext = import_react22.createContext({
+  push: () => {},
+  pop: () => {},
+  replace: () => {},
+  reset: () => {},
+  currentRoute: "welcome",
+  params: undefined,
+  canGoBack: false
+});
+function useRouter() {
+  return import_react22.useContext(RouterContext);
+}
+
+// src/utils/colors.ts
+var colors = {
+  primary: "blue",
+  primaryLight: "#87CEEB",
+  label: "#CCCCCC",
+  labelDim: "#888888",
+  muted: "#888888",
+  footer: "#666666",
+  error: "red",
+  warning: "yellow"
+};
+
+// src/components/Footer.tsx
+var jsx_runtime = __toESM(require_jsx_runtime(), 1);
+function Footer() {
+  const [confirmExit, setConfirmExit] = import_react23.useState(false);
+  const { exit } = use_app_default();
+  const { canGoBack } = useRouter();
+  use_input_default((input, key) => {
+    if (key.ctrl && input === "c") {
+      if (confirmExit) {
+        exit();
+      } else {
+        setConfirmExit(true);
+      }
+    } else if (confirmExit) {
+      setConfirmExit(false);
+    }
+  });
+  const hints = ["↑/↓/TAB navigate", canGoBack && "ESC back", "Ctrl+C quit"].filter(Boolean).join(", ");
+  return /* @__PURE__ */ jsx_runtime.jsx(Box_default, {
+    children: confirmExit ? /* @__PURE__ */ jsx_runtime.jsx(Text, {
+      color: colors.warning,
+      children: "Press Ctrl+C again to exit!"
+    }) : /* @__PURE__ */ jsx_runtime.jsxs(Text, {
+      italic: true,
+      color: colors.footer,
+      children: [
+        "(",
+        hints,
+        ")"
+      ]
+    })
+  });
+}
+
+// src/components/Header.tsx
+var import_react24 = __toESM(require_react(), 1);
 
 // ../../../node_modules/.pnpm/@trpc+client@11.8.1_@trpc+server@11.8.1_typescript@5.9.3__typescript@5.9.3/node_modules/@trpc/client/dist/objectSpread2-BvkFp-_Y.mjs
 var __create2 = Object.create;
@@ -18971,11 +19029,11 @@ var __commonJS2 = (cb, mod) => function() {
 };
 var __copyProps = (to, from, except, desc) => {
   if (from && typeof from === "object" || typeof from === "function")
-    for (var keys = __getOwnPropNames2(from), i = 0, n2 = keys.length, key;i < n2; i++) {
+    for (var keys = __getOwnPropNames2(from), i = 0, n3 = keys.length, key;i < n3; i++) {
       key = keys[i];
       if (!__hasOwnProp2.call(to, key) && key !== except)
         __defProp2(to, key, {
-          get: ((k) => from[k]).bind(null, key),
+          get: ((k2) => from[k2]).bind(null, key),
           enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
         });
     }
@@ -19298,11 +19356,11 @@ var __commonJS3 = (cb, mod) => function() {
 };
 var __copyProps2 = (to, from, except, desc) => {
   if (from && typeof from === "object" || typeof from === "function")
-    for (var keys = __getOwnPropNames3(from), i = 0, n2 = keys.length, key;i < n2; i++) {
+    for (var keys = __getOwnPropNames3(from), i = 0, n3 = keys.length, key;i < n3; i++) {
       key = keys[i];
       if (!__hasOwnProp3.call(to, key) && key !== except)
         __defProp3(to, key, {
-          get: ((k) => from[k]).bind(null, key),
+          get: ((k2) => from[k2]).bind(null, key),
           enumerable: !(desc = __getOwnPropDesc2(from, key)) || desc.enumerable
         });
     }
@@ -20135,12 +20193,12 @@ var import_objectSpread2$3 = __toESM2(require_objectSpread2(), 1);
 var import_objectSpread2$2 = __toESM2(require_objectSpread2(), 1);
 var require_asyncIterator = __commonJS2({ "../../node_modules/.pnpm/@oxc-project+runtime@0.72.2/node_modules/@oxc-project/runtime/src/helpers/asyncIterator.js"(exports, module) {
   function _asyncIterator$1(r2) {
-    var n2, t2, o, e = 2;
+    var n3, t2, o, e = 2;
     for (typeof Symbol != "undefined" && (t2 = Symbol.asyncIterator, o = Symbol.iterator);e--; ) {
-      if (t2 && (n2 = r2[t2]) != null)
-        return n2.call(r2);
-      if (o && (n2 = r2[o]) != null)
-        return new AsyncFromSyncIterator(n2.call(r2));
+      if (t2 && (n3 = r2[t2]) != null)
+        return n3.call(r2);
+      if (o && (n3 = r2[o]) != null)
+        return new AsyncFromSyncIterator(n3.call(r2));
       t2 = "@@asyncIterator", o = "@@iterator";
     }
     throw new TypeError("Object is not async iterable");
@@ -20149,11 +20207,11 @@ var require_asyncIterator = __commonJS2({ "../../node_modules/.pnpm/@oxc-project
     function AsyncFromSyncIteratorContinuation(r$1) {
       if (Object(r$1) !== r$1)
         return Promise.reject(new TypeError(r$1 + " is not an object."));
-      var n2 = r$1.done;
+      var n3 = r$1.done;
       return Promise.resolve(r$1.value).then(function(r$2) {
         return {
           value: r$2,
-          done: n2
+          done: n3
         };
       });
     }
@@ -20166,15 +20224,15 @@ var require_asyncIterator = __commonJS2({ "../../node_modules/.pnpm/@oxc-project
         return AsyncFromSyncIteratorContinuation(this.n.apply(this.s, arguments));
       },
       return: function _return(r$1) {
-        var n2 = this.s["return"];
-        return n2 === undefined ? Promise.resolve({
+        var n3 = this.s["return"];
+        return n3 === undefined ? Promise.resolve({
           value: r$1,
           done: true
-        }) : AsyncFromSyncIteratorContinuation(n2.apply(this.s, arguments));
+        }) : AsyncFromSyncIteratorContinuation(n3.apply(this.s, arguments));
       },
       throw: function _throw(r$1) {
-        var n2 = this.s["return"];
-        return n2 === undefined ? Promise.reject(r$1) : AsyncFromSyncIteratorContinuation(n2.apply(this.s, arguments));
+        var n3 = this.s["return"];
+        return n3 === undefined ? Promise.reject(r$1) : AsyncFromSyncIteratorContinuation(n3.apply(this.s, arguments));
       }
     }, new AsyncFromSyncIterator(r2);
   }
@@ -20187,7 +20245,7 @@ var require_usingCtx = __commonJS2({ "../../node_modules/.pnpm/@oxc-project+runt
     var r2 = typeof SuppressedError == "function" ? SuppressedError : function(r$1, e$1) {
       var n$1 = Error();
       return n$1.name = "SuppressedError", n$1.error = r$1, n$1.suppressed = e$1, n$1;
-    }, e = {}, n2 = [];
+    }, e = {}, n3 = [];
     function using(r$1, e$1) {
       if (e$1 != null) {
         if (Object(e$1) !== e$1)
@@ -20204,13 +20262,13 @@ var require_usingCtx = __commonJS2({ "../../node_modules/.pnpm/@oxc-project+runt
           } catch (r$2) {
             return Promise.reject(r$2);
           }
-        }), n2.push({
+        }), n3.push({
           v: e$1,
           d: o,
           a: r$1
         });
       } else
-        r$1 && n2.push({
+        r$1 && n3.push({
           d: e$1,
           a: r$1
         });
@@ -20223,10 +20281,10 @@ var require_usingCtx = __commonJS2({ "../../node_modules/.pnpm/@oxc-project+runt
       d: function d() {
         var o, t2 = this.e, s = 0;
         function next() {
-          for (;o = n2.pop(); )
+          for (;o = n3.pop(); )
             try {
               if (!o.a && s === 1)
-                return s = 0, n2.push(o), Promise.resolve().then(next);
+                return s = 0, n3.push(o), Promise.resolve().then(next);
               if (o.d) {
                 var r$1 = o.d.call(o.v);
                 if (o.a)
@@ -20274,7 +20332,7 @@ var require_wrapAsyncGenerator = __commonJS2({ "../../node_modules/.pnpm/@oxc-pr
     var r2, t2;
     function resume(r$1, t$1) {
       try {
-        var n2 = e[r$1](t$1), o = n2.value, u2 = o instanceof OverloadYield;
+        var n3 = e[r$1](t$1), o = n3.value, u2 = o instanceof OverloadYield;
         Promise.resolve(u2 ? o.v : o).then(function(t$2) {
           if (u2) {
             var i = r$1 === "return" ? "return" : "next";
@@ -20282,7 +20340,7 @@ var require_wrapAsyncGenerator = __commonJS2({ "../../node_modules/.pnpm/@oxc-pr
               return resume(i, t$2);
             t$2 = e[i](t$2).value;
           }
-          settle(n2.done ? "return" : "normal", t$2);
+          settle(n3.done ? "return" : "normal", t$2);
         }, function(e$1) {
           resume("throw", e$1);
         });
@@ -20290,35 +20348,35 @@ var require_wrapAsyncGenerator = __commonJS2({ "../../node_modules/.pnpm/@oxc-pr
         settle("throw", e$1);
       }
     }
-    function settle(e$1, n2) {
+    function settle(e$1, n3) {
       switch (e$1) {
         case "return":
           r2.resolve({
-            value: n2,
+            value: n3,
             done: true
           });
           break;
         case "throw":
-          r2.reject(n2);
+          r2.reject(n3);
           break;
         default:
           r2.resolve({
-            value: n2,
+            value: n3,
             done: false
           });
       }
       (r2 = r2.next) ? resume(r2.key, r2.arg) : t2 = null;
     }
-    this._invoke = function(e$1, n2) {
+    this._invoke = function(e$1, n3) {
       return new Promise(function(o, u2) {
         var i = {
           key: e$1,
-          arg: n2,
+          arg: n3,
           resolve: o,
           reject: u2,
           next: null
         };
-        t2 ? t2 = t2.next = i : (r2 = t2 = i, resume(e$1, n2));
+        t2 ? t2 = t2.next = i : (r2 = t2 = i, resume(e$1, n3));
       });
     }, typeof e["return"] != "function" && (this["return"] = undefined);
   }
@@ -20731,13 +20789,13 @@ var untransformValue = (json, type, superJson) => {
 };
 
 // ../../../node_modules/.pnpm/superjson@2.2.6/node_modules/superjson/dist/accessDeep.js
-var getNthKey = (value, n2) => {
-  if (n2 > value.size)
+var getNthKey = (value, n3) => {
+  if (n3 > value.size)
     throw new Error("index out of bounds");
   const keys = value.keys();
-  while (n2 > 0) {
+  while (n3 > 0) {
     keys.next();
-    n2--;
+    n3--;
   }
   return keys.next().value;
 };
@@ -21312,19 +21370,19 @@ function createRetryProxy(target, path = []) {
 var trpcClient = createRetryProxy(baseClient);
 
 // src/components/Logo.tsx
-var jsx_runtime = __toESM(require_jsx_runtime(), 1);
+var jsx_runtime2 = __toESM(require_jsx_runtime(), 1);
 var LOGO_LINES = ["█▀▀ █ █ █ █▀█ █▀█ █▀█", "▀▀█ █▀█ █ █▀▀ █▀▀ ██▀", "▀▀▀ ▀ ▀ ▀ ▀   ▀   ▀ ▀"];
 function Logo() {
-  return /* @__PURE__ */ jsx_runtime.jsx(Box_default, {
+  return /* @__PURE__ */ jsx_runtime2.jsx(Box_default, {
     flexDirection: "column",
-    children: LOGO_LINES.map((line, i) => /* @__PURE__ */ jsx_runtime.jsx(Text, {
+    children: LOGO_LINES.map((line, i) => /* @__PURE__ */ jsx_runtime2.jsx(Text, {
       children: line
     }, i))
   });
 }
 
 // src/components/Header.tsx
-var jsx_runtime2 = __toESM(require_jsx_runtime(), 1);
+var jsx_runtime3 = __toESM(require_jsx_runtime(), 1);
 function formatDateTime(date) {
   return date.toLocaleString("en-US", {
     weekday: "short",
@@ -21337,15 +21395,15 @@ function formatDateTime(date) {
   });
 }
 function Header() {
-  const [currentTime, setCurrentTime] = import_react22.useState(() => new Date);
-  const [motd, setMotd] = import_react22.useState(null);
-  import_react22.useEffect(() => {
+  const [currentTime, setCurrentTime] = import_react24.useState(() => new Date);
+  const [motd, setMotd] = import_react24.useState(null);
+  import_react24.useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTime(new Date);
     }, 1000);
     return () => clearInterval(interval);
   }, []);
-  import_react22.useEffect(() => {
+  import_react24.useEffect(() => {
     function fetchMotd() {
       trpcClient.motd.getRandom.query().then((result) => {
         setMotd(result.message);
@@ -21355,19 +21413,19 @@ function Header() {
     const interval = setInterval(fetchMotd, 15000);
     return () => clearInterval(interval);
   }, []);
-  return /* @__PURE__ */ jsx_runtime2.jsxs(Box_default, {
+  return /* @__PURE__ */ jsx_runtime3.jsxs(Box_default, {
     gap: 2,
     children: [
-      /* @__PURE__ */ jsx_runtime2.jsx(Logo, {}),
-      /* @__PURE__ */ jsx_runtime2.jsxs(Box_default, {
+      /* @__PURE__ */ jsx_runtime3.jsx(Logo, {}),
+      /* @__PURE__ */ jsx_runtime3.jsxs(Box_default, {
         flexDirection: "column",
         children: [
-          /* @__PURE__ */ jsx_runtime2.jsx(Text, {
+          /* @__PURE__ */ jsx_runtime3.jsx(Text, {
             children: formatDateTime(currentTime)
           }),
-          motd && /* @__PURE__ */ jsx_runtime2.jsx(Box_default, {
+          motd && /* @__PURE__ */ jsx_runtime3.jsx(Box_default, {
             width: 30,
-            children: /* @__PURE__ */ jsx_runtime2.jsx(Text, {
+            children: /* @__PURE__ */ jsx_runtime3.jsx(Text, {
               color: "gray",
               wrap: "wrap",
               children: motd
@@ -21380,77 +21438,7 @@ function Header() {
 }
 
 // src/components/Router.tsx
-var jsx_runtime3 = __toESM(require_jsx_runtime(), 1);
-var RouterContext = import_react23.createContext({
-  push: () => {},
-  pop: () => {},
-  replace: () => {},
-  reset: () => {},
-  currentRoute: "welcome",
-  params: undefined,
-  canGoBack: false
-});
-function useRouter() {
-  return import_react23.useContext(RouterContext);
-}
-
-// src/utils/colors.ts
-var colors = {
-  primary: "blue",
-  primaryLight: "#87CEEB",
-  label: "#CCCCCC",
-  labelDim: "#888888",
-  muted: "#888888",
-  footer: "#666666",
-  error: "red",
-  warning: "yellow"
-};
-
-// src/components/Footer.tsx
 var jsx_runtime4 = __toESM(require_jsx_runtime(), 1);
-function Footer() {
-  const [confirmExit, setConfirmExit] = import_react24.useState(false);
-  const { exit } = use_app_default();
-  const { canGoBack } = useRouter();
-  use_input_default((input, key) => {
-    if (key.ctrl && input === "c") {
-      if (confirmExit) {
-        exit();
-      } else {
-        setConfirmExit(true);
-      }
-    } else if (confirmExit) {
-      setConfirmExit(false);
-    }
-  });
-  const hints = ["↑/↓/TAB navigate", canGoBack && "ESC back", "Ctrl+C quit"].filter(Boolean).join(", ");
-  return /* @__PURE__ */ jsx_runtime4.jsx(Box_default, {
-    children: confirmExit ? /* @__PURE__ */ jsx_runtime4.jsx(Text, {
-      color: colors.warning,
-      children: "Press Ctrl+C again to exit!"
-    }) : /* @__PURE__ */ jsx_runtime4.jsxs(Text, {
-      italic: true,
-      color: colors.footer,
-      children: [
-        "(",
-        hints,
-        ")"
-      ]
-    })
-  });
-}
-
-// src/components/Router.tsx
-var jsx_runtime5 = __toESM(require_jsx_runtime(), 1);
-var RouterContext2 = import_react25.createContext({
-  push: () => {},
-  pop: () => {},
-  replace: () => {},
-  reset: () => {},
-  currentRoute: "welcome",
-  params: undefined,
-  canGoBack: false
-});
 function Router({ routes }) {
   const [routeStack, setRouteStack] = import_react25.useState([{ name: "welcome" }]);
   const [loading, setLoading] = import_react25.useState(true);
@@ -21501,7 +21489,7 @@ function Router({ routes }) {
     return null;
   }
   const Component = routeConfig.component;
-  return /* @__PURE__ */ jsx_runtime5.jsx(RouterContext2.Provider, {
+  return /* @__PURE__ */ jsx_runtime4.jsx(RouterContext.Provider, {
     value: {
       push,
       pop,
@@ -21511,47 +21499,52 @@ function Router({ routes }) {
       params: current.params,
       canGoBack: routeStack.length > 1
     },
-    children: /* @__PURE__ */ jsx_runtime5.jsx(Box_default, {
+    children: /* @__PURE__ */ jsx_runtime4.jsx(Box_default, {
       marginLeft: 2,
       marginTop: 1,
-      children: /* @__PURE__ */ jsx_runtime5.jsxs(Box_default, {
+      children: /* @__PURE__ */ jsx_runtime4.jsxs(Box_default, {
         flexDirection: "column",
         gap: 1,
         children: [
-          /* @__PURE__ */ jsx_runtime5.jsx(Header, {}),
-          /* @__PURE__ */ jsx_runtime5.jsx(Box_default, {
+          /* @__PURE__ */ jsx_runtime4.jsx(Header, {}),
+          /* @__PURE__ */ jsx_runtime4.jsx(Box_default, {
             flexDirection: "column",
-            children: /* @__PURE__ */ jsx_runtime5.jsx(Component, {})
+            children: /* @__PURE__ */ jsx_runtime4.jsx(Component, {})
           }),
-          /* @__PURE__ */ jsx_runtime5.jsx(Footer, {})
+          /* @__PURE__ */ jsx_runtime4.jsx(Footer, {})
         ]
       })
     })
   });
 }
 
-// src/components/Menu.tsx
+// src/components/Router.tsx
 var import_react26 = __toESM(require_react(), 1);
+var jsx_runtime5 = __toESM(require_jsx_runtime(), 1);
+
+// src/components/Menu.tsx
+var import_react27 = __toESM(require_react(), 1);
 var jsx_runtime6 = __toESM(require_jsx_runtime(), 1);
 function Menu({
   items,
   onSelect,
   focus = true
 }) {
-  const [selectedIndex, setSelectedIndex] = import_react26.useState(0);
-  import_react26.useEffect(() => {
+  const [selectedIndex, setSelectedIndex] = import_react27.useState(0);
+  import_react27.useEffect(() => {
     if (selectedIndex >= items.length) {
       setSelectedIndex(Math.max(0, items.length - 1));
     }
   }, [items.length, selectedIndex]);
-  use_input_default((_input, key) => {
+  use_input_default((input, key) => {
     if (key.upArrow) {
       setSelectedIndex((i) => i > 0 ? i - 1 : i);
     } else if (key.downArrow) {
       setSelectedIndex((i) => i < items.length - 1 ? i + 1 : i);
     } else if (key.tab) {
       setSelectedIndex((i) => (i + 1) % items.length);
-    } else if (key.return) {
+    } else if (key.return || input === `
+`) {
       onSelect(items[selectedIndex].value);
     }
   }, { isActive: focus });
@@ -21615,10 +21608,10 @@ function WelcomeScreen() {
 }
 
 // src/screens/LoginScreen.tsx
-var import_react28 = __toESM(require_react(), 1);
+var import_react29 = __toESM(require_react(), 1);
 
 // src/components/TextInput.tsx
-var import_react27 = __toESM(require_react(), 1);
+var import_react28 = __toESM(require_react(), 1);
 var jsx_runtime8 = __toESM(require_jsx_runtime(), 1);
 function TextInput({
   value,
@@ -21629,15 +21622,16 @@ function TextInput({
   focus = true,
   label
 }) {
-  const [cursorOffset, setCursorOffset] = import_react27.useState(value.length);
-  import_react27.useEffect(() => {
+  const [cursorOffset, setCursorOffset] = import_react28.useState(value.length);
+  import_react28.useEffect(() => {
     setCursorOffset(value.length);
   }, [value.length]);
   use_input_default((input2, key) => {
     if (key.upArrow || key.downArrow || key.ctrl && input2 === "c" || key.tab || key.shift && key.tab || key.escape) {
       return;
     }
-    if (key.return) {
+    if (key.return || input2 === `
+`) {
       onSubmit?.(value);
       return;
     }
@@ -21726,8 +21720,9 @@ function TextInput({
 // src/components/Button.tsx
 var jsx_runtime9 = __toESM(require_jsx_runtime(), 1);
 function Button({ label, onPress, focus = false }) {
-  use_input_default((_input, key) => {
-    if (key.return) {
+  use_input_default((input, key) => {
+    if (key.return || input === `
+`) {
       onPress();
     }
   }, { isActive: focus });
@@ -21808,11 +21803,11 @@ function FormScreen({
 var jsx_runtime11 = __toESM(require_jsx_runtime(), 1);
 var fields = ["email", "password", "submit"];
 function LoginScreen() {
-  const [activeField, setActiveField] = import_react28.useState("email");
-  const [email, setEmail] = import_react28.useState("");
-  const [password, setPassword] = import_react28.useState("");
-  const [loading, setLoading] = import_react28.useState(false);
-  const [error, setError] = import_react28.useState("");
+  const [activeField, setActiveField] = import_react29.useState("email");
+  const [email, setEmail] = import_react29.useState("");
+  const [password, setPassword] = import_react29.useState("");
+  const [loading, setLoading] = import_react29.useState(false);
+  const [error, setError] = import_react29.useState("");
   const { reset, pop, params } = useRouter();
   const successMessage = params?.successMessage;
   function navigateField(direction) {
@@ -21903,16 +21898,16 @@ function LoginScreen() {
 }
 
 // src/screens/CreateAccountScreen.tsx
-var import_react29 = __toESM(require_react(), 1);
+var import_react30 = __toESM(require_react(), 1);
 var jsx_runtime12 = __toESM(require_jsx_runtime(), 1);
 var fields2 = ["email", "password", "confirmPassword", "submit"];
 function CreateAccountScreen() {
-  const [activeField, setActiveField] = import_react29.useState("email");
-  const [email, setEmail] = import_react29.useState("");
-  const [password, setPassword] = import_react29.useState("");
-  const [confirmPassword, setConfirmPassword] = import_react29.useState("");
-  const [loading, setLoading] = import_react29.useState(false);
-  const [error, setError] = import_react29.useState("");
+  const [activeField, setActiveField] = import_react30.useState("email");
+  const [email, setEmail] = import_react30.useState("");
+  const [password, setPassword] = import_react30.useState("");
+  const [confirmPassword, setConfirmPassword] = import_react30.useState("");
+  const [loading, setLoading] = import_react30.useState(false);
+  const [error, setError] = import_react30.useState("");
   const { reset, pop } = useRouter();
   function navigateField(direction) {
     setActiveField((f2) => {
@@ -22016,14 +22011,14 @@ function CreateAccountScreen() {
 }
 
 // src/screens/ForgotPasswordScreen.tsx
-var import_react30 = __toESM(require_react(), 1);
+var import_react31 = __toESM(require_react(), 1);
 var jsx_runtime13 = __toESM(require_jsx_runtime(), 1);
 var fields3 = ["email", "submit"];
 function ForgotPasswordScreen() {
-  const [activeField, setActiveField] = import_react30.useState("email");
-  const [email, setEmail] = import_react30.useState("");
-  const [loading, setLoading] = import_react30.useState(false);
-  const [error, setError] = import_react30.useState("");
+  const [activeField, setActiveField] = import_react31.useState("email");
+  const [email, setEmail] = import_react31.useState("");
+  const [loading, setLoading] = import_react31.useState(false);
+  const [error, setError] = import_react31.useState("");
   const { push, pop } = useRouter();
   function navigateField(direction) {
     setActiveField((f2) => {
@@ -22091,16 +22086,16 @@ function ForgotPasswordScreen() {
 }
 
 // src/screens/ResetPasswordScreen.tsx
-var import_react31 = __toESM(require_react(), 1);
+var import_react32 = __toESM(require_react(), 1);
 var jsx_runtime14 = __toESM(require_jsx_runtime(), 1);
 var fields4 = ["code", "newPassword", "confirmPassword", "submit"];
 function ResetPasswordScreen() {
-  const [activeField, setActiveField] = import_react31.useState("code");
-  const [code, setCode] = import_react31.useState("");
-  const [newPassword, setNewPassword] = import_react31.useState("");
-  const [confirmPassword, setConfirmPassword] = import_react31.useState("");
-  const [loading, setLoading] = import_react31.useState(false);
-  const [error, setError] = import_react31.useState("");
+  const [activeField, setActiveField] = import_react32.useState("code");
+  const [code, setCode] = import_react32.useState("");
+  const [newPassword, setNewPassword] = import_react32.useState("");
+  const [confirmPassword, setConfirmPassword] = import_react32.useState("");
+  const [loading, setLoading] = import_react32.useState(false);
+  const [error, setError] = import_react32.useState("");
   const { push, pop, params } = useRouter();
   const email = params?.email ?? "";
   function navigateField(direction) {
@@ -22205,12 +22200,12 @@ function ResetPasswordScreen() {
 }
 
 // src/screens/DashboardScreen.tsx
-var import_react32 = __toESM(require_react(), 1);
+var import_react33 = __toESM(require_react(), 1);
 var jsx_runtime15 = __toESM(require_jsx_runtime(), 1);
 function DashboardScreen() {
   const { reset } = useRouter();
-  const [isRefreshing, setIsRefreshing] = import_react32.useState(false);
-  const [error, setError] = import_react32.useState("");
+  const [isRefreshing, setIsRefreshing] = import_react33.useState(false);
+  const [error, setError] = import_react33.useState("");
   const items2 = [
     { label: isRefreshing ? "Refreshing..." : "Refresh", value: "refresh" },
     { label: "Sign out", value: "signout" }

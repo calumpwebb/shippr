@@ -1,24 +1,14 @@
-import { createContext, useContext, useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Box } from 'ink'
 import type { Route } from '../routes'
-import type { RouteConfig, RouterContextType, RouteStackItem } from '../types'
+import type { RouteConfig, RouteStackItem } from '../types'
 import { getToken, clearToken, isTokenValid } from '../utils/credentials'
 import { Footer } from './Footer'
 import { Header } from './Header'
+import { RouterContext } from './RouterContext'
 
-const RouterContext = createContext<RouterContextType>({
-  push: () => {},
-  pop: () => {},
-  replace: () => {},
-  reset: () => {},
-  currentRoute: 'welcome',
-  params: undefined,
-  canGoBack: false,
-})
-
-export function useRouter(): RouterContextType {
-  return useContext(RouterContext)
-}
+// Re-export useRouter for convenience
+export { useRouter } from './RouterContext'
 
 type RouterProps = {
   routes: Record<Route, RouteConfig>

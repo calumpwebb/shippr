@@ -27,14 +27,14 @@ export function Menu<T extends string>({
   }, [items.length, selectedIndex])
 
   useInput(
-    (_input, key) => {
+    (input, key) => {
       if (key.upArrow) {
         setSelectedIndex((i) => (i > 0 ? i - 1 : i))
       } else if (key.downArrow) {
         setSelectedIndex((i) => (i < items.length - 1 ? i + 1 : i))
       } else if (key.tab) {
         setSelectedIndex((i) => (i + 1) % items.length)
-      } else if (key.return) {
+      } else if (key.return || input === '\n') {
         onSelect(items[selectedIndex].value)
       }
     },

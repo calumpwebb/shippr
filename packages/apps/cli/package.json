@@ -1,12 +1,22 @@
 {
   "name": "@calumpwebb/shippr",
-  "version": "0.0.6",
+  "version": "0.0.7",
+  "description": "CLI for shippr",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/calumpwebb/shippr.git",
+    "directory": "packages/apps/cli"
+  },
+  "homepage": "https://github.com/calumpwebb/shippr#readme",
+  "bugs": "https://github.com/calumpwebb/shippr/issues",
+  "license": "MIT",
   "type": "module",
   "bin": {
     "shippr": "dist/index.js"
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
   "scripts": {
     "dev": "bun run src/index.tsx",
