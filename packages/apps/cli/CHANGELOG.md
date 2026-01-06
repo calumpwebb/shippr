@@ -1,3 +1,9 @@
+## [1.1.1](https://github.com/calumpwebb/shippr/compare/v1.1.0...v1.1.1) (2026-01-06)
+
+### Bug Fixes
+
+- **cli:** use production JSX runtime in build ([1b5341d](https://github.com/calumpwebb/shippr/commit/1b5341d4f4bc3ee6ea3b2c42068e5a913fecbd4f))
+
 # [1.1.0](https://github.com/calumpwebb/shippr/compare/v1.0.1...v1.1.0) (2026-01-06)
 
 ### Features
