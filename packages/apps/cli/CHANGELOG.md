@@ -1,3 +1,9 @@
+# [1.1.0](https://github.com/calumpwebb/shippr/compare/v1.0.1...v1.1.0) (2026-01-06)
+
+### Features
+
+- **cli:** display version in footer ([e9d41d1](https://github.com/calumpwebb/shippr/commit/e9d41d1dd34d687b9d360d7887de253e6d03513d))
+
 ## [1.0.1](https://github.com/calumpwebb/shippr/compare/v1.0.0...v1.0.1) (2026-01-06)
 
 ### Bug Fixes
