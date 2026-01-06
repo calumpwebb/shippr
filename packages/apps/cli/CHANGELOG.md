@@ -1,3 +1,9 @@
+## [1.0.1](https://github.com/calumpwebb/shippr/compare/v1.0.0...v1.0.1) (2026-01-06)
+
+### Bug Fixes
+
+- **ci:** use Node.js 24 for npm OIDC trusted publishing ([e2db35a](https://github.com/calumpwebb/shippr/commit/e2db35a50bf97b31bfb9f52690b3c1975b8fb045))
+
 # 1.0.0 (2026-01-06)
 
 ### Bug Fixes
