@@ -1,12 +1,14 @@
 import { Box, Text } from 'ink'
 
+// prettier-ignore - preserve intentional spacing in ASCII art
+const LOGO_LINES = ['█▀▀ █ █ █ █▀█ █▀█ █▀█', '▀▀█ █▀█ █ █▀▀ █▀▀ ██▀', '▀▀▀ ▀ ▀ ▀ ▀   ▀   ▀ ▀']
+
 export function Logo(): React.ReactNode {
-  // prettier-ignore - preserve intentional spacing in ASCII art
   return (
     <Box flexDirection="column">
-      <Text>█▀▀ █ █ █ █▀█ █▀█ █▀█</Text>
-      <Text>▀▀█ █▀█ █ █▀▀ █▀▀ ██▀</Text>
-      <Text>▀▀▀ ▀ ▀ ▀ ▀ ▀ ▀ ▀</Text>
+      {LOGO_LINES.map((line, i) => (
+        <Text key={i}>{line}</Text>
+      ))}
     </Box>
   )
 }
