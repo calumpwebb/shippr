@@ -1,3 +1,9 @@
+# [1.3.0](https://github.com/calumpwebb/shippr/compare/v1.2.0...v1.3.0) (2026-01-06)
+
+### Features
+
+- **db:** add 10 more MOTD messages ([b4bba60](https://github.com/calumpwebb/shippr/commit/b4bba60090c5ad6fc2117bb633070314631450ca))
+
 # [1.2.0](https://github.com/calumpwebb/shippr/compare/v1.1.1...v1.2.0) (2026-01-06)
 
 ### Features
