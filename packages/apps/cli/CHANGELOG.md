@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/calumpwebb/shippr/compare/v1.1.1...v1.2.0) (2026-01-06)
+
+### Features
+
+- **cli:** add client-side email validation and improve form UX ([7365ad6](https://github.com/calumpwebb/shippr/commit/7365ad6aae92c267da552edef45405417c7289e1))
+- **cli:** center layout in terminal viewport ([26bf83b](https://github.com/calumpwebb/shippr/commit/26bf83bb8a5d68bbd60c297f93453e4023e7c0fb))
+
 ## [1.1.1](https://github.com/calumpwebb/shippr/compare/v1.1.0...v1.1.1) (2026-01-06)
 
 ### Bug Fixes
