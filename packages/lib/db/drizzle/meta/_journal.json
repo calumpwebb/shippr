@@ -22,6 +22,13 @@
       "when": 1767595212853,
       "tag": "0002_rich_stryfe",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1736121600000,
+      "tag": "0003_add_more_motd",
+      "breakpoints": true
     }
   ]
 }
