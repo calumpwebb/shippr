@@ -5,7 +5,7 @@ export function Logo(): React.ReactNode {
     <Box flexDirection="column">
       <Text>█▀▀ █ █ █ █▀█ █▀█ █▀█</Text>
       <Text>▀▀█ █▀█ █ █▀▀ █▀▀ ██▀</Text>
-      <Text>▀▀▀ ▀ ▀ ▀ ▀ ▀ ▀ ▀</Text>
+      <Text>▀▀▀ ▀ ▀ ▀ ▀   ▀   ▀ ▀</Text>
     </Box>
   )
 }
