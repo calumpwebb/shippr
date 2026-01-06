@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Box, Text, useApp, useInput } from 'ink'
 import { useRouter } from './RouterContext'
 import { colors } from '../utils/colors'
+import packageJson from '../../package.json'
 
 export function Footer(): React.ReactNode {
   const [confirmExit, setConfirmExit] = useState(false)
@@ -25,7 +26,7 @@ export function Footer(): React.ReactNode {
     .join(', ')
 
   return (
-    <Box>
+    <Box justifyContent="space-between">
       {confirmExit ? (
         <Text color={colors.warning}>Press Ctrl+C again to exit!</Text>
       ) : (
@@ -33,6 +34,9 @@ export function Footer(): React.ReactNode {
           ({hints})
         </Text>
       )}
+      <Text italic color={colors.footer}>
+        v{packageJson.version}
+      </Text>
     </Box>
   )
 }
