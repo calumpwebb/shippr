@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Box } from 'ink'
+import { Box, useStdout } from 'ink'
 import type { Route } from '../routes'
 import type { RouteConfig, RouteStackItem } from '../types'
 import { getToken, clearToken, isTokenValid } from '../utils/credentials'
@@ -16,6 +16,7 @@ type RouterProps = {
 }
 
 export function Router({ routes }: RouterProps): React.ReactNode {
+  const { stdout } = useStdout()
   const [routeStack, setRouteStack] = useState<RouteStackItem[]>([{ name: 'welcome' }])
   const [loading, setLoading] = useState(true)
 
@@ -92,12 +93,10 @@ export function Router({ routes }: RouterProps): React.ReactNode {
         canGoBack: routeStack.length > 1,
       }}
     >
-      <Box paddingX={2} paddingY={1}>
-        <Box flexDirection="column" gap={1}>
+      <Box width="100%" height={stdout?.rows} justifyContent="center" alignItems="center">
+        <Box flexDirection="column" gap={1} paddingX={1}>
           <Header />
-          <Box flexDirection="column">
-            <Component />
-          </Box>
+          <Component />
           <Footer />
         </Box>
       </Box>

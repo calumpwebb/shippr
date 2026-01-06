@@ -46,10 +46,10 @@ export function Header(): React.ReactNode {
   return (
     <Box gap={2}>
       <Logo />
-      <Box flexDirection="column">
+      <Box flexDirection="column" width={30}>
         <Text>{formatDateTime(currentTime)}</Text>
         {motd && (
-          <Box width={30}>
+          <Box>
             <Text color="gray" wrap="wrap">
               {motd}
             </Text>
